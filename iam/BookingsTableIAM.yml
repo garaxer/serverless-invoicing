@@ -1,4 +1,4 @@
-InvoicesTableIAM:
+BookingsTableIAM:
   Effect: Allow
   Action:
     - dynamodb:PutItem
@@ -8,5 +8,5 @@ InvoicesTableIAM:
     - dynamodb:UpdateItem
     - dynamodb:Query
   Resource:
-    - ${self:custom.InvoicesTable.arn}
-    - !Join ['/', [ '${self:custom.InvoicesTable.arn}', 'index', 'statusAndEndDate' ]]
+    - ${self:custom.BookingsTable.arn}
+    - !Join ['/', [ '${self:custom.BookingsTable.arn}', 'index', 'statusAndStartDateTime' ]]

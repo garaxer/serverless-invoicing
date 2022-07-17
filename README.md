@@ -96,7 +96,7 @@ Any tsconfig.json can be used, but if you do, set the environment variable `TS_N
 
 
 
-# Personal notes
+# Personal notes (Don't look at these internet)
 
 if you haven't changed the yml
 sls deploy -f FUNCTION_NAME
@@ -107,3 +107,11 @@ show logs
 sls logs -f remindInvoice -t
 sls logs -f remindInvoice -t
 sls invoke -f remindInvoice -l
+
+
+offline: serverless offline start
+TODOS
+get next two weeks off bookings by copying the getOverdueInvoices
+
+
+Goal: Service to send an email confirming, reminding of booking, invoicing booking for dr appointments

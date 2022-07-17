@@ -1,24 +1,24 @@
-InvoicesTable:
+BookingsTable:
   Type: AWS::DynamoDB::Table
   Properties:
-    TableName: InvoicesTable-${self:provider.stage}
+    TableName: BookingsTable-${self:provider.stage}
     BillingMode: PAY_PER_REQUEST
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
-      - AttributeName: paidStatus
+      - AttributeName: bookingStatus
         AttributeType: S
-      - AttributeName: dueDate
+      - AttributeName: startDateTime
         AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH
     GlobalSecondaryIndexes:
-      - IndexName: statusAndEndDate
+      - IndexName: statusAndStartDateTime
         KeySchema:
-          - AttributeName: paidStatus
+          - AttributeName: bookingStatus
             KeyType: HASH
-          - AttributeName: dueDate
+          - AttributeName: startDateTime
             KeyType: RANGE
         Projection:
           ProjectionType: ALL

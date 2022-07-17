@@ -25,7 +25,7 @@ async function deleteInvoices(event, context) {
 
   return {
     statusCode: 204,
-    body: JSON.stringify({ id, foo: invoice}),
+    body: JSON.stringify({ id, invoice}),
   };
 }
 

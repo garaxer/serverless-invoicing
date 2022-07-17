@@ -2,8 +2,8 @@ service: auction-service
 
 plugins:
   - serverless-esbuild
-  # - serverless-bundle
-  # - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
 
 provider:
   name: aws
@@ -13,14 +13,43 @@ provider:
   region: ap-southeast-2
   environment:
     INVOICES_TABLE_NAME: InvoicesTable-${self:provider.stage}
+    BOOKINGS_TABLE_NAME: BookingsTable-${self:provider.stage}
   iamRoleStatements:
     - ${file(./iam/InvoicesTableIAM.yml):InvoicesTableIAM}
+    - ${file(./iam/BookingsTableIAM.yml):BookingsTableIAM}
 
 resources:
   Resources:
     InvoicesTable: ${file(./resources/InvoicesTable.yml):InvoicesTable}
+    BookingsTable: ${file(./resources/BookingsTable.yml):BookingsTable}
     
 functions:
+  # hello:
+  #   handler: src/functions/index.hello
+  createBooking:
+    handler: src/functions/index.createBooking
+    events:
+      - http:
+          method: POST
+          path: /booking
+  getBookings:
+    handler: src/functions/index.getBookings
+    events:
+      - http:
+          method: GET
+          path: /bookings
+          request:
+            parameters:
+              querystrings:
+                limit: false #marking as true will make them required and will be parsed
+                exclusiveStartKeyId: false
+  deleteBooking:
+    handler: src/functions/index.deleteBooking
+    events:
+      - http:
+          method: DELETE
+          path: /booking/{id}
+
   createInvoice:
     handler: src/handlers/createInvoice.handler
     events:
@@ -39,21 +68,18 @@ functions:
       - http:
           method: GET
           path: /invoice/{id}
-    
   deleteInvoice:
     handler: src/handlers/deleteInvoice.handler
     events:
       - http:
           method: DELETE
           path: /invoice/{id}
-
-  placeBid:
+  payInvoice:
     handler: src/handlers/payInvoice.handler
     events:
       - http:
           method: PATCH
           path: /invoice/{id}/pay
-  
   remindInvoice:
     handler: src/handlers/remindInvoice.handler
     # events:
@@ -63,3 +89,15 @@ custom:
   InvoicesTable:
     name: !Ref InvoicesTable
     arn: !GetAtt InvoicesTable.Arn
+  BookingsTable:
+    name: !Ref BookingsTable
+    arn: !GetAtt BookingsTable.Arn
+
+  esbuild: 
+    bundle: true
+    minify: false
+    sourcemap: true
+    target: 'node16'
+    platform: 'node'
+    concurrency: 10
+    

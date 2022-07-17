@@ -1,10 +1,9 @@
 import { Context, APIGatewayEvent } from 'aws-lambda';
+import { getOverdueInvoices } from '@libs/getOverdueInvoices';
 
 const remindInvoice = async (event: APIGatewayEvent, context: Context): Promise<void> => {
-    console.log('Processing !!');
-    console.log(`Event: ${JSON.stringify(event, null, 2)}`);
-    console.log(`Context: ${JSON.stringify(context, null, 2)}`);
-
-};
+    const invoicesOverdue = await getOverdueInvoices();
+    console.log(invoicesOverdue);
+    };
 
 export const handler = remindInvoice;
