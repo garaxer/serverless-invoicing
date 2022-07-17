@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@handlers/*": ["src/handlers/*"],
+      "@functions/*": ["src/functions/*"],
+      "@libs/*": ["src/libs/*"]
+    }
+  }
+}

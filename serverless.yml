@@ -1,0 +1,65 @@
+service: auction-service
+
+plugins:
+  - serverless-esbuild
+  # - serverless-bundle
+  # - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-2
+  environment:
+    INVOICES_TABLE_NAME: InvoicesTable-${self:provider.stage}
+  iamRoleStatements:
+    - ${file(./iam/InvoicesTableIAM.yml):InvoicesTableIAM}
+
+resources:
+  Resources:
+    InvoicesTable: ${file(./resources/InvoicesTable.yml):InvoicesTable}
+    
+functions:
+  createInvoice:
+    handler: src/handlers/createInvoice.handler
+    events:
+      - http:
+          method: POST
+          path: /invoice
+  getInvoices:
+    handler: src/handlers/getInvoices.handler
+    events:
+      - http:
+          method: GET
+          path: /invoices
+  getInvoice:
+    handler: src/handlers/getInvoice.handler
+    events:
+      - http:
+          method: GET
+          path: /invoice/{id}
+    
+  deleteInvoice:
+    handler: src/handlers/deleteInvoice.handler
+    events:
+      - http:
+          method: DELETE
+          path: /invoice/{id}
+
+  placeBid:
+    handler: src/handlers/payInvoice.handler
+    events:
+      - http:
+          method: PATCH
+          path: /invoice/{id}/pay
+  
+  remindInvoice:
+    handler: src/handlers/remindInvoice.handler
+    # events:
+    #   - schedule: rate(60 minute)
+
+custom:
+  InvoicesTable:
+    name: !Ref InvoicesTable
+    arn: !GetAtt InvoicesTable.Arn
