@@ -1,0 +1,143 @@
+import { Serverless } from 'serverless/aws';
+export const service: Serverless = {
+  "service": "auction-service",
+  "plugins": [
+    "serverless-esbuild",
+    "serverless-dynamodb-local",
+    "serverless-offline"
+  ],
+  "provider": {
+    "name": "aws",
+    "runtime": "nodejs16.x",
+    "memorySize": 256,
+    "stage": "${opt:stage, 'dev'}",
+    "region": "ap-southeast-2",
+    "environment": {
+      "INVOICES_TABLE_NAME": "InvoicesTable-${self:provider.stage}",
+      "BOOKINGS_TABLE_NAME": "BookingsTable-${self:provider.stage}"
+    },
+    "iamRoleStatements": [
+      "${file(./iam/InvoicesTableIAM.yml):InvoicesTableIAM}",
+      "${file(./iam/BookingsTableIAM.yml):BookingsTableIAM}"
+    ]
+  },
+  "resources": {
+    "Resources": {
+      "InvoicesTable": "${file(./resources/InvoicesTable.yml):InvoicesTable}",
+      "BookingsTable": "${file(./resources/BookingsTable.yml):BookingsTable}"
+    }
+  },
+  "functions": {
+    "createBooking": {
+      "handler": "src/functions/index.createBooking",
+      "events": [
+        {
+          "http": {
+            "method": "POST",
+            "path": "/booking"
+          }
+        }
+      ]
+    },
+    "getBookings": {
+      "handler": "src/functions/index.getBookings",
+      "events": [
+        {
+          "http": {
+            "method": "GET",
+            "path": "/bookings",
+            "request": {
+              "parameters": {
+                "querystrings": {
+                  "limit": false,
+                  "exclusiveStartKeyId": false
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deleteBooking": {
+      "handler": "src/functions/index.deleteBooking",
+      "events": [
+        {
+          "http": {
+            "method": "DELETE",
+            "path": "/booking/{id}"
+          }
+        }
+      ]
+    },
+    "createInvoice": {
+      "handler": "src/handlers/createInvoice.handler",
+      "events": [
+        {
+          "http": {
+            "method": "POST",
+            "path": "/invoice"
+          }
+        }
+      ]
+    },
+    "getInvoices": {
+      "handler": "src/handlers/getInvoices.handler",
+      "events": [
+        {
+          "http": {
+            "method": "GET",
+            "path": "/invoices"
+          }
+        }
+      ]
+    },
+    "getInvoice": {
+      "handler": "src/handlers/getInvoice.handler",
+      "events": [
+        {
+          "http": {
+            "method": "GET",
+            "path": "/invoice/{id}"
+          }
+        }
+      ]
+    },
+    "deleteInvoice": {
+      "handler": "src/handlers/deleteInvoice.handler",
+      "events": [
+        {
+          "http": {
+            "method": "DELETE",
+            "path": "/invoice/{id}"
+          }
+        }
+      ]
+    },
+    "payInvoice": {
+      "handler": "src/handlers/payInvoice.handler",
+      "events": [
+        {
+          "http": {
+            "method": "PATCH",
+            "path": "/invoice/{id}/pay"
+          }
+        }
+      ]
+    },
+    "remindInvoice": {
+      "handler": "src/handlers/remindInvoice.handler"
+    }
+  },
+  "custom": {
+    "esbuild": {
+      "bundle": true,
+      "minify": false,
+      "sourcemap": true,
+      "target": "node16",
+      "platform": "node",
+      "concurrency": 10
+    }
+  }
+}
+
+module.exports = service

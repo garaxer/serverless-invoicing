@@ -1,3 +1,21 @@
-import { main } from './bookingsHandler'
+import { handlerPath } from "@libs/handler-resolver";
 
-export default main
+export default {
+  handler: `${handlerPath(__dirname)}/bookingsHandler.main`,
+  events: [
+    {
+      http: {
+        method: "get",
+        path: "bookings",
+        request: {
+          parameters: {
+            querystrings: {
+              limit: false,
+              exclusiveStartKeyId: false,
+            },
+          },
+        },
+      },
+    },
+  ],
+};

@@ -27,13 +27,13 @@ functions:
   # hello:
   #   handler: src/functions/index.hello
   createBooking:
-    handler: src/functions/index.createBooking
+    handler: src/functions/bookingHandler/createBooking.main
     events:
       - http:
           method: POST
           path: /booking
   getBookings:
-    handler: src/functions/index.getBookings
+    handler: src/functions/getBookings/bookingsHandler.main
     events:
       - http:
           method: GET
@@ -44,7 +44,7 @@ functions:
                 limit: false #marking as true will make them required and will be parsed
                 exclusiveStartKeyId: false
   deleteBooking:
-    handler: src/functions/index.deleteBooking
+    handler: src/functions/deleteBooking/deleteBookingHandler.main
     events:
       - http:
           method: DELETE
@@ -86,12 +86,12 @@ functions:
     #   - schedule: rate(60 minute)
 
 custom:
-  InvoicesTable:
-    name: !Ref InvoicesTable
-    arn: !GetAtt InvoicesTable.Arn
-  BookingsTable:
-    name: !Ref BookingsTable
-    arn: !GetAtt BookingsTable.Arn
+  # InvoicesTable:
+  #   name: !Ref InvoicesTable
+  #   arn: !GetAtt InvoicesTable.Arn
+  # BookingsTable:
+  #   name: !Ref BookingsTable
+  #   arn: !GetAtt BookingsTable.Arn
 
   esbuild: 
     bundle: true
