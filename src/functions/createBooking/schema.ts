@@ -18,9 +18,31 @@ export default {
           contactEmail: { type: "string" },
           phoneNumber: { type: "string" },
         },
-        required: ['contactEmail']
+        required: ["contactEmail"],
       },
     },
   },
   required: ["startTime", "bookingStatus", "description", "attendees"],
 } as const;
+
+/**{
+    "customer": {
+        "firstName": "Gary",
+        "lastName": "Bagnall",
+        "email": "gbagnall8@gmail.com",
+        "phone": "+61 434 984 069",
+    },
+    "time": {selection:"2022-07-29T18:00:00", "id": ""},
+    "selectedMenuOptions": [],
+    "numOfPeople": 2,
+    "sectionId": "",
+    "hasCustomerNotes": false,
+    "hasManagerNotes": false,
+    "service": {
+        "id": "",
+        "duration": 105,
+        "serviceType": "Dinner",
+        "name": "Dinner"
+    },
+    "tags": []
+} */

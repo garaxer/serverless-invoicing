@@ -5,11 +5,12 @@ import commonMiddleware from "../../libs/commonMiddleware";
 import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import schema from "./schema";
 import { InvoiceDto, PAIDSTATUS } from "src/typings/invoice";
+import { invoiceMailer } from "@libs/InvoiceMailer";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
 const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event, context) => {
-  const { title, amount = 0, dueDate = undefined } = event.body;
+  const { title, recipientEmail, amount = 0, dueDate = undefined } = event.body;
   const now = new Date();
   const dueDate14 = new Date();
   dueDate14.setDate(now.getDate() + 14);
@@ -20,6 +21,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     paidStatus: PAIDSTATUS.UNPAID,
     createdAt: now.toISOString(),
     amount,
+    recipientEmail,
     dueDate: dueDate ? new Date(dueDate).toISOString() : dueDate14.toISOString(),
     paidBy: {
       amount: 0,
@@ -37,6 +39,8 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
+
+  await invoiceMailer(invoice)
 
   return formatJSONResponse({invoice}, 201);
 }

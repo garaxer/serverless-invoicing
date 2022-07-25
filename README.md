@@ -117,3 +117,83 @@ get next two weeks off bookings by copying the getOverdueInvoices
 Goal: Service to send an email confirming, reminding of booking, invoicing booking for dr appointments
 
 sls -c serverless.ts deploy --verbose
+
+
+```mermaid
+erDiagram
+    REPORTS ||--o| INVOICES : has
+    REPORTS {
+        id string
+        source string
+        amount number
+        tax_deductable boolean
+        paid boolean
+        description string
+        created_at Date
+        updated_at Date
+        type ReportType-INCOMEorEXPENSE
+        invoiceId string FK
+    }
+    INVOICES ||--o{ NOTIFICATION : has
+    INVOICES {
+        id string
+        title string
+        paidStatus PAIDSTATUS
+        createdAt string
+        amount number
+        dueDate string
+        recipientEmail string
+        amountPaid number
+        datePaid string
+        reminderSentDate string
+    }
+    NOTIFICATION {
+        id string PK
+        invoice_id string FK
+    }
+```
+
+```mermaid
+erDiagram
+    SCHEDULES ||--o{ SERVICES : hasMany
+    SCHEDULES {
+
+    }
+    SERVICES {
+        id string
+        serviceType string
+        times DateList
+        sections stringList
+    }
+
+    SERVICE ||--o{ TIMESLOTS : hasMany
+    SERVICE {
+        id string
+        duration number
+        serviceType string
+        createdAt Date
+        updatedAt Date
+    } 
+    TIMESLOTS ||--o{ BOOKINGS : creates
+    TIMESLOTS {
+        id string
+        time Date
+    }
+    BOOKINGS {
+        time Date
+        selectedMenuOptions List
+        numOfPeople number
+        customerNotes string
+        managerNotes string
+        created_at Date
+        updated_at Date
+    }
+    CUSTOMER ||--o{ BOOKINGS : places
+    CUSTOMER {
+        id string PK
+        firstName string
+        lastName string
+        email string
+        phoneNational string
+    }
+```

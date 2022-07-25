@@ -1,10 +1,11 @@
 import { DynamoDB } from "aws-sdk";
 import commonMiddleware from "../libs/commonMiddleware";
 import * as createHttpError from "http-errors";
+import { Invoice } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-export const getInvoiceById = async (id: string) => {
+export const getInvoiceById = async (id: string)  => {
   let invoice: DynamoDB.DocumentClient.AttributeMap;
 
   try {
@@ -25,7 +26,7 @@ export const getInvoiceById = async (id: string) => {
     throw new createHttpError.NotFound(`Auction with ID "${id}" not found`);
   }
 
-  return invoice;
+  return invoice as Invoice | undefined
 };
 
 async function getInvoice(event, context) {

@@ -1,4 +1,5 @@
 import { DynamoDB } from "aws-sdk";
+import { Invoice } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
@@ -16,6 +17,6 @@ export const getOverdueInvoices = async () => {
   };
   
   const result = await dynamodb.query(params).promise();
-  return result.Items
+  return result.Items as Invoice[]
 }
 

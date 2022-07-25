@@ -4,7 +4,5 @@ export default {
     title: { type: 'string' },
     amount: { type: 'number' },
     dueDate: { type: 'string' },
-    recipientEmail: { type: 'string' },
-  },
-  required: ['title']
+  }
 } as const;
