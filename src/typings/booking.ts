@@ -16,6 +16,41 @@ export type Booking = {
   repeat?: boolean;
 };
 
+// TODO use the below three booking types instead
+export type Bookings = {
+  id: string;
+  invoice_id?: string;
+  booking_status: string;
+  party_size: number;
+  host: User;
+  time_slot_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TimeSlot = {
+  id: string;
+  start_time: string;
+  availability_count: number;
+  booking_count: number;
+  is_bookable: boolean;
+  maximum_party_size?: number;
+  service_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Service = {
+  id: string;
+  title: string;
+  description: string;
+  location?: string;
+  is_bookable: boolean;
+  time_slots?: TimeSlot[];
+  created_at: string;
+  updated_at: string;
+};
+
 export type BookingNew = {
   id: string;
   startTime: string;

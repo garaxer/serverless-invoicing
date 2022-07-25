@@ -10,10 +10,15 @@ import deleteBooking from "@functions/deleteBooking";
 import { createInvoice } from "@handlers/index";
 import payInvoice from "@handlers/payInvoice";
 
+// TODO use these in the imports
 export const custom = {
   BookingsTable: {
     name: { Ref: "BookingsTable" },
     arn: { "Fn::GetAtt": ["BookingsTable", "Arn"] },
+  },
+  InvoicesTable: {
+    name: { Ref: "InvociesTable" },
+    arn: { "Fn::GetAtt": ["InvociesTable", "Arn"] },
   },
 };
 
@@ -38,6 +43,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       BOOKINGS_TABLE_NAME: 'BookingsTable-${self:provider.stage}',
+      INVOICES_TABLE_NAME: 'InvoicesTable-${self:provider.stage}',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },

@@ -23,4 +23,28 @@ export default {
       ],
     },
   },
+  InvoicesTable: {
+    Type: "AWS::DynamoDB::Table",
+    DeletionPolicy: "Delete",
+    Properties: {
+      TableName: "InvoicesTable-${self:provider.stage}",
+      BillingMode: "PAY_PER_REQUEST",
+      AttributeDefinitions: [
+        { AttributeName: "id", AttributeType: "S" },
+        { AttributeName: "paidStatus", AttributeType: "S" },
+        { AttributeName: "dueDate", AttributeType: "S" },
+      ],
+      KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: "statusAndDueDate",
+          KeySchema: [
+            { AttributeName: "paidStatus", KeyType: "HASH" },
+            { AttributeName: "dueDate", KeyType: "RANGE" },
+          ],
+          Projection: { ProjectionType: "ALL" },
+        },
+      ],
+    },
+  },
 };

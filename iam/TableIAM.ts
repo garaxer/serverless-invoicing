@@ -12,11 +12,17 @@ export default {
     { "Fn::GetAtt": ["BookingsTable", "Arn"] },
     // "${self:custom.BookingsTable.arn}",
     // 
-    // { "Fn::GetAtt": ["InvoicesTable", "Arn"] },
+    { "Fn::GetAtt": ["InvoicesTable", "Arn"] },
     {
       "Fn::Join": [
         "/",
         [{ "Fn::GetAtt": ["BookingsTable", "Arn"] }, "index", "statusAndStartDateTime"],
+      ],
+    },
+    {
+      "Fn::Join": [
+        "/",
+        [{ "Fn::GetAtt": ["InvoicesTable", "Arn"] }, "index", "statusAndDueDate"],
       ],
     },
   ],
