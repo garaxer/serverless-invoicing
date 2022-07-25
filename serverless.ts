@@ -20,6 +20,10 @@ export const custom = {
     name: { Ref: "InvociesTable" },
     arn: { "Fn::GetAtt": ["InvociesTable", "Arn"] },
   },
+  // MailQueue: {
+  //   arn: "${cf:notification-service-${self:provider.stage}.MailQueueArn}",
+  //   url: "${cf:notification-service-${self:provider.stage}.MailQueueUrl}",
+  // },
 };
 
 const serverlessConfiguration: AWS = {
@@ -42,8 +46,9 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
     },
     environment: {
-      BOOKINGS_TABLE_NAME: 'BookingsTable-${self:provider.stage}',
-      INVOICES_TABLE_NAME: 'InvoicesTable-${self:provider.stage}',
+      BOOKINGS_TABLE_NAME: "BookingsTable-${self:provider.stage}",
+      INVOICES_TABLE_NAME: "InvoicesTable-${self:provider.stage}",
+      // MAIL_QUEUE_URL: "${self:custom.MailQueue.url}",
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },
@@ -54,7 +59,15 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, getBookings, createBooking, deleteBooking, ...handlers, createInvoice, payInvoice },
+  functions: {
+    hello,
+    getBookings,
+    createBooking,
+    deleteBooking,
+    ...handlers,
+    createInvoice,
+    payInvoice,
+  },
   package: { individually: true },
   custom: {
     ...custom,

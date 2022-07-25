@@ -41,6 +41,10 @@ export async function invoiceMailer(invoice: Invoice) {
   await dynamodb.update(params).promise();
 
   const isOverdue = new Date(dueDate) < now;
+  console.log('INVOICE NOT YET IMPLEMENTED');
+  console.log(isOverdue);
+  
+  return 
 
   const notifyPayer = sqs
     .sendMessage({

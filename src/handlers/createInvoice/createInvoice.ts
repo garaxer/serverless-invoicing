@@ -5,7 +5,7 @@ import commonMiddleware from "../../libs/commonMiddleware";
 import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import schema from "./schema";
 import { InvoiceDto, PAIDSTATUS } from "src/typings/invoice";
-import { invoiceMailer } from "@libs/InvoiceMailer";
+import { invoiceMailer } from "@libs/invoiceMailer";
 
 const dynamodb = new DynamoDB.DocumentClient();
 

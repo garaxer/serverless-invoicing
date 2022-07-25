@@ -1,6 +1,6 @@
 import { Context, APIGatewayEvent } from "aws-lambda";
 import { getOverdueInvoices } from "@libs/overdueInvoicesQuery";
-import { invoiceMailer } from "@libs/InvoiceMailer";
+import { invoiceMailer } from "@libs/invoiceMailer";
 import * as createHttpError from "http-errors";
 
 const remindInvoice = async (_event: APIGatewayEvent, _context: Context) => {

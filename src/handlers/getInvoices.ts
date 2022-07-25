@@ -5,13 +5,19 @@ import { APIGatewayEvent, Context } from "aws-lambda";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-async function getInvoices(_event: APIGatewayEvent, _context: Context) {
+async function getInvoices(event: APIGatewayEvent, _context: Context) {
   let invoices: DynamoDB.DocumentClient.ItemList;
+  const { status = "UNPAID" } = event.queryStringParameters;
 
   try {
     const result = await dynamodb
-      .scan({
+      .query({
         TableName: process.env.INVOICES_TABLE_NAME,
+        IndexName: "statusAndEndDate",
+        KeyConditionExpression: "paidStatus = :paidStatus",
+        ExpressionAttributeValues: {
+          ":paidStatus": status,
+        },
       })
       .promise();
 

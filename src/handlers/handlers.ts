@@ -17,6 +17,13 @@ export default {
         http: {
           method: "GET",
           path: "/invoice/{id}",
+          request: {
+            parameters: {
+              querystrings: {
+                status: false,
+              },
+            },
+          },
         },
       },
     ],

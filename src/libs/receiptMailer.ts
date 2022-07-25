@@ -12,6 +12,9 @@ export async function receiptMailer(invoice: Invoice, amountPaid: number) {
     amount,
     paidBy: { amount: totalPayment },
   } = invoice;
+
+  console.log('RECIEPT NOT YET IMPLEMENTED');
+  return 
   await sqs
     .sendMessage({
       QueueUrl: process.env.MAIL_QUEUE_URL,
