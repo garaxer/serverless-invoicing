@@ -13,7 +13,7 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
     const result = await dynamodb
       .query({
         TableName: process.env.INVOICES_TABLE_NAME,
-        IndexName: "statusAndEndDate",
+        IndexName: "statusAndDueDate",
         KeyConditionExpression: "paidStatus = :paidStatus",
         ExpressionAttributeValues: {
           ":paidStatus": status,

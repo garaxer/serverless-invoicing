@@ -14,7 +14,7 @@ InvoicesTable:
       - AttributeName: id
         KeyType: HASH
     GlobalSecondaryIndexes:
-      - IndexName: statusAndEndDate
+      - IndexName: statusAndDueDate
         KeySchema:
           - AttributeName: paidStatus
             KeyType: HASH

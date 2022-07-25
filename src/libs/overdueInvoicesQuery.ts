@@ -7,7 +7,7 @@ export const getOverdueInvoices = async () => {
   const now = new Date();
   const params = {
     TableName: process.env.INVOICES_TABLE_NAME,
-    IndexName: 'statusAndEndDate',
+    IndexName: 'statusAndDueDate',
     KeyConditionExpression:
       "paidStatus = :paidStatus AND dueDate < :now",
       ExpressionAttributeValues: {

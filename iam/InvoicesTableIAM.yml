@@ -9,4 +9,4 @@ InvoicesTableIAM:
     - dynamodb:Query
   Resource:
     - ${self:custom.InvoicesTable.arn}
-    - !Join ['/', [ '${self:custom.InvoicesTable.arn}', 'index', 'statusAndEndDate' ]]
+    - !Join ['/', [ '${self:custom.InvoicesTable.arn}', 'index', 'statusAndDueDate' ]]
