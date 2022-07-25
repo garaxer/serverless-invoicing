@@ -1,15 +1,4 @@
 export default {
-  createInvoice: {
-    handler: "src/handlers/createInvoice.handler",
-    events: [
-      {
-        http: {
-          method: "POST",
-          path: "/invoice",
-        },
-      },
-    ],
-  },
   getInvoices: {
     handler: "src/handlers/getInvoices.handler",
     events: [
@@ -39,17 +28,6 @@ export default {
         http: {
           method: "DELETE",
           path: "/invoice/{id}",
-        },
-      },
-    ],
-  },
-  payInvoice: {
-    handler: "src/handlers/payInvoice.handler",
-    events: [
-      {
-        http: {
-          method: "PATCH",
-          path: "/invoice/{id}/pay",
         },
       },
     ],

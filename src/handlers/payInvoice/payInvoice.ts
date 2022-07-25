@@ -1,11 +1,13 @@
 import { DynamoDB } from "aws-sdk";
-import commonMiddleware from "../libs/commonMiddleware";
+import commonMiddleware from "../../libs/commonMiddleware";
 import * as createHttpError from "http-errors";
-import { getInvoiceById } from "./getInvoice";
+import { getInvoiceById } from "../getInvoice";
+import { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
+import schema from "./schema";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-async function payInvoice(event, context) {
+const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema>= async (event, context) => {
   const { id } = event.pathParameters;
   const { amount } = event.body;
 

@@ -115,3 +115,5 @@ get next two weeks off bookings by copying the getOverdueInvoices
 
 
 Goal: Service to send an email confirming, reminding of booking, invoicing booking for dr appointments
+
+sls -c serverless.ts deploy --verbose

@@ -7,6 +7,8 @@ import createBooking from "@functions/createBooking";
 import getBookings from "@functions/getBookings";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
+import { createInvoice } from "@handlers/index";
+import payInvoice from "@handlers/payInvoice";
 
 export const custom = {
   BookingsTable: {
@@ -46,7 +48,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, getBookings, createBooking, deleteBooking, ...handlers },
+  functions: { hello, getBookings, createBooking, deleteBooking, ...handlers, createInvoice, payInvoice },
   package: { individually: true },
   custom: {
     ...custom,
