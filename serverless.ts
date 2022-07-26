@@ -7,11 +7,11 @@ import createBooking from "@functions/createBooking";
 import getBookings from "@functions/getBookings";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
-import { createInvoice } from "@handlers/index";
-import payInvoice from "@handlers/payInvoice";
+import { createInvoice, payInvoice, editInvoice } from "@handlers/index";
 
 // TODO use these in the imports
 export const custom = {
+  Foo: { "Fn::If": ["isDev", 9, 12] },
   BookingsTable: {
     name: { Ref: "BookingsTable" },
     arn: { "Fn::GetAtt": ["BookingsTable", "Arn"] },
@@ -57,6 +57,11 @@ const serverlessConfiguration: AWS = {
     Resources: {
       ...DynamoTables,
     },
+    Conditions: {
+      isDev: {
+        "Fn::Equals": ["${self:provider.stage}", "dev"],
+      },
+    },
   },
   // import the function via paths
   functions: {
@@ -67,6 +72,7 @@ const serverlessConfiguration: AWS = {
     ...handlers,
     createInvoice,
     payInvoice,
+    editInvoice,
   },
   package: { individually: true },
   custom: {

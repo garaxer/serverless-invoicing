@@ -19,14 +19,14 @@ export type Booking = {
 // TODO use the below three booking types instead
 export type Bookings = {
   id: string;
-  customer: User;
+  customer_id: string;
   time_slot_id: string;
-  invoice_id?: string;
-  service_id?: string;
+  service_id: string;
   booking_status?: string;
   party_size?: number;
-  created_at: string;
-  updated_at: string;
+  invoice_id?: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type TimeSlot = {
@@ -36,19 +36,33 @@ export type TimeSlot = {
   booking_count?: number;
   is_bookable?: boolean;
   maximum_party_size?: number;
-  service_id?: string;
   created_at?: string;
-  updated_at: string;
+  updated_at?: string;
+  service_id?: string;
 };
 
 export type Service = {
   id: string;
   title: string;
-  duration: number;
-  locations?: string[];
-  time_slots?: TimeSlot[];
-  created_at: string;
-  updated_at: string;
+  time_slots: TimeSlot[];
+  sections?: string[];
+  description?: string;
+  image?: string;
+  price?: number;
+  duration?: number;
+  venue?:string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type BookingCreate = {
+  customer: User;
+  start_time: string;
+  time_id: string;
+  party_size?: number;
+  managers_notes?: number;
+  customers_notes?: number;
+  service: Service;
 };
 
 export type BookingNew = {
@@ -67,13 +81,29 @@ export type BookingNew = {
   repeat?: boolean;
 };
 
-export type BookingCreate = {
-  startTime: string;
-  bookingStatus: string;
-  bookingType: string;
-  description: string;
-  attendees: User[];
-};
+
+// "customer": {
+//   "firstName": "Gary",
+//   "lastName": "Bagnall",
+//   "email": "gbagnall8@gmail.com",
+//   "phone": "+61 434 984 069",
+//   "subscribed": true,
+//   "phoneNational": "0434 984 069"
+// },
+// "time": "2022-07-29T18:00:00",
+// "selectedMenuOptions": [],
+// "numOfPeople": 2,
+// "sectionId": "section_SWMT1IWG671CG",
+// "hasCustomerNotes": false,
+// "hasManagerNotes": false,
+// "service": {
+//   "id": "service_FHQUKGKJ7CT9G_1596089488429",
+//   "duration": 105,
+//   "serviceType": "Dinner",
+//   "name": "Dinner"
+// },
+// "tags": []
+
 // {
 //   "startTime": "2022-07-30 13:30",
 //   "bookingType": "ONLINE",
