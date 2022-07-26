@@ -2,16 +2,18 @@ import commonMiddleware from "../../libs/commonMiddleware";
 import * as createHttpError from "http-errors";
 import { getInvoiceById } from "../getInvoice";
 import { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import schema from "./schema";
+import schema, { payInvoiceSchema } from "./schema";
 import { payInvoiceCommand } from "@libs/payInvoiceCommand";
 import { receiptMailer } from "@libs/receiptMailer";
 import { PAIDSTATUS } from "src/typings/invoice";
+import validator from "@middy/validator";
 
-
-const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema>= async (event, context) => {
+const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+  event,
+  _context
+) => {
   const { id } = event.pathParameters;
   const { amount } = event.body;
-
 
   if (amount < 0) {
     throw new createHttpError.Forbidden(
@@ -21,25 +23,29 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema>= async (even
 
   const invoice = await getInvoiceById(id);
 
-  if (invoice.paidStatus = PAIDSTATUS.PAID) {
-    throw new createHttpError.Forbidden(
-      `You have paid this invoice`
-    );
+  if ((invoice.paidStatus = PAIDSTATUS.PAID)) {
+    throw new createHttpError.Forbidden(`You have paid this invoice`);
   }
 
   try {
-    const updatedInvoice = await payInvoiceCommand(invoice, amount)
-    await receiptMailer(invoice, amount)
+    const updatedInvoice = await payInvoiceCommand(invoice, amount);
+    await receiptMailer(invoice, amount);
 
     return {
       statusCode: 201,
       body: JSON.stringify(updatedInvoice),
     };
-
   } catch (error) {
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
-}
+};
 
-export const handler = commonMiddleware(payInvoice);
+export const handler = commonMiddleware(payInvoice).use(
+  validator({
+    inputSchema: payInvoiceSchema,
+    ajvOptions: {
+      strict: false,
+    },
+  })
+);

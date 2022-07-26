@@ -3,9 +3,10 @@ import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
 import commonMiddleware from "../../libs/commonMiddleware";
 import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import schema from "./schema";
+import schema, {createInvoiceSchema} from "./schema";
 import { InvoiceDto, PAIDSTATUS } from "src/typings/invoice";
 import { invoiceMailer } from "@libs/invoiceMailer";
+import validator from '@middy/validator';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
@@ -45,4 +46,11 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   return formatJSONResponse({invoice}, 201);
 }
 
-export const handler = commonMiddleware(createInvoice);
+export const handler = commonMiddleware(createInvoice).use(
+  validator({
+    inputSchema: createInvoiceSchema,
+    ajvOptions: {
+      strict: false,
+    },
+  })
+);;

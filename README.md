@@ -194,6 +194,6 @@ erDiagram
         firstName string
         lastName string
         email string
-        phoneNational string
+        phoneß string
     }
 ```

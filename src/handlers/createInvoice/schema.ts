@@ -1,4 +1,4 @@
-export default {
+const schema = {
   type: "object",
   properties: {
     title: { type: 'string' },
@@ -7,4 +7,13 @@ export default {
     recipientEmail: { type: 'string' },
   },
   required: ['title']
-} as const;
+} 
+export default schema
+
+
+export const createInvoiceSchema = {
+  properties: {
+      body : schema
+  },
+  required: ['body']
+}

@@ -2,6 +2,8 @@ import { DynamoDB } from "aws-sdk";
 import commonMiddleware from "../libs/commonMiddleware";
 import * as createHttpError from "http-errors";
 import { APIGatewayEvent, Context } from "aws-lambda";
+import validator from '@middy/validator';
+import getInvoicesSchemas from '@libs/schemas/getInvoicesSchemas';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
@@ -33,4 +35,12 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
   };
 }
 
-export const handler = commonMiddleware(getInvoices);
+export const handler = commonMiddleware(getInvoices).use(
+  validator({
+    inputSchema: getInvoicesSchemas,
+    ajvOptions: {
+      useDefaults: true,
+      strict: false,
+    },
+  })
+);
