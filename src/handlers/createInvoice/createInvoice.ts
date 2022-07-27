@@ -10,7 +10,7 @@ import validator from '@middy/validator';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event, context) => {
+const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event, _context) => {
   const { title, recipientEmail, amount = 0, dueDate = undefined } = event.body;
   const now = new Date();
   const dueDate14 = new Date();
