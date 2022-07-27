@@ -1,29 +1,48 @@
 export default {
   type: "object",
   properties: {
-    startTime: { type: "string" },
-    bookingStatus: { type: "string" },
-    bookingType: { type: "string" },
-    description: { type: "string" },
-    attendees: {
-      type: "array",
-      uniqueItems: true,
-      items: {
-        type: "object",
-        minItems: 1,
-        maxItems: 15,
-        properties: {
-          firstName: { type: "string" },
-          lastName: { type: "string" },
-          contactEmail: { type: "string" },
-          phoneNumber: { type: "string" },
-        },
-        required: ["contactEmail"],
+    customer: {
+      type: "object",
+      minItems: 1,
+      maxItems: 15,
+      properties: {
+        id: { type: "string" },
+        firstName: { type: "string" },
+        lastName: { type: "string" },
+        email: { type: "string" },
+        phone: { type: "string" },
       },
+      required: ["email"],
+    },
+    startDateTime: { type: "string" },
+    time_slot_id: { type: "string" },
+    party_size: { type: "number" },
+    managers_notes: { type: "string" },
+    customers_notes: { type: "string" },
+    section: { type: "string" },
+    service: {
+      type: "object",
+      minItems: 1,
+      maxItems: 2,
+      properties: {
+        id: { type: "string" },
+        title: { type: "string" },
+      },
+      required: ["id"],
     },
   },
-  required: ["startTime", "bookingStatus", "description", "attendees"],
+  required: ["customer", "startDateTime", "time_slot_id", "service"],
 } as const;
+
+// export type BookingCreate = {
+//   customer: User;
+//   start_time: string;
+//   time_id: string;
+//   party_size?: number;
+//   managers_notes?: string;
+//   customers_notes?: string;
+//   service: Service;
+// };
 
 /**{
     "customer": {
@@ -46,3 +65,20 @@ export default {
     },
     "tags": []
 } */
+
+// attendees: {
+//   type: "array",
+//   uniqueItems: true,
+//   items: {
+//     type: "object",
+//     minItems: 1,
+//     maxItems: 15,
+//     properties: {
+//       firstName: { type: "string" },
+//       lastName: { type: "string" },
+//       contactEmail: { type: "string" },
+//       phoneNumber: { type: "string" },
+//     },
+//     required: ["contactEmail"],
+//   },
+// },

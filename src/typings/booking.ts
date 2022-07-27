@@ -1,6 +1,6 @@
 import { User } from "./user";
 
-export type Booking = {
+export type Booking_old = {
   id: string;
   startTime: Date;
   bookingStatus: string;
@@ -17,14 +17,18 @@ export type Booking = {
 };
 
 // TODO use the below three booking types instead
-export type Bookings = {
+export type Booking = {
   id: string;
   customer_id: string;
   time_slot_id: string;
+  startDateTime: string;
   service_id: string;
-  booking_status?: string;
+  bookingStatus: string;
   party_size?: number;
   invoice_id?: string;
+  section?: string;
+  managers_notes?: string;
+  customers_notes?: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -57,11 +61,12 @@ export type Service = {
 
 export type BookingCreate = {
   customer: User;
-  start_time: string;
-  time_id: string;
+  startDateTime: string;
+  time_slot_id: string;
   party_size?: number;
-  managers_notes?: number;
-  customers_notes?: number;
+  managers_notes?: string;
+  customers_notes?: string;
+  section?: string;
   service: Service;
 };
 
@@ -129,7 +134,7 @@ export type BookingNew = {
 //   ]
 // }
 
-export class BookingClass implements Booking {
+export class BookingClass implements Booking_old {
   id: string;
   startTime: Date;
   bookingStatus: string;

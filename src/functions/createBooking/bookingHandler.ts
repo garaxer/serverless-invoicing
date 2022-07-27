@@ -3,7 +3,7 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
-import { BookingClass } from "src/typings/booking";
+import { Booking } from "src/typings/booking";
 import { v4 as uuid } from "uuid";
 
 import schema from "./schema";
@@ -12,31 +12,38 @@ const dynamodb = new DynamoDB.DocumentClient();
 const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
-  const { startTime, bookingStatus, bookingType, description, attendees } = event.body;
+  const {
+    time_slot_id,
+    party_size,
+    managers_notes,
+    customers_notes,
+    section,
+    customer,
+    service, 
+    startDateTime } = event.body;
 
   console.log("Creating Booking");
 
-  const booking = new BookingClass({
+  const booking: Booking = {
     id: uuid(),
-    startTime,
-    description,
-    bookingStatus,
-    bookingType,
-    attendees: attendees.map(
-      ({ firstName, lastName, phoneNumber, contactEmail }) => ({
-        firstName,
-        lastName,
-        phoneNumber,
-        contactEmail,
-      })
-    ),
-  });
+    time_slot_id,
+    party_size,
+    managers_notes,
+    customers_notes,
+    section,
+    customer_id: customer?.id ?? customer.email,
+    service_id: service.id,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    startDateTime,
+    bookingStatus: "OPEN"
+  };
 
   try {
     const result = await dynamodb
       .put({
         TableName: process.env.BOOKINGS_TABLE_NAME,
-        Item: booking.to_new(),
+        Item: booking,
       })
       .promise();
     console.log(result);  
