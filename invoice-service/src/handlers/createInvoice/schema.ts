@@ -5,6 +5,8 @@ const schema = {
     amount: { type: 'number' },
     dueDate: { type: 'string' },
     recipientEmail: { type: 'string' },
+    serviceEndDate: { type: 'string' },
+    serviceStartDate: { type: 'string' },
   },
   required: ['title']
 } 
