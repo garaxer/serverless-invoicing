@@ -39,9 +39,9 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     dueDate: dueDate
       ? new Date(dueDate).toISOString()
       : dueDate14.toISOString(),
-    paidBy: {
+    paidBy: [{
       amount: 0,
-    },
+    }],
     serviceEndDate: serviceEndDate || new Date(serviceEndDate).toISOString(),
     serviceStartDate:
       serviceStartDate || new Date(serviceStartDate).toISOString(),

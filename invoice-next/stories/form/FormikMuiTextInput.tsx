@@ -1,12 +1,12 @@
-import { useField } from 'formik';
-import TextField from '@mui/material/TextField';
+import { useField } from "formik";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 
-export interface FormikMuiTextInputProps {
+export type FormikMuiTextInputProps = TextFieldProps & {
   placeholder: string;
   name: string;
   label?: string;
   type?: string;
-}
+};
 
 export default function FormikMuiTextInput(props: FormikMuiTextInputProps) {
   const [field, meta] = useField(props.name);

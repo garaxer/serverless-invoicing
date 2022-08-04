@@ -14,7 +14,7 @@ export type Invoice = {
   paidBy: {
     amount: number;
     datePaid?: string;
-  };
+  }[];
   reminderSentDate?: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
@@ -31,7 +31,7 @@ export class InvoiceDto implements Invoice {
   paidBy: {
     amount: number;
     datePaid?: string;
-  };
+  }[];
   reminderSentDate?: string;
   serviceEndDate?: string;
   serviceStartDate?: string;

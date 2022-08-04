@@ -22,10 +22,12 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   }
 
   const invoice = await getInvoiceById(id);
-
-  if ((amount + invoice?.paidBy?.amount || 0) > invoice.amount) {
+  const totalPaidSoFar = invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
+  if ((amount + totalPaidSoFar ) > invoice.amount) {
     throw new createHttpError.Forbidden(
-      `Your pay amount greater than the remaining amount Your Amount: ${amount}. Paid so far ${invoice?.paidBy?.amount || 0}. Total ${invoice.amount}`
+      `Your pay amount greater than the remaining amount Your Amount: ${amount}. Paid so far ${
+        totalPaidSoFar
+      }. Total ${invoice.amount}`
     );
   }
 

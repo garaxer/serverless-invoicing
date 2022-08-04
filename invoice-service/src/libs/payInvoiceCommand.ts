@@ -1,21 +1,25 @@
-import { DynamoDB, SQS } from "aws-sdk";
+import { DynamoDB } from "aws-sdk";
 import { Invoice } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
 export async function payInvoiceCommand(invoice: Invoice, amount: number) {
+  const totalPaidSoFar =
+    invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
+
   const paidStatus =
-    amount + invoice.paidBy.amount >= invoice.amount ? "PAID" : "UNPAID";
+    amount + totalPaidSoFar >= invoice.amount ? "PAID" : "UNPAID";
 
   const params = {
     TableName: process.env.INVOICES_TABLE_NAME,
     Key: { id: invoice.id },
-    UpdateExpression:
-      "set paidBy.amount = :amount, paidBy.datePaid = :datePaid, paidStatus = :paid",
+    UpdateExpression: "set paidBy = :paidBy, paidStatus = :paid",
     ExpressionAttributeValues: {
-      ":amount": amount + invoice.paidBy.amount,
+      ":paidBy": [
+        ...invoice.paidBy,
+        { datePaid: new Date().toISOString(), amount },
+      ],
       ":paid": paidStatus,
-      ":datePaid": new Date().toISOString(),
     },
     ReturnValues: "ALL_NEW",
   };
@@ -24,7 +28,6 @@ export async function payInvoiceCommand(invoice: Invoice, amount: number) {
 
   const result = await dynamodb.update(params).promise();
 
-  
   updatedInvoice = result.Attributes;
 
   return updatedInvoice as Invoice | undefined;
