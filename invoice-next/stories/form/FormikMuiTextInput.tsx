@@ -2,8 +2,8 @@ import { useField } from "formik";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 export type FormikMuiTextInputProps = TextFieldProps & {
-  placeholder: string;
   name: string;
+  placeholder?: string;
   label?: string;
   type?: string;
 };

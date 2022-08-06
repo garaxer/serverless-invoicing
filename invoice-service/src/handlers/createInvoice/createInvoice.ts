@@ -13,6 +13,7 @@ import validator from "@middy/validator";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
+// TODO create an automation.
 const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event,
   _context
@@ -39,9 +40,11 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     dueDate: dueDate
       ? new Date(dueDate).toISOString()
       : dueDate14.toISOString(),
-    paidBy: [{
-      amount: 0,
-    }],
+    paidBy: [
+      {
+        amount: 0,
+      },
+    ],
     serviceEndDate: serviceEndDate || new Date(serviceEndDate).toISOString(),
     serviceStartDate:
       serviceStartDate || new Date(serviceStartDate).toISOString(),
