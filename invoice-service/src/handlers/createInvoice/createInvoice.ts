@@ -10,6 +10,7 @@ import schema, { createInvoiceSchema } from "./schema";
 import { InvoiceDto, PAIDSTATUS } from "src/typings/invoice";
 import { invoiceMailer } from "@libs/invoiceMailer";
 import validator from "@middy/validator";
+import { subDays, addDays } from "date-fns";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
@@ -22,13 +23,12 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     title,
     recipientEmail,
     amount = 0,
-    dueDate = undefined,
+    dueDate: dueDateU = undefined,
     serviceEndDate = undefined,
     serviceStartDate = undefined,
   } = event.body;
   const now = new Date();
-  const dueDate14 = new Date();
-  dueDate14.setDate(now.getDate() + 14);
+  const dueDate = dueDateU ? new Date(dueDateU) : addDays(now, 14);
 
   const invoice = new InvoiceDto({
     id: uuid(),
@@ -37,17 +37,20 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     createdAt: now.toISOString(),
     amount,
     recipientEmail,
-    dueDate: dueDate
-      ? new Date(dueDate).toISOString()
-      : dueDate14.toISOString(),
+    dueDate: dueDate.toISOString(),
     paidBy: [
       {
         amount: 0,
       },
     ],
-    serviceEndDate: serviceEndDate || new Date(serviceEndDate).toISOString(),
-    serviceStartDate:
-      serviceStartDate || new Date(serviceStartDate).toISOString(),
+    serviceEndDate: (serviceEndDate
+      ? new Date(serviceEndDate)
+      : subDays(dueDate, 1)
+    ).toISOString(),
+    serviceStartDate: (serviceStartDate
+      ? new Date(serviceStartDate)
+      : subDays(dueDate, 7)
+    ).toISOString(),
   });
 
   try {
@@ -64,7 +67,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
   await invoiceMailer(invoice);
 
-  return formatJSONResponse({ invoice }, 201);
+  return formatJSONResponse({ ...invoice }, 201);
 };
 
 export const handler = commonMiddleware(createInvoice).use(

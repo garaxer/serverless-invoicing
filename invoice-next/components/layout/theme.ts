@@ -8,6 +8,9 @@ let theme = createTheme({
     secondary: {
       main: '#e65400',
     },
+    background: {
+      default: 'blue'
+    }
   },
 });
 

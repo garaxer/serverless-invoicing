@@ -22,6 +22,7 @@ export default {
     events: [
       {
         http: {
+          cors: true,
           method: "GET",
           path: "/invoice/{id}",
           
@@ -34,6 +35,7 @@ export default {
     events: [
       {
         http: {
+          cors: true,
           method: "DELETE",
           path: "/invoice/{id}",
         },

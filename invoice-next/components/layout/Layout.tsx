@@ -46,7 +46,7 @@ const ResponsiveAppBar = ({ children }: PropsWithChildren<AppBarProps>) => {
     ({ theme }) =>
       `display: flex;
 flex-direction: column;
-height: 100vh;
+min-height: 100vh;
 background-color: ${theme.palette.background.paper};
 color: ${theme.palette.text.primary}
 `
@@ -165,7 +165,6 @@ color: ${theme.palette.text.primary}
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
                     />
                   </IconButton>
                 </Tooltip>
@@ -195,7 +194,7 @@ color: ${theme.palette.text.primary}
             </Toolbar>
           </Container>
         </AppBar>
-        <Container maxWidth="lg" sx={{ paddingTop: 5, flexGrow: 1 }}>
+        <Container maxWidth="lg" sx={{ paddingTop: 5, flexGrow: 1 }} >
           {children}
         </Container>
         <div>

@@ -6,6 +6,7 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "POST",
         path: "/invoice",
         request: {

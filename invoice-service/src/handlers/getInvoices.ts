@@ -9,6 +9,7 @@ const dynamodb = new DynamoDB.DocumentClient();
 
 async function getInvoices(event: APIGatewayEvent, _context: Context) {
   let invoices: DynamoDB.DocumentClient.ItemList;
+  // TODO add optional duedate before and after
   const { status = "UNPAID" } = event.queryStringParameters;
 
   try {
@@ -31,6 +32,10 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
 
   return {
     statusCode: 200,
+    // headers: {
+    //   'Access-Control-Allow-Origin': '*',
+    //   'Access-Control-Allow-Credentials': true,
+    // },
     body: JSON.stringify(invoices),
   };
 }
