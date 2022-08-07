@@ -27,6 +27,7 @@ const Home: NextPage = () => {
     const createdInvoice: InvoiceDto = {
       ...invoice,
       id: "pending",
+      title: 'creating',
       paidStatus: PAIDSTATUS.UNPAID,
       createdAt: new Date().toLocaleDateString(),
       paidBy: [],

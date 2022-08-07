@@ -17,7 +17,7 @@ export async function invoiceMailer(invoice: Invoice) {
     reminderSentDate,
     dueDate,
   } = invoice;
-  const { amount: amountPaid } = paidBy;
+  const amountPaid = paidBy.reduce((a,c) => c.amount + a, 0);
 
   if (reminderSentDate) {
     const REMINDER_INTERVAL = 1; // 86400000; //1 day
