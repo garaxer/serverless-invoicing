@@ -12,6 +12,7 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
   // TODO add optional duedate before and after
   const { status = "UNPAID" } = event.queryStringParameters;
 
+  // TODO Only get invoices created by you.
   try {
     const result = await dynamodb
       .query({

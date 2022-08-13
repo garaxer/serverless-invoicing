@@ -6,6 +6,7 @@ export default {
         http: {
           method: "GET",
           path: "/invoices",
+          authorizer: "${self:custom.authorizer}",
           request: {
             parameters: {
               querystrings: {
@@ -25,7 +26,7 @@ export default {
           cors: true,
           method: "GET",
           path: "/invoice/{id}",
-          
+          authorizer: "${self:custom.authorizer}",
         },
       },
     ],
