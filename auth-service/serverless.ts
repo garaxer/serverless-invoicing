@@ -14,6 +14,7 @@ const serverlessConfiguration: AWS = {
     runtime: "nodejs16.x",
     memorySize: 128,
     region: "ap-southeast-2",
+    stage: "${opt:stage, 'dev'}",
     environment: {
       AUTH0_PUBLIC_KEY: fs.readFileSync("./secret.pem", "utf8"), // From auth0 application settings
     },
