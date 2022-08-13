@@ -11,14 +11,21 @@ import { InvoiceDto, PAIDSTATUS } from "src/typings/invoice";
 import { invoiceMailer } from "@libs/invoiceMailer";
 import validator from "@middy/validator";
 import { subDays, addDays } from "date-fns";
+import { Authorizer } from "src/typings/authorizer";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-// TODO create an automation.
-const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event,
-  _context
-) => {
+// TODO automate this to happen once a week or on payment of last invoice.
+const createInvoice: ValidatedEventAPIGatewayProxyEvent<
+  typeof schema,
+  Authorizer
+> = async (event, _context) => {
+  const { email } = event.requestContext.authorizer;
+  console.log({auth: event.requestContext.authorizer});
+  if (event.requestContext.authorizer[Object.keys(event.requestContext.authorizer).find(x => x.includes("roles"))]?.includes('admin')) {
+    console.log('is admin');
+  }
+
   const {
     title,
     recipientEmail,
@@ -51,6 +58,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       ? new Date(serviceStartDate)
       : subDays(dueDate, 7)
     ).toISOString(),
+    ...(email && { createdBy: email }),
   });
 
   try {

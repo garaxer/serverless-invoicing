@@ -1,11 +1,13 @@
-const schema = {
+import schema from './schema';
+
+export default  {
   type: "object",
   properties: {
     amount: { type: "number" },
   },
   required: ['amount']
-}; 
-export default schema
+
+} as const; 
 
 export const payInvoiceSchema = {
   properties: {

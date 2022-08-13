@@ -1,4 +1,6 @@
-const schema = {
+import schema from './schema';
+
+export default {
   type: "object",
   properties: {
     title: { type: 'string' },
@@ -9,9 +11,7 @@ const schema = {
     serviceStartDate: { type: 'string' },
   },
   required: ['title']
-} 
-export default schema
-
+} as const
 
 export const createInvoiceSchema = {
   properties: {

@@ -8,6 +8,7 @@ export default {
       http: {
         method: "PATCH",
         path: "/invoice/{id}/pay",
+        authorizer: "${self:custom.authorizer}",
         request: {
           schemas: {
             'application/json': schema,

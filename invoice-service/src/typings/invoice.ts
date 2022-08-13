@@ -14,10 +14,12 @@ export type Invoice = {
   paidBy: {
     amount: number;
     datePaid?: string;
+    email?: string;
   }[];
   reminderSentDate?: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
+  createdBy?: string;
 };
 
 export class InvoiceDto implements Invoice {
@@ -31,10 +33,12 @@ export class InvoiceDto implements Invoice {
   paidBy: {
     amount: number;
     datePaid?: string;
+    email?: string;
   }[];
   reminderSentDate?: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
+  createdBy?: string;
   constructor(partial: Partial<InvoiceDto>) {
     Object.assign(this, partial);
   }

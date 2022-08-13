@@ -53,6 +53,8 @@ export const handler = async (
       {}
     );
     console.log({ claims });
+    // TODO add new auth service that checks for roles.
+    //claims[Object.keys(claims).find(x => x.includes("rolesl"))]?.includes('admin')
 
     console.log({
       ...policy,

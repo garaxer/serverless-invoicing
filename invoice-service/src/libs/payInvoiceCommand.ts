@@ -3,7 +3,7 @@ import { Invoice } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-export async function payInvoiceCommand(invoice: Invoice, amount: number) {
+export async function payInvoiceCommand(invoice: Invoice, amount: number, email = 'unknown') {
   const totalPaidSoFar =
     invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
 
@@ -17,7 +17,7 @@ export async function payInvoiceCommand(invoice: Invoice, amount: number) {
     ExpressionAttributeValues: {
       ":paidBy": [
         ...invoice.paidBy,
-        { datePaid: new Date().toISOString(), amount },
+        { datePaid: new Date().toISOString(), amount, email },
       ],
       ":paid": paidStatus,
     },

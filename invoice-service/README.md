@@ -152,7 +152,9 @@ erDiagram
         invoice_id string FK
     }
 ```
+// other ideas:
 
+// Restaurant / Medical booking
 ```mermaid
 erDiagram
     SCHEDULES ||--o{ SERVICES : hasMany
@@ -194,11 +196,37 @@ erDiagram
         firstName string
         lastName string
         email string
-        phoneß string
+        phone string
+    }
+```
+
+// Email service only
+no auth or machine to machine auth, just email only that can be used by another server
+```mermaid 
+erDiagram   
+    EMAIL {
+        emails StringList
+        title string
+        body stringToBucket
+        attachments stringToBucket
     }
 ```
 
 
+// Event planner.
+Create events, share via id, get email notifications, small nice portfolio app, lets business send out emails or text if you add a user table.
+```mermaid 
+erDiagram   
+    EVENT {
+        id string
+        title string
+        description string
+        location string
+        dateTime Date
+        host string
+        attendees emailList
+    }
+```
 Personal notes:
 Auth0
 https://gist.github.com/arielweinberger/21d3b72bb4f345a410abb7e98a17cc96
@@ -212,3 +240,4 @@ curl --location --request POST 'https://YOUR_AUTH0_DOMAIN/oauth/token' \
 --data-urlencode 'scope=openid'
 --data-urlencode 'audience=YOUR_AUDIENCE_IDENTIFIER'
 ```
+The username and password is for a user, but your application(the client id) must have username password auth enabled, the audience is from an api

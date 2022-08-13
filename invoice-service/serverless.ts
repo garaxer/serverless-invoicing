@@ -9,8 +9,12 @@ import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
 import { createInvoice, payInvoice, editInvoice } from "@handlers/index";
 
-// TODO use these in the imports
+// TODO use these as the imports
 export const custom = {
+  authorizer: {
+    name: "serverless-auth0-authorizer-${self:provider.stage}-auth",
+    arn: { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:serverless-auth0-authorizer-${self:provider.stage}-auth"}
+  },
   Foo: { "Fn::If": ["isDev", 9, 12] },
   BookingsTable: {
     name: { Ref: "BookingsTable" },

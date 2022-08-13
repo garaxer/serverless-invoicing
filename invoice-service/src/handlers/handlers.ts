@@ -38,6 +38,7 @@ export default {
           cors: true,
           method: "DELETE",
           path: "/invoice/{id}",
+          authorizer: "${self:custom.authorizer}",
         },
       },
     ],
