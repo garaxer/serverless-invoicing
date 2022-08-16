@@ -9,6 +9,8 @@ const generatePolicy = (
   methodArn: string
 ) => {
   const apiGatewayWildcard = methodArn.split("/", 2).join("/") + "/*";
+  console.log({principalId, methodArn});
+  
   return {
     principalId,
     policyDocument: {
@@ -52,7 +54,6 @@ export const handler = async (
       (a, [k, v]) => ({ ...a, [k]: typeof v === "string" ? v : v.toString() }),
       {}
     );
-    console.log({ claims });
     // TODO add new auth service that checks for roles.
     //claims[Object.keys(claims).find(x => x.includes("rolesl"))]?.includes('admin')
 

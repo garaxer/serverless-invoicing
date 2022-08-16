@@ -9,7 +9,7 @@ export default {
         cors: true,
         method: "POST",
         authorizer: "${self:custom.authorizer}",
-        path: "/invoice",
+        path: "/email",
         request: {
           schemas: {
             "application/json": schema,

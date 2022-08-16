@@ -6,8 +6,8 @@ export default {
     recipients: {
       type: "array",
       uniqueItems: true,
-      recipient: { type: "string" },
+      items: { type: "string" },
     },
   },
-  required: ["name"],
+  required: ["subject","body"],
 } as const;

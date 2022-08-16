@@ -1,5 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 import sendMail from "@functions/sendMail";
+import sendMailHttp from "@functions/sendMailHttp";
 import SendMailIAM from "./iam/SendMailIAM";
 import MailQueueIAM from "./iam/MailQueueIAM";
 import MailQueue from "./resources/MailQueue";
@@ -29,12 +30,16 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { sendMail },
+  functions: { sendMail, sendMailHttp },
   package: { individually: true },
   custom: {
     mailQueue: {
       name: "MailQueue-${self:provider.stage}",
       arn: { "Fn::GetAtt": ["MailQueue", "Arn"] },
+    },
+    authorizer: {
+      name: "serverless-auth0-authorizer-${self:provider.stage}-auth",
+      arn: { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:serverless-auth0-authorizer-${self:provider.stage}-auth"}
     },
     esbuild: {
       bundle: true,

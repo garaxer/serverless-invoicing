@@ -1,4 +1,4 @@
-import { ValidatedAPIGatewayProxyEvent } from "@libs/api-gateway";
+import { formatJSONResponse, ValidatedAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { SES } from "aws-sdk";
 import schema from "./schema";
@@ -10,7 +10,7 @@ const handler = async (
   event: ValidatedAPIGatewayProxyEvent<typeof schema>,
   _context
 ) => {
-  const { subject, body, recipients } = event.body;
+  const { subject, body, recipients = [] } = event.body;
 
   const params = {
     Source: "gbagnall8@gmail.com",
@@ -32,7 +32,7 @@ const handler = async (
   try {
     const result = await ses.sendEmail(params).promise();
     console.log(result);
-    return result;
+    return formatJSONResponse({result});
   } catch (error) {
     console.error(error);
   }
