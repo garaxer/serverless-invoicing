@@ -1,3 +1,5 @@
+import { ExpandMore } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import React from 'react';
 
 import { Header } from './Header';
@@ -12,6 +14,8 @@ export const Page: React.VFC = () => {
 
   return (
     <article>
+
+      
       <Header
         user={user}
         onLogin={() => setUser({ name: 'Jane Doe' })}
@@ -20,7 +24,14 @@ export const Page: React.VFC = () => {
       />
 
       <section>
-        <h2>Pages in Storybook</h2>
+      <Button>
+        Select <ExpandMore />
+      </Button>
+      <Button endIcon={<ExpandMore />}>
+        Select
+      </Button>
+      <br />
+        <h2>Pages in Storybook2</h2>
         <p>
           We recommend building UIs with a{' '}
           <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
