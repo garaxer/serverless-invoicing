@@ -48,5 +48,6 @@ export default {
   },
   remindInvoice: {
     handler: "src/handlers/remindInvoice.handler",
+    events: [{ schedule: "rate(5 days)" }],
   },
 };

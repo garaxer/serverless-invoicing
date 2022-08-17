@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{ \"startTime\": \"2022-07-30 13:30\",    \"bookingType\": \"ONLINE\",    \"bookingStatus\": \"SCHEDULED\",    \"description\": \"1hr session with Craig\",    \"attendees\": [        {            \"contactEmail\": \"gbagnall8@gmail.com\"        }    ]  }"
+}

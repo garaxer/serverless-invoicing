@@ -1,5 +1,23 @@
 import { User } from "./user";
 
+// Event booking
+export type CreateEventService = {
+  id: string;
+  title: string;
+  description: string;
+  venue: string;
+  bookingStatus: string;
+  startDateTime: string;
+  serviceType: string;
+  duration: number;
+  maxPartySize: number;
+  maxCapacity: number;
+  timeSlots: string[];
+  created_at: string;
+  updated_at: string;
+};
+
+// Restaurant booking
 export type Booking_old = {
   id: string;
   startTime: Date;
@@ -54,7 +72,7 @@ export type Service = {
   image?: string;
   price?: number;
   duration?: number;
-  venue?:string;
+  venue?: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -85,7 +103,6 @@ export type BookingNew = {
   nextBookingId?: string;
   repeat?: boolean;
 };
-
 
 // "customer": {
 //   "firstName": "Gary",

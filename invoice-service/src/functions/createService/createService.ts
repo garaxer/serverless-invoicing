@@ -3,58 +3,62 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
-import { Booking } from "src/typings/booking";
+import { CreateEventService } from "src/typings/booking";
 import { v4 as uuid } from "uuid";
 
 import schema from "./schema";
 const dynamodb = new DynamoDB.DocumentClient();
 
-const createService: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
   const {
-    time_slot_id,
-    party_size,
-    managers_notes,
-    customers_notes,
-    section,
-    customer,
-    service, 
-    startDateTime } = event.body;
+    title,
+    description = "",
+    venue = "",
+    bookingStatus = "OPEN",
+    startDateTime = new Date().toISOString(),
+    serviceType = "",
+    duration = 60,
+    maxPartySize = 1,
+    maxCapacity = 12,
+    timeSlots = ["1200"],
+  } = event.body;
 
-  console.log("Creating Booking");
+  console.log("Creating Service");
 
-  const booking: Booking = {
+  const service: CreateEventService = {
     id: uuid(),
-    time_slot_id,
-    party_size,
-    managers_notes,
-    customers_notes,
-    section,
-    customer_id: customer?.id ?? customer.email,
-    service_id: service.id,
+    title,
+    description,
+    venue,
+    bookingStatus,
+    startDateTime,
+    serviceType,
+    duration,
+    maxPartySize,
+    maxCapacity,
+    timeSlots,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    startDateTime,
-    bookingStatus: "OPEN"
   };
 
   try {
     const result = await dynamodb
       .put({
         TableName: process.env.BOOKINGS_TABLE_NAME,
-        Item: booking,
+        Item: service,
       })
       .promise();
-    console.log(result);  
+    console.log(result);
   } catch (error) {
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
 
   return formatJSONResponse({
-    booking,
+    service,
   });
 };
 
-export const main = middyfy(createService);
+export const main = middyfy(hello);

@@ -1,3 +1,15 @@
+# Serverless experimentation
+Personal application for automating my invoices.
+React, NextJS. Typescript, Serverless.
+
+Allows you to create an invoice and email it out and keep track and remind of overdue invoices.
+
+
+
+##### Bonus booking site for my portfolio.
+
+###### Create an event, have users sign up to it.
+
 # Serverless - AWS Node.js Typescript
 
 This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
@@ -96,20 +108,13 @@ Any tsconfig.json can be used, but if you do, set the environment variable `TS_N
 
 
 
-# Personal notes (Don't look at these internet)
+# Personal notes
 
 To deploy: 
 sls deploy --verbose
-
-
-
-if you haven't changed the yml
 sls deploy -f FUNCTION_NAME
 
-
 show logs
-
-sls logs -f remindInvoice -t
 sls logs -f remindInvoice -t
 sls invoke -f remindInvoice -l
 
@@ -164,11 +169,11 @@ erDiagram
 // Restaurant / Medical booking
 ```mermaid
 erDiagram
-    SCHEDULES ||--o{ SERVICES : hasMany
+    SCHEDULES ||--o{ SERVICE : hasMany
     SCHEDULES {
 
     }
-    SERVICES {
+    SERVICE {
         id string
         serviceType string
         times DateList
@@ -180,6 +185,7 @@ erDiagram
         id string
         duration number
         serviceType string
+        sections stringList
         createdAt Date
         updatedAt Date
     } 
@@ -234,9 +240,11 @@ erDiagram
         attendees emailList
     }
 ```
-Personal notes:
-Auth0
+Auth0:
+You will need to generate an jwt using auth0, either a machine to machine application or a logged in user.
+
 https://gist.github.com/arielweinberger/21d3b72bb4f345a410abb7e98a17cc96
+
 ```
 curl --location --request POST 'https://YOUR_AUTH0_DOMAIN/oauth/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
@@ -250,3 +258,12 @@ curl --location --request POST 'https://YOUR_AUTH0_DOMAIN/oauth/token' \
 The username and password is for a user, but your application(the client id) must have username password auth enabled, the audience is from an api
 
 Need to let anyone create and invoice, only see the invoices you created, can only pay the invoices assigned to you (recipient) or you created.
+
+
+
+# Operation.
+Create an invoice
+Which sends an email
+sls invoke -f remindInvoice -l
+to go through and check any overdue invoices (UNPAID and dueDate < now and hasn't been reminded in a week)
+List through invoices.
