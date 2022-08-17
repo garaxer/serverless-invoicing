@@ -63,7 +63,11 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
       totalPaidSoFar,
       email
     );
-    await receiptMailer(updatedInvoice, amount, totalPaidSoFar);
+    const totalPaidSoFarAfterPaying =
+      updatedInvoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
+
+    //TODO Get the next invoice using the due date.
+    await receiptMailer(updatedInvoice, amount, totalPaidSoFarAfterPaying);
 
     return {
       statusCode: 201,

@@ -11,6 +11,8 @@ export default {
             parameters: {
               querystrings: {
                 status: false,
+                limit: false,
+                exclusiveStartKeyId: false,
               },
             },
           },
