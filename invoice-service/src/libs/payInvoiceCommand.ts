@@ -27,10 +27,13 @@ export async function payInvoiceCommand(
   };
 
   let updatedInvoice: DynamoDB.DocumentClient.AttributeMap;
-
+  
   const result = await dynamodb.update(params).promise();
+  console.log({result});
 
   updatedInvoice = result.Attributes;
+
+  console.log({updatedInvoice});
 
   return updatedInvoice as Invoice | undefined;
 }

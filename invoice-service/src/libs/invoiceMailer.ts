@@ -61,5 +61,7 @@ export async function invoiceMailer(invoice: Invoice, sendOverride = false) {
     })
     .promise();
 
+    // TODOMAYBE notify invoice creator it has been paid?
+
   return Promise.all([notifyPayer]);
 }

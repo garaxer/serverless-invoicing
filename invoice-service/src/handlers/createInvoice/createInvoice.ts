@@ -52,11 +52,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
     amount,
     recipientEmail,
     dueDate: dueDate.toISOString(),
-    paidBy: [
-      {
-        amount: 0,
-      },
-    ],
+    paidBy: [],
     serviceEndDate: (serviceEndDate
       ? new Date(serviceEndDate)
       : subDays(dueDate, 1)
