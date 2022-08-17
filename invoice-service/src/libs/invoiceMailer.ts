@@ -1,10 +1,10 @@
 import { DynamoDB, SQS } from "aws-sdk";
-import { Invoice } from "src/typings/invoice";
+import { Invoice, PAIDSTATUS } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 const sqs = new SQS();
 
-export async function invoiceMailer(invoice: Invoice) {
+export async function invoiceMailer(invoice: Invoice, sendOverride = false) {
   const now = new Date();
 
   const {
@@ -17,14 +17,20 @@ export async function invoiceMailer(invoice: Invoice) {
     reminderSentDate,
     dueDate,
   } = invoice;
-  const amountPaid = paidBy.reduce((a,c) => c.amount + a, 0);
+  const amountPaid = paidBy.reduce((a, c) => c.amount + a, 0);
 
-  if (reminderSentDate) {
+  const isOverdue = new Date(dueDate) < now;
+  const isUnpaid = paidStatus !== PAIDSTATUS.PAID;
+
+  // Has it been a week since last reminder email and it is overdue and unpaid
+  if (reminderSentDate && !sendOverride) {
     const REMINDER_INTERVAL = 1; // 86400000; //1 day
     const lastSent = new Date(reminderSentDate);
     const followingDay = new Date(lastSent.getTime() + REMINDER_INTERVAL); // + 1 day in ms
 
-    if (now < followingDay) {
+    console.log({isOverdue, isUnpaid, now, followingDay});
+    
+    if (!isOverdue || !isUnpaid || now < followingDay) {
       return;
     }
   }
@@ -40,17 +46,13 @@ export async function invoiceMailer(invoice: Invoice) {
 
   await dynamodb.update(params).promise();
 
-  const isOverdue = new Date(dueDate) < now;
-  console.log('INVOICE NOT YET IMPLEMENTED');
-  console.log(isOverdue);
-  
-  return 
+  console.log("Sending invoice");
 
   const notifyPayer = sqs
     .sendMessage({
       QueueUrl: process.env.MAIL_QUEUE_URL,
       MessageBody: JSON.stringify({
-        subject: `Invoice - ${title} ${id}${isOverdue ? " OVERDUE" : ""}`,
+        subject: `Invoice - ${title}${isOverdue ? " OVERDUE" : ""}| ${id}`,
         recipient: recipientEmail,
         body: `Your payment $"${amount}" is due ${new Date(
           dueDate

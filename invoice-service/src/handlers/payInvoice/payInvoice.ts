@@ -9,11 +9,11 @@ import { PAIDSTATUS } from "src/typings/invoice";
 import validator from "@middy/validator";
 import { Authorizer } from "src/typings/authorizer";
 
-const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema, Authorizer> = async (
-  event,
-  _context
-) => {
-  const { email } = event.requestContext.authorizer;
+const payInvoice: ValidatedEventAPIGatewayProxyEvent<
+  typeof schema,
+  Authorizer
+> = async (event, _context) => {
+  const { email = "unknown@example.com" } = event.requestContext.authorizer;
   const { id } = event.pathParameters;
   const { amount } = event.body;
 
@@ -25,14 +25,22 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema, Authorizer> 
   }
 
   const invoice = await getInvoiceById(id);
-  const totalPaidSoFar = invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
-  
+
+  if (
+    !email.includes(invoice.recipientEmail) &&
+    !email.includes(invoice.createdBy)
+  ) {
+    const message = `You can not pay an invoice that was not assigned to you. ${email} was attempting to pay ${invoice.recipientEmail}'s invoice, created by ${invoice.createdBy}`;
+    throw new createHttpError.Forbidden(message);
+  }
+
+  const totalPaidSoFar =
+    invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
+
   // Validate overpaying
-  if ((amount + totalPaidSoFar ) > invoice.amount) {
+  if (amount + totalPaidSoFar > invoice.amount) {
     throw new createHttpError.Forbidden(
-      `Your pay amount greater than the remaining amount Your Amount: ${amount}. Paid so far ${
-        totalPaidSoFar
-      }. Total ${invoice.amount}`
+      `Your pay amount greater than the remaining amount Your Amount: ${amount}. Paid so far ${totalPaidSoFar}. Total ${invoice.amount}`
     );
   }
 
@@ -46,9 +54,16 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<typeof schema, Authorizer> 
   //   throw new createHttpError.Forbidden('You cannot pay your own invoice')
   // }
 
+  // Pay invoice and use the account the logged it as paid as the one who did.
+  // Send an email to the recipient email.
   try {
-    const updatedInvoice = await payInvoiceCommand(invoice, amount, email);
-    await receiptMailer(invoice, amount);
+    const updatedInvoice = await payInvoiceCommand(
+      invoice,
+      amount,
+      totalPaidSoFar,
+      email
+    );
+    await receiptMailer(updatedInvoice, amount, totalPaidSoFar);
 
     return {
       statusCode: 201,

@@ -3,13 +3,15 @@ import { Invoice } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-export async function payInvoiceCommand(invoice: Invoice, amount: number, email = 'unknown') {
-  const totalPaidSoFar =
-    invoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
-
+export async function payInvoiceCommand(
+  invoice: Invoice,
+  amount: number,
+  totalPaidSoFar: number,
+  email = "unknown"
+) {
   const paidStatus =
     amount + totalPaidSoFar >= invoice.amount ? "PAID" : "UNPAID";
-
+  // email is the email of the account the user is logged in with that has.
   const params = {
     TableName: process.env.INVOICES_TABLE_NAME,
     Key: { id: invoice.id },

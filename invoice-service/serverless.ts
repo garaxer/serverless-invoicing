@@ -2,6 +2,7 @@ import type { AWS } from "@serverless/typescript";
 
 import hello from "@functions/hello";
 import BookingsTableIAM from "./iam/TableIAM";
+import MailQueueIAM from "./iam/MailQueueIAM";
 import DynamoTables from "./resources/DynamoTables";
 import createBooking from "@functions/createBooking";
 import getBookings from "@functions/getBookings";
@@ -13,7 +14,10 @@ import { createInvoice, payInvoice, editInvoice } from "@handlers/index";
 export const custom = {
   authorizer: {
     name: "serverless-auth0-authorizer-${self:provider.stage}-auth",
-    arn: { "Fn::Sub" : "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:serverless-auth0-authorizer-${self:provider.stage}-auth"}
+    arn: {
+      "Fn::Sub":
+        "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:serverless-auth0-authorizer-${self:provider.stage}-auth",
+    },
   },
   Foo: { "Fn::If": ["isDev", 9, 12] },
   BookingsTable: {
@@ -24,10 +28,10 @@ export const custom = {
     name: { Ref: "InvociesTable" },
     arn: { "Fn::GetAtt": ["InvociesTable", "Arn"] },
   },
-  // MailQueue: {
-  //   arn: "${cf:notification-service-${self:provider.stage}.MailQueueArn}",
-  //   url: "${cf:notification-service-${self:provider.stage}.MailQueueUrl}",
-  // },
+  MailQueue: {
+    arn: "${cf:notification-service-${self:provider.stage}.MailQueueArn}",
+    url: "${cf:notification-service-${self:provider.stage}.MailQueueUrl}",
+  },
 };
 
 const serverlessConfiguration: AWS = {
@@ -44,7 +48,7 @@ const serverlessConfiguration: AWS = {
     memorySize: 256,
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",
-    iamRoleStatements: [BookingsTableIAM],
+    iamRoleStatements: [BookingsTableIAM, MailQueueIAM],
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -52,7 +56,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       BOOKINGS_TABLE_NAME: "BookingsTable-${self:provider.stage}",
       INVOICES_TABLE_NAME: "InvoicesTable-${self:provider.stage}",
-      // MAIL_QUEUE_URL: "${self:custom.MailQueue.url}",
+      MAIL_QUEUE_URL: "${self:custom.MailQueue.url}",
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },

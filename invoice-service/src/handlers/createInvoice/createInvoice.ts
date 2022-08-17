@@ -20,10 +20,17 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
   typeof schema,
   Authorizer
 > = async (event, _context) => {
-  const { email } = event.requestContext.authorizer;
-  console.log({auth: event.requestContext.authorizer});
-  if (event.requestContext.authorizer[Object.keys(event.requestContext.authorizer).find(x => x.includes("roles"))]?.includes('admin')) {
-    console.log('is admin');
+  const { email = "unknownCreate@example.com" } =
+    event.requestContext.authorizer;
+  console.log({ auth: event.requestContext.authorizer });
+  if (
+    event.requestContext.authorizer[
+      Object.keys(event.requestContext.authorizer).find((x) =>
+        x.includes("roles")
+      )
+    ]?.includes("admin")
+  ) {
+    console.log("is admin");
   }
 
   const {

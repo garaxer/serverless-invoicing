@@ -248,3 +248,5 @@ curl --location --request POST 'https://YOUR_AUTH0_DOMAIN/oauth/token' \
 --data-urlencode 'audience=YOUR_AUDIENCE_IDENTIFIER'
 ```
 The username and password is for a user, but your application(the client id) must have username password auth enabled, the audience is from an api
+
+Need to let anyone create and invoice, only see the invoices you created, can only pay the invoices assigned to you (recipient) or you created.
