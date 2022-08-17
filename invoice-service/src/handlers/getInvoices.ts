@@ -47,6 +47,7 @@ export const getInvoicesByFilter = async ({
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
+  return invoices
 };
 
 async function getInvoices(event: APIGatewayEvent, _context: Context) {
