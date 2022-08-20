@@ -27,9 +27,9 @@ const addBookingCommand = async (
   const params = {
     TableName: process.env.BOOKINGS_TABLE_NAME,
     Key: { id: service.id },
-    UpdateExpression: "set timeSlot = :timeSlot, updated_at = :updated_at",
+    UpdateExpression: "set timeSlots = :timeSlots, updated_at = :updated_at",
     ExpressionAttributeValues: {
-      ":timeSlot": newTimeSlot,
+      ":timeSlots": newTimeSlot,
       ":updated_at": new Date().toISOString(),
     },
     ReturnValues: "ALL_NEW",

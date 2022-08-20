@@ -10,6 +10,17 @@ export default {
     duration: { type: "number" },
     maxPartySize: { type: "number" },
     maxCapacity: { type: "number" },
+    sendText: { type: "boolean" },
+    sendEmail: { type: "boolean" },
+    reminder: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string",
+        minItems: 0,
+        maxItems: 3,
+      },
+    },
     timeSlots: {
       type: "array",
       uniqueItems: true,

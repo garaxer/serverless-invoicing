@@ -1,5 +1,8 @@
 import { User } from "./user";
 
+export type ReminderFrequency = "Daily" | "Weekly" | "DayBefore" | "WeekBefore"
+export type BookingStatus = "OPEN" | "CLOSED"
+
 // Event booking
 export type CreateEventService = {
   id: string;
@@ -14,6 +17,9 @@ export type CreateEventService = {
   maxCapacity: number;
   timeSlots: TimeSlots[];
   creatorEmail: string;
+  reminder: ReminderFrequency[]
+  sendText: boolean;
+  sendEmail: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -42,6 +48,10 @@ export type Service = {
   maxCapacity: number;
   timeSlots: TimeSlots[];
   creatorEmail: string;
+  reminder: ReminderFrequency[]
+  reminderSentDate?: string;
+  sendText: boolean;
+  sendEmail: boolean;
   created_at: string;
   updated_at: string;
 };

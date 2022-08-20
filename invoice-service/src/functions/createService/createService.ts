@@ -4,7 +4,7 @@ import { middyfy } from "@libs/lambda";
 import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
 import { Authorizer } from "src/typings/authorizer";
-import { CreateEventService } from "src/typings/booking";
+import { CreateEventService, ReminderFrequency } from "src/typings/booking";
 import { v4 as uuid } from "uuid";
 
 import schema from "./schema";
@@ -25,6 +25,9 @@ const hello: ValidatedEventAPIGatewayProxyEvent<
     maxPartySize = 1,
     maxCapacity = 12,
     timeSlots = ["1200"],
+    reminder = ["weekly"],
+    sendEmail = true,
+    sendText = false,
   } = event.body;
   const { email: creatorEmail = "unknown@example.com" } =
     event.requestContext.authorizer;
@@ -44,6 +47,9 @@ const hello: ValidatedEventAPIGatewayProxyEvent<
     maxCapacity,
     timeSlots: timeSlots.map((timeSlot) => ({ id: timeSlot, attendees: [] })),
     creatorEmail,
+    reminder: reminder as ReminderFrequency[],
+    sendEmail,
+    sendText,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };

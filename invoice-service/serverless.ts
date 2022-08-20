@@ -6,6 +6,7 @@ import DynamoTables from "./resources/DynamoTables";
 import addBooking from "@functions/addBooking";
 import createService from "@functions/createService";
 import getBookings from "@functions/getBookings";
+import remindService from "@functions/remindService";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
 import { createInvoice, payInvoice, editInvoice } from "@handlers/index";
@@ -81,6 +82,7 @@ const serverlessConfiguration: AWS = {
     createInvoice,
     payInvoice,
     editInvoice,
+    remindService
   },
   package: { individually: true },
   custom: {
