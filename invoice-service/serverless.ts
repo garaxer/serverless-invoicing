@@ -1,6 +1,5 @@
 import type { AWS } from "@serverless/typescript";
 
-import hello from "@functions/hello";
 import BookingsTableIAM from "./iam/TableIAM";
 import MailQueueIAM from "./iam/MailQueueIAM";
 import DynamoTables from "./resources/DynamoTables";
@@ -74,7 +73,6 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: {
-    hello,
     getBookings,
     addBooking,
     createService,

@@ -15,14 +15,18 @@ const createService: ValidatedEventAPIGatewayProxyEvent<
   Authorizer
 > = async (event) => {
   const { timeSlot } = event.body;
-  const { email = "unknown@example.com" } = event.requestContext.authorizer;
+  const { email = "unknown@example.com", name = "unknown" } =
+    event.requestContext.authorizer;
   const { id } = event.pathParameters;
 
   console.log("Adding Booking");
 
   try {
     const service = await getServicebyId(id);
-    const updatedService = await addBookingCommand(service, timeSlot, email);
+    const updatedService = await addBookingCommand(service, timeSlot, {
+      email,
+      name,
+    });
     console.log(updatedService);
     return formatJSONResponse({
       ...updatedService,

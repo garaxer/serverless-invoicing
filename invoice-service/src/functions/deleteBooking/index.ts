@@ -5,8 +5,10 @@ export default {
   events: [
     {
       http: {
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
         method: "DELETE",
-        path: "/booking/{id}",
+        path: "/service/{id}",
       },
     },
   ],

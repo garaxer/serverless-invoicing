@@ -54,9 +54,9 @@ export async function invoiceMailer(invoice: Invoice, sendOverride = false) {
       MessageBody: JSON.stringify({
         subject: `Invoice - ${title}${isOverdue ? " OVERDUE" : ""}| ${id}`,
         recipient: recipientEmail,
-        body: `Your payment $"${amount}" is due on the ${new Date(
+        body: `Your payment $${amount} is due on the ${new Date(
           dueDate
-        ).toLocaleDateString()}.\nYou have paid $${amountPaid} so far, the invoice status is ${paidStatus}.`,
+        ).toLocaleDateString('en-AU')}.\nYou have paid $${amountPaid} so far, the invoice status is ${paidStatus}.`,
       }),
     })
     .promise();

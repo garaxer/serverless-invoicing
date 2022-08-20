@@ -1,6 +1,5 @@
 export type User = {
-    firstName?: string,
-    lastName?: string,
-    contactEmail: string,
+    name: string,
+    email: string,
     phoneNumber?: string,
 }

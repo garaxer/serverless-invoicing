@@ -5,8 +5,10 @@ export default {
   events: [
     {
       http: {
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
         method: "get",
-        path: "bookings",
+        path: "/services",
         request: {
           parameters: {
             querystrings: {

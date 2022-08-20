@@ -1,3 +1,4 @@
+import { User } from "./user";
 
 // Event booking
 export type CreateEventService = {
@@ -25,7 +26,7 @@ export type AddBookingToServiceDto = {
 
 export type TimeSlots = {
   id: string;
-  attendees: string[];
+  attendees: User[];
 };
 
 export type Service = {

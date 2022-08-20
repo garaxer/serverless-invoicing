@@ -1,15 +1,15 @@
 import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
 import { Service } from "src/typings/booking";
+import { User } from "src/typings/user";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
 const addBookingCommand = async (
   service: Service,
   timeSlotId: string,
-  email = "unknown"
+  { email, name }: User = { email: "unknown@unknown.com", name: "unknown" }
 ) => {
-
   if (!service.timeSlots.find((ts) => ts.id === timeSlotId)) {
     throw new createHttpError.NotFound(
       `Timeslot ${timeSlotId} does not exist ${service.timeSlots.map(
@@ -20,7 +20,7 @@ const addBookingCommand = async (
 
   const newTimeSlot = service.timeSlots.map((timeSlot) =>
     timeSlot.id === timeSlotId
-      ? { ...timeSlot, attendees: [...timeSlot.attendees, email] }
+      ? { ...timeSlot, attendees: [...timeSlot.attendees, { email, name }] }
       : timeSlot
   );
 

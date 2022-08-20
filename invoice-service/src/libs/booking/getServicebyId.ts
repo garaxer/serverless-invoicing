@@ -10,7 +10,7 @@ const getServicebyId = async (id: string) => {
   try {
     const result = await dynamodb
       .get({
-        TableName: process.env.BOOKING_TABLE_NAME,
+        TableName: process.env.BOOKINGS_TABLE_NAME,
         Key: { id },
       })
       .promise();
