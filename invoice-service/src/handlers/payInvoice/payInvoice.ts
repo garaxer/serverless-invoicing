@@ -40,7 +40,7 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
   // Validate overpaying
   if (amount + totalPaidSoFar > invoice.amount) {
     throw new createHttpError.Forbidden(
-      `Your pay amount greater than the remaining amount Your Amount: ${amount}. Paid so far ${totalPaidSoFar}. Total ${invoice.amount}`
+      `Your pay amount is greater than the remaining amount Your Amount: ${amount}. Paid so far ${totalPaidSoFar}. Total ${invoice.amount}`
     );
   }
 

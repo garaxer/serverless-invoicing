@@ -1,4 +1,3 @@
-import { User } from "./user";
 
 // Event booking
 export type CreateEventService = {
@@ -12,97 +11,126 @@ export type CreateEventService = {
   duration: number;
   maxPartySize: number;
   maxCapacity: number;
-  timeSlots: string[];
+  timeSlots: TimeSlots[];
+  creatorEmail: string;
   created_at: string;
   updated_at: string;
 };
 
-// Restaurant booking
-export type Booking_old = {
+export type AddBookingToServiceDto = {
   id: string;
-  startTime: Date;
-  bookingStatus: string;
-  bookingType: string;
-  description: string;
-  createdAt: Date;
-  attendees: User[];
-  hostUser?: User;
-  minutes?: number;
-  location?: string;
-  invoiceId?: string;
-  nextBookingId?: string;
-  repeat?: boolean;
+  partySize: number;
+  timeSlots: string;
 };
 
-// TODO use the below three booking types instead
-export type Booking = {
+export type TimeSlots = {
   id: string;
-  customer_id: string;
-  time_slot_id: string;
-  startDateTime: string;
-  service_id: string;
-  bookingStatus: string;
-  party_size?: number;
-  invoice_id?: string;
-  section?: string;
-  managers_notes?: string;
-  customers_notes?: string;
-  created_at?: string;
-  updated_at?: string;
-};
-
-export type TimeSlot = {
-  id: string;
-  start_time: string;
-  availability_count?: number;
-  booking_count?: number;
-  is_bookable?: boolean;
-  maximum_party_size?: number;
-  created_at?: string;
-  updated_at?: string;
-  service_id?: string;
+  attendees: string[];
 };
 
 export type Service = {
   id: string;
   title: string;
-  time_slots: TimeSlot[];
-  sections?: string[];
-  description?: string;
-  image?: string;
-  price?: number;
-  duration?: number;
-  venue?: string;
-  created_at?: string;
-  updated_at?: string;
-};
-
-export type BookingCreate = {
-  customer: User;
-  startDateTime: string;
-  time_slot_id: string;
-  party_size?: number;
-  managers_notes?: string;
-  customers_notes?: string;
-  section?: string;
-  service: Service;
-};
-
-export type BookingNew = {
-  id: string;
-  startTime: string;
-  bookingStatus: string;
-  bookingType: string;
   description: string;
-  createdAt?: string;
-  attendees: User[];
-  hostUser?: User;
-  minutes?: number;
-  location?: string;
-  invoiceId?: string;
-  nextBookingId?: string;
-  repeat?: boolean;
+  venue: string;
+  bookingStatus: string;
+  startDateTime: string;
+  serviceType: string;
+  duration: number;
+  maxPartySize: number;
+  maxCapacity: number;
+  timeSlots: TimeSlots[];
+  creatorEmail: string;
+  created_at: string;
+  updated_at: string;
 };
+
+// Restaurant booking
+// export type Booking_old = {
+//   id: string;
+//   startTime: Date;
+//   bookingStatus: string;
+//   bookingType: string;
+//   description: string;
+//   createdAt: Date;
+//   attendees: User[];
+//   hostUser?: User;
+//   minutes?: number;
+//   location?: string;
+//   invoiceId?: string;
+//   nextBookingId?: string;
+//   repeat?: boolean;
+// };
+
+// // TODO use the below three booking types instead
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// export type TimeSlot = {
+//   id: string;
+//   start_time: string;
+//   availability_count?: number;
+//   booking_count?: number;
+//   is_bookable?: boolean;
+//   maximum_party_size?: number;
+//   created_at?: string;
+//   updated_at?: string;
+//   service_id?: string;
+// };
+
+// export type Service = {
+//   id: string;
+//   title: string;
+//   time_slots: TimeSlot[];
+//   sections?: string[];
+//   description?: string;
+//   image?: string;
+//   price?: number;
+//   duration?: number;
+//   venue?: string;
+//   created_at?: string;
+//   updated_at?: string;
+// };
+
+// export type BookingCreate = {
+//   customer: User;
+//   startDateTime: string;
+//   time_slot_id: string;
+//   party_size?: number;
+//   managers_notes?: string;
+//   customers_notes?: string;
+//   section?: string;
+//   service: Service;
+// };
+
+// export type BookingNew = {
+//   id: string;
+//   startTime: string;
+//   bookingStatus: string;
+//   bookingType: string;
+//   description: string;
+//   createdAt?: string;
+//   attendees: User[];
+//   hostUser?: User;
+//   minutes?: number;
+//   location?: string;
+//   invoiceId?: string;
+//   nextBookingId?: string;
+//   repeat?: boolean;
+// };
 
 // "customer": {
 //   "firstName": "Gary",
@@ -151,56 +179,56 @@ export type BookingNew = {
 //   ]
 // }
 
-export class BookingClass implements Booking_old {
-  id: string;
-  startTime: Date;
-  bookingStatus: string;
-  bookingType: string;
-  description: string;
-  createdAt: Date;
-  attendees: User[];
-  hostUser?: User;
-  minutes?: number;
-  location?: string;
-  invoiceId?: string;
-  nextBookingId?: string;
-  repeat?: boolean;
+// export class BookingClass implements Booking_old {
+//   id: string;
+//   startTime: Date;
+//   bookingStatus: string;
+//   bookingType: string;
+//   description: string;
+//   createdAt: Date;
+//   attendees: User[];
+//   hostUser?: User;
+//   minutes?: number;
+//   location?: string;
+//   invoiceId?: string;
+//   nextBookingId?: string;
+//   repeat?: boolean;
 
-  constructor({
-    id: _id,
-    startTime: _startTime,
-    bookingStatus: _bookingStatus,
-    bookingType: _bookingType,
-    description: _description,
-    createdAt: _createdAt,
-    attendees: _attendees,
-    hostUser: _hostUser,
-    minutes: _minutes,
-    location: _location,
-    invoiceId: _invoiceId,
-    nextBookingId: _nextBookingId,
-    repeat: _repeat,
-  }: BookingNew) {
-    this.id = _id;
-    this.startTime = new Date(_startTime);
-    this.bookingStatus = _bookingStatus;
-    this.bookingType = _bookingType;
-    this.description = _description;
-    this.createdAt = _createdAt ? new Date(_createdAt) : new Date();
-    this.attendees = _attendees;
-    this.minutes = _minutes;
-    this.hostUser = _hostUser;
-    this.location = _location;
-    this.invoiceId = _invoiceId;
-    this.nextBookingId = _nextBookingId;
-    this.repeat = _repeat;
-  }
+//   constructor({
+//     id: _id,
+//     startTime: _startTime,
+//     bookingStatus: _bookingStatus,
+//     bookingType: _bookingType,
+//     description: _description,
+//     createdAt: _createdAt,
+//     attendees: _attendees,
+//     hostUser: _hostUser,
+//     minutes: _minutes,
+//     location: _location,
+//     invoiceId: _invoiceId,
+//     nextBookingId: _nextBookingId,
+//     repeat: _repeat,
+//   }: BookingNew) {
+//     this.id = _id;
+//     this.startTime = new Date(_startTime);
+//     this.bookingStatus = _bookingStatus;
+//     this.bookingType = _bookingType;
+//     this.description = _description;
+//     this.createdAt = _createdAt ? new Date(_createdAt) : new Date();
+//     this.attendees = _attendees;
+//     this.minutes = _minutes;
+//     this.hostUser = _hostUser;
+//     this.location = _location;
+//     this.invoiceId = _invoiceId;
+//     this.nextBookingId = _nextBookingId;
+//     this.repeat = _repeat;
+//   }
 
-  to_new(): BookingNew {
-    return {
-      ...this,
-      startTime: this.startTime.toISOString(),
-      createdAt: this.createdAt.toISOString(),
-    };
-  }
-}
+//   to_new(): BookingNew {
+//     return {
+//       ...this,
+//       startTime: this.startTime.toISOString(),
+//       createdAt: this.createdAt.toISOString(),
+//     };
+//   }
+// }

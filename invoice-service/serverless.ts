@@ -4,7 +4,8 @@ import hello from "@functions/hello";
 import BookingsTableIAM from "./iam/TableIAM";
 import MailQueueIAM from "./iam/MailQueueIAM";
 import DynamoTables from "./resources/DynamoTables";
-import createBooking from "@functions/createBooking";
+import addBooking from "@functions/addBooking";
+import createService from "@functions/createService";
 import getBookings from "@functions/getBookings";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
@@ -75,7 +76,8 @@ const serverlessConfiguration: AWS = {
   functions: {
     hello,
     getBookings,
-    createBooking,
+    addBooking,
+    createService,
     deleteBooking,
     ...handlers,
     createInvoice,

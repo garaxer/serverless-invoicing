@@ -76,7 +76,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
     throw new createHttpError.InternalServerError(error);
   }
 
-  await invoiceMailer(invoice);
+  await invoiceMailer(invoice, true);
 
   return formatJSONResponse({ ...invoice }, 201);
 };

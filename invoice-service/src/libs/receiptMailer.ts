@@ -16,10 +16,10 @@ export async function receiptMailer(
     .sendMessage({
       QueueUrl: process.env.MAIL_QUEUE_URL,
       MessageBody: JSON.stringify({
-        subject: `Payment reciept ${title} | ${id}`,
+        subject: `Payment reciept for ${title} | ${id}`,
         recipient: recipientEmail,
         body: `I confirm I have recieved payment of ${amountPaid} \
-            I have now recieved payment of "${totalPaidSoFar}" towards ${amount}. The invoice is ${paidStatus}`,
+            I have now recieved payment of "${totalPaidSoFar}" towards ${amount}. The invoice status is ${paidStatus}`,
       }),
     })
     .promise();

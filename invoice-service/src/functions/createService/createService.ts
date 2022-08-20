@@ -3,15 +3,17 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { DynamoDB } from "aws-sdk";
 import * as createHttpError from "http-errors";
+import { Authorizer } from "src/typings/authorizer";
 import { CreateEventService } from "src/typings/booking";
 import { v4 as uuid } from "uuid";
 
 import schema from "./schema";
 const dynamodb = new DynamoDB.DocumentClient();
 
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+const hello: ValidatedEventAPIGatewayProxyEvent<
+  typeof schema,
+  Authorizer
+> = async (event) => {
   const {
     title,
     description = "",
@@ -24,6 +26,8 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     maxCapacity = 12,
     timeSlots = ["1200"],
   } = event.body;
+  const { email: creatorEmail = "unknown@example.com" } =
+    event.requestContext.authorizer;
 
   console.log("Creating Service");
 
@@ -38,7 +42,8 @@ const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     duration,
     maxPartySize,
     maxCapacity,
-    timeSlots,
+    timeSlots: timeSlots.map((timeSlot) => ({ id: timeSlot, attendees: [] })),
+    creatorEmail,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
