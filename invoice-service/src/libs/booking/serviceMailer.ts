@@ -23,17 +23,17 @@ export async function serviceMailer(service: Service, sendOverride = false) {
   const isClosed = bookingStatus.includes("CLOSED");
 
   // Has it been a bit since last reminder email and it is overdue and unpaid
-  if (reminderSentDate && !sendOverride) {
-    const REMINDER_INTERVAL = 86400000 * 1; //1 day * 1
-    const lastSent = new Date(reminderSentDate);
-    const followingDay = new Date(lastSent.getTime() + REMINDER_INTERVAL); // + 1 day in ms
+  // if (reminderSentDate && !sendOverride) {
+  //   const REMINDER_INTERVAL = 86400000 * 1; //1 day * 1
+  //   const lastSent = new Date(reminderSentDate);
+  //   const followingDay = new Date(lastSent.getTime() + REMINDER_INTERVAL); // + 1 day in ms
 
-    console.log({ isAfter, isClosed, now, followingDay });
+  //   console.log({ isAfter, isClosed, now, followingDay });
 
-    if (isAfter || isClosed || now < followingDay) {
-      return;
-    }
-  }
+  //   if (isAfter || isClosed || now < followingDay) {
+  //     return;
+  //   }
+  // }
 
   const params = {
     TableName: process.env.BOOKINGS_TABLE_NAME,
@@ -73,12 +73,13 @@ export async function serviceMailer(service: Service, sendOverride = false) {
   const notifyBookeesText = sendText
     ? timeSlots.flatMap((t) =>
         t.attendees.flatMap((a) =>
-          a.phoneNumber
+          a.phone
             ? [
                 sns
                   .publish({
-                    PhoneNumber: a.phoneNumber,
+                    PhoneNumber: a.phone,
                     Message: `${title.replace("{name}", a.name)}`,
+                    
                   })
                   .promise(),
               ]
@@ -86,6 +87,10 @@ export async function serviceMailer(service: Service, sendOverride = false) {
         )
       )
     : [];
+  console.log(notifyBookees);
+  console.log(notifyBookeesText);
+  console.log("Emails sent: " + notifyBookees.length);
+  console.log("Texts sent: " + notifyBookeesText.length);
 
-  return Promise.all([notifyBookeesText, notifyBookees]);
+  return Promise.all([...notifyBookeesText, ...notifyBookees]);
 }

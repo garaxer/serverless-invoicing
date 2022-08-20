@@ -14,12 +14,15 @@ const hello: ValidatedEventAPIGatewayProxyEvent<
   typeof schema,
   Authorizer
 > = async (event) => {
+  const oneWeekFromNow = new Date(
+    new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+  ).toISOString();
   const {
     title,
     description = "",
     venue = "",
     bookingStatus = "OPEN",
-    startDateTime = new Date().toISOString(),
+    startDateTime = oneWeekFromNow,
     serviceType = "",
     duration = 60,
     maxPartySize = 1,

@@ -8,7 +8,7 @@ const dynamodb = new DynamoDB.DocumentClient();
 const addBookingCommand = async (
   service: Service,
   timeSlotId: string,
-  { email, name }: User = { email: "unknown@unknown.com", name: "unknown" }
+  user: User = { email: "unknown@unknown.com", name: "unknown" }
 ) => {
   if (!service.timeSlots.find((ts) => ts.id === timeSlotId)) {
     throw new createHttpError.NotFound(
@@ -20,7 +20,7 @@ const addBookingCommand = async (
 
   const newTimeSlot = service.timeSlots.map((timeSlot) =>
     timeSlot.id === timeSlotId
-      ? { ...timeSlot, attendees: [...timeSlot.attendees, { email, name }] }
+      ? { ...timeSlot, attendees: [...timeSlot.attendees, user] }
       : timeSlot
   );
 

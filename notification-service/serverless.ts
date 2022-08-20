@@ -1,6 +1,7 @@
 import type { AWS } from "@serverless/typescript";
 import { sendMail, sendMailHttp } from "@functions/index";
 import SendMailIAM from "./iam/SendMailIAM";
+import SendTextIAM from "./iam/SendTextIAM";
 import MailQueueIAM from "./iam/MailQueueIAM";
 import MailQueue, { MailQueueOutputs } from "./resources/MailQueue";
 
@@ -13,7 +14,7 @@ const serverlessConfiguration: AWS = {
     runtime: "nodejs16.x",
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",
-    iamRoleStatements: [SendMailIAM, MailQueueIAM],
+    iamRoleStatements: [SendMailIAM, MailQueueIAM, SendTextIAM],
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,

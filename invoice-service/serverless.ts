@@ -2,6 +2,7 @@ import type { AWS } from "@serverless/typescript";
 
 import BookingsTableIAM from "./iam/TableIAM";
 import MailQueueIAM from "./iam/MailQueueIAM";
+import SendTextIAM from "./iam/SendTextIAM";
 import DynamoTables from "./resources/DynamoTables";
 import addBooking from "@functions/addBooking";
 import createService from "@functions/createService";
@@ -49,7 +50,7 @@ const serverlessConfiguration: AWS = {
     memorySize: 256,
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",
-    iamRoleStatements: [BookingsTableIAM, MailQueueIAM],
+    iamRoleStatements: [BookingsTableIAM, MailQueueIAM, ...SendTextIAM],
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
