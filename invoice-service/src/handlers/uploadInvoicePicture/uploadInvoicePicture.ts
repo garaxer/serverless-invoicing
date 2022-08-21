@@ -1,10 +1,12 @@
-import { getInvoiceById } from "../getInvoice";
-import { APIGatewayProxyEvent } from "aws-lambda";
-import { uploadPictureToS3 } from "@libs/uploadPictureToS3";
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
 import * as createHttpError from "http-errors";
+import { APIGatewayProxyEvent } from "aws-lambda";
+import middy from "@middy/core";
+import validator from "@middy/validator";
+import httpErrorHandler from "@middy/http-error-handler";
+import { uploadPictureToS3 } from "@libs/uploadPictureToS3";
 import { addPictureToInvoiceCommand } from "@libs/addPictureToInvoiceCommand";
+import { getInvoiceById } from "../getInvoice";
+import schema from "./schema";
 
 const uploadInvoicePicture = async (
   event: APIGatewayProxyEvent,
@@ -12,7 +14,16 @@ const uploadInvoicePicture = async (
 ) => {
   const { id } = event.pathParameters;
   const invoice = await getInvoiceById(id);
-
+  const { email = "unknown@example.com" } = event.requestContext.authorizer;
+  const isOwner = [invoice.createdBy, invoice.recipientEmail].includes(email);
+  if (!isOwner) {
+    throw new createHttpError.Unauthorized(
+      `account email ${email} must one of: ${[
+        invoice.createdBy,
+        invoice.recipientEmail,
+      ].toString()}`
+    );
+  }
   const base64 = event.body.replace(/^data:image\/\w+;base64,/, "");
   const buffer = Buffer.from(base64, "base64");
 
@@ -21,7 +32,7 @@ const uploadInvoicePicture = async (
       invoice.id + ".jpg",
       buffer
     );
-    console.log({uploadToS3Result});
+    console.log({ uploadToS3Result });
     const updatedInvoice = await addPictureToInvoiceCommand(
       invoice,
       uploadToS3Result.Location
@@ -36,4 +47,13 @@ const uploadInvoicePicture = async (
   }
 };
 
-export const handler = middy(uploadInvoicePicture).use(httpErrorHandler());
+export const handler = middy(uploadInvoicePicture)
+  .use(httpErrorHandler())
+  .use(
+    validator({
+      inputSchema: schema,
+      ajvOptions: {
+        strict: false,
+      },
+    })
+  );
