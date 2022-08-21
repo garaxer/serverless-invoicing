@@ -33,7 +33,5 @@ export async function payInvoiceCommand(
 
   updatedInvoice = result.Attributes;
 
-  console.log({updatedInvoice});
-
   return updatedInvoice as Invoice | undefined;
 }

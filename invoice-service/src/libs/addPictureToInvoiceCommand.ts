@@ -24,7 +24,5 @@ export async function addPictureToInvoiceCommand(
 
   updatedInvoice = result.Attributes;
 
-  console.log({updatedInvoice});
-
   return updatedInvoice as Invoice | undefined;
 }
