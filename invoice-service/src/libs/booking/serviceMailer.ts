@@ -27,7 +27,7 @@ export async function serviceMailer(service: Service, sendOverride = false) {
     const REMINDER_INTERVAL = 86400000 * 1; //1 day * 1
     const lastSent = new Date(reminderSentDate);
     const followingDay = new Date(lastSent.getTime() + REMINDER_INTERVAL); // + 1 day in ms
-
+    // equivalent to now - reminderSentDate > 1 day
     console.log({
       isAfter,
       isClosed,
