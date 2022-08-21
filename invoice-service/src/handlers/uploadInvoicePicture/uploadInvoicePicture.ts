@@ -2,6 +2,7 @@ import * as createHttpError from "http-errors";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import middy from "@middy/core";
 import validator from "@middy/validator";
+import cors from '@middy/http-cors'
 import httpErrorHandler from "@middy/http-error-handler";
 import { uploadPictureToS3 } from "@libs/uploadPictureToS3";
 import { addPictureToInvoiceCommand } from "@libs/addPictureToInvoiceCommand";
@@ -56,4 +57,5 @@ export const handler = middy(uploadInvoicePicture)
         strict: false,
       },
     })
-  );
+  )
+  .use(cors());
