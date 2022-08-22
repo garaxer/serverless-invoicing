@@ -2,6 +2,9 @@
 
 This is a serverless based application for an invoice and event planning.
 
+
+# Booking
+A microservice that allows a service to be made and bookings attached to it.
 # Invoicing
 
 ## Running Locally
