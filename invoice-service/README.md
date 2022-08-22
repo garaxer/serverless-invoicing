@@ -260,6 +260,10 @@ The username and password is for a user, but your application(the client id) mus
 Need to let anyone create and invoice, only see the invoices you created, can only pay the invoices assigned to you (recipient) or you created.
 
 
+# Commands
+sls info
+
+
 
 # Operation.
 Create an invoice
