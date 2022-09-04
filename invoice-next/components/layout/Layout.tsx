@@ -16,14 +16,19 @@ import AppThemeProvider from "./AppThemeProvider";
 import Head from "next/head";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import ProtectedAuth from "./ProtectedAuth";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const siteTitle = "Real Estate Invoicing";
 
-type AppBarProps = { title: string };
+type AppBarProps = { title: string; useAuth: boolean };
 
-const ResponsiveAppBar = ({ children }: PropsWithChildren<AppBarProps>) => {
+const ResponsiveAppBar = ({
+  children,
+  title = "Real Estate Invoicing",
+  useAuth,
+}: PropsWithChildren<AppBarProps>) => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -87,7 +92,7 @@ color: ${theme.palette.text.primary}
                     textDecoration: "none",
                   }}
                 >
-                  Real Estate Invoicing
+                  {title}
                 </Typography>
               </Link>
 
@@ -145,7 +150,7 @@ color: ${theme.palette.text.primary}
                   textDecoration: "none",
                 }}
               >
-                LOGO
+                {title}
               </Typography>
 
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -161,41 +166,43 @@ color: ${theme.palette.text.primary}
               </Box>
 
               <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
+                {useAuth && (
+                  <>
+                    <Tooltip title="Open settings">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar alt="Remy Sharp" />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      {settings.map((setting) => (
+                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </>
+                )}
               </Box>
             </Toolbar>
           </Container>
         </AppBar>
-        <Container maxWidth="lg" sx={{ paddingTop: 5, flexGrow: 1 }} >
-          {children}
+        <Container maxWidth="lg" sx={{ paddingTop: 5, flexGrow: 1 }}>
+          {useAuth ? <ProtectedAuth>{children}</ProtectedAuth> : children}
         </Container>
         <div>
           <AppThemeProvider.ToggleDarkMode />

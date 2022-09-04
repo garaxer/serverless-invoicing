@@ -3,7 +3,7 @@ import { InvoiceDto, PAIDSTATUS } from "../../types/invoice";
 import InvoicesList from "./InvoicesList";
 import { v4 as uuid } from "uuid";
 import { Box } from "@mui/material";
-import { getGroupedInvoices } from "libs/invoices";
+import { getGroupedInvoices } from "../../libs/invoices";
 
 const invoices: InvoiceDto[] = [
   {
