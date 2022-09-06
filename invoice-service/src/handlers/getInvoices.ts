@@ -47,7 +47,7 @@ export const getInvoicesByFilter = async ({
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
-  return invoices
+  return invoices;
 };
 
 async function getInvoices(event: APIGatewayEvent, _context: Context) {
@@ -66,6 +66,10 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
   return {
     statusCode: 200,
     body: JSON.stringify(invoices),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+    },
   };
 }
 

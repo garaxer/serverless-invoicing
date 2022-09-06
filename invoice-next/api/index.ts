@@ -12,6 +12,7 @@ export const SWRFetcher =
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
     });
     console.log("Custom fetcher");

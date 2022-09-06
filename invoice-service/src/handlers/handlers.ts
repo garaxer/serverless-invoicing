@@ -4,6 +4,7 @@ export default {
     events: [
       {
         http: {
+          cors: true,
           method: "GET",
           path: "/invoices",
           authorizer: "${self:custom.authorizer}",
