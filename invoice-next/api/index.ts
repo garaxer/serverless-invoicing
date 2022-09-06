@@ -12,7 +12,7 @@ export const SWRFetcher =
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
     console.log("Custom fetcher");
@@ -37,7 +37,14 @@ const responseError = (error: Error) => {
 const requests = (token: string) => {
   return {
     get: <T>(url: string) =>
-      fetch(`${BASE_URL}${url}`)
+      fetch(`${BASE_URL}${url}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((r) => responseBody<T>(r))
         .catch(responseError),
     post: <T>(url: string, body: {}) =>
@@ -46,6 +53,7 @@ const requests = (token: string) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
       })
