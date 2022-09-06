@@ -6,10 +6,16 @@ const BASE_URL =
 export const SWRFetcher =
   (token: string) =>
   async (resource: RequestInfo | URL, init?: RequestInit | undefined) => {
-    console.log({token});
-    const res = await fetch(`${BASE_URL}${resource}`, init);
+    console.log({ token });
+    const res = await fetch(`${BASE_URL}${resource}`, {
+      ...init,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
     console.log("Custom fetcher");
-    console.log({res});
+    console.log({ res });
     return await res.json();
   };
 
@@ -54,7 +60,8 @@ const Invoices = (token: string) => ({
     ),
   create: (invoice: CreateInvoiceDto) =>
     requests(token).post<InvoiceDto>("/invoice", invoice),
-  pay: (invoiceId: string) => requests(token).get<InvoiceDto>(`/invoices/${invoiceId}`)
+  pay: (invoiceId: string) =>
+    requests(token).get<InvoiceDto>(`/invoices/${invoiceId}`),
 });
 
 const agent = {

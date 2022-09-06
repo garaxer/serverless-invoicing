@@ -3,7 +3,7 @@ import Layout from '../components/layout/Layout'
 
 const Home: NextPage = () => {
   return (
-    <Layout title={'Login'}>
+    <Layout title={'Login'} useAuth>
         <div>
             Nice
         </div>

@@ -8,6 +8,7 @@ export type InvoicesListProps = {
 // Use this for the client facing list of invoices. Infinite scroll
 //The table will be used for the month to month reciepts using virtualised scrolling.
 const InvoicesList = ({ groupedInvoices }: InvoicesListProps) => {
+  console.log('Using invoices list')
   const theme = useTheme();
   return (
     <>

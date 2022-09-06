@@ -13,6 +13,7 @@ const AuthedApp = ({ Component, pageProps }: AppProps) => {
     init?: RequestInit | undefined
   ) => {
     const idToken = await auth.getIdTokenClaims();
+    console.log({idToken, authed: auth.isAuthenticated})
     if (!idToken?.__raw) {
       return;
     }

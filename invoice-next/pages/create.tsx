@@ -12,9 +12,9 @@ const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
 }));
-// TODO kanban style paid unpaid overdue
-const Home: NextPage = () => {
-  
+
+const Invoices = () => {
+  console.log('Invoicing')
   const {
     data: invoices,
     error,
@@ -50,9 +50,8 @@ const Home: NextPage = () => {
     };
     mutate(f, options);
   };
-
   return (
-    <Layout title={"Login"}>
+    <>
       <CreateInvoice onSubmit={handleSubmitInvoice} />
       <SpacedDivider />
       {invoices ? (
@@ -60,6 +59,15 @@ const Home: NextPage = () => {
       ) : (
         <CircularProgress />
       )}
+    </>
+  );
+};
+
+// TODO kanban style paid unpaid overdue
+const Home: NextPage = () => {
+  return (
+    <Layout title={"Invoicing - create"} useAuth={true}>
+      <Invoices />
     </Layout>
   );
 };
