@@ -40,7 +40,7 @@ const InvoicesListItem = ({
           <Typography variant="h5" component="div">
             {invoice.paidStatus}
           </Typography>
-          <PayInvoice initialAmount={0} invoiceId={invoice.id} onSubmit={onPay} />
+          <PayInvoice initialAmount={invoice.amount} invoiceId={invoice.id} onSubmit={onPay} />
         </Box>
         {invoice.serviceStartDate && invoice.serviceEndDate && (
           <Typography variant="body2" sx={{ mb: 0.5 }}>

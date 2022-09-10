@@ -27,10 +27,7 @@ const PayInvoice = ({
         amount: initialAmount,
       }}
       validationSchema={Yup.object({
-        title: Yup.string()
-          .max(100, "Must be 100 characters or less")
-          .required("Required"),
-        dueDate: Yup.date().required("Required"),
+        amount: Yup.number().required("Required"),
       })}
       onSubmit={async (values: { amount: number }, { setSubmitting }) => {
         await onSubmit(invoiceId, values.amount);
@@ -51,7 +48,7 @@ const PayInvoice = ({
               type="submit"
               variant="contained"
             >
-              Submit
+              Pay
             </Button>
           </BoxFormInputWrapper>
         </Form>

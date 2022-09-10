@@ -29,6 +29,9 @@ const Invoices = () => {
   const handleDelete = (invoiceId: string) => {
     alert(invoiceId);
   };
+  const handlePay = async (invoiceId: string, amount: number) => {
+    console.log({ invoiceId, amount });
+  };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {
     const createdInvoice: InvoiceDto = {
@@ -64,7 +67,7 @@ const Invoices = () => {
           onDelete={handleDelete}
           onReSend={() => alert("not yet implemented")}
           onEdit={() => alert("not yet implemented")}
-          onPay={() => alert("not yet implemented")}
+          onPay={handlePay}
         />
       ) : (
         <CircularProgress />
