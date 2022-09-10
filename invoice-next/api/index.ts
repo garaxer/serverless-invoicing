@@ -34,10 +34,10 @@ const responseError = (error: Error) => {
   throw error;
 };
 
-const requests = (token: string) => {
+const requests = (token: string, baseUrl = BASE_URL) => {
   return {
     get: <T>(url: string) =>
-      fetch(`${BASE_URL}${url}`, {
+      fetch(`${baseUrl}${url}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -48,7 +48,7 @@ const requests = (token: string) => {
         .then((r) => responseBody<T>(r))
         .catch(responseError),
     post: <T>(url: string, body: {}) =>
-      fetch(`${BASE_URL}${url}`, {
+      fetch(`${baseUrl}${url}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -62,15 +62,15 @@ const requests = (token: string) => {
   };
 };
 
-const Invoices = (token: string) => ({
+const Invoices = (token: string, baseUrl = BASE_URL) => ({
   list: (status?: PAIDSTATUS) =>
-    requests(token).get<InvoiceDto[]>(
+    requests(token, baseUrl).get<InvoiceDto[]>(
       `/invoices${status ? `?status=${status}` : ""}`
     ),
   create: (invoice: CreateInvoiceDto) =>
-    requests(token).post<InvoiceDto>("/invoice", invoice),
+    requests(token, baseUrl).post<InvoiceDto>("/invoice", invoice),
   pay: (invoiceId: string) =>
-    requests(token).get<InvoiceDto>(`/invoices/${invoiceId}`),
+    requests(token, baseUrl).get<InvoiceDto>(`/invoices/${invoiceId}`),
 });
 
 const agent = {
