@@ -59,6 +59,18 @@ const requests = (token: string, baseUrl = BASE_URL) => {
       })
         .then((r) => responseBody<T>(r))
         .catch(responseError),
+    patch: <T>(url: string, body: {}) =>
+      fetch(`${baseUrl}${url}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      })
+        .then((r) => responseBody<T>(r))
+        .catch(responseError),
   };
 };
 
@@ -69,8 +81,8 @@ const Invoices = (token: string, baseUrl = BASE_URL) => ({
     ),
   create: (invoice: CreateInvoiceDto) =>
     requests(token, baseUrl).post<InvoiceDto>("/invoice", invoice),
-  pay: (invoiceId: string) =>
-    requests(token, baseUrl).get<InvoiceDto>(`/invoices/${invoiceId}`),
+  pay: (invoiceId: string, amount: number) =>
+    requests(token, baseUrl).patch<InvoiceDto>(`/invoice/${invoiceId}/pay`, {amount}),
 });
 
 const agent = {

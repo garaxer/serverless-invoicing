@@ -6,6 +6,7 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "PATCH",
         path: "/invoice/{id}/pay",
         authorizer: "${self:custom.authorizer}",

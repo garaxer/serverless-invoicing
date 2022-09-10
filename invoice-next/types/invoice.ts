@@ -2,6 +2,7 @@
 export enum PAIDSTATUS {
   PAID = "PAID",
   UNPAID = "UNPAID",
+  LOADING = "LOADING",
 }
 
 export type CreateInvoiceDto = {

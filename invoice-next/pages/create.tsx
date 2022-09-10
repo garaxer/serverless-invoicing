@@ -7,11 +7,14 @@ import { CreateInvoiceDto, InvoiceDto, PAIDSTATUS } from "../types/invoice";
 import { getGroupedInvoices } from "libs/invoices";
 import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
-import { useAuth0 } from "@auth0/auth0-react";
+import usePayInvoice from "api/usePayInvoice";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
 }));
+
+const spliceInvoice = (invoices: InvoiceDto[], invoice: InvoiceDto) =>
+  invoices.map((i) => (i.id.includes(invoice.id) ? invoice : i));
 
 const Invoices = () => {
   console.log("Invoicing");
@@ -22,15 +25,33 @@ const Invoices = () => {
   } = useSWR<InvoiceDto[]>("/invoices?status=UNPAID");
 
   const { mutate: addInvoice } = useAddInvoice();
+  const { mutate: payInvoice } = usePayInvoice();
   if (error) {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
   }
 
+  // TODO move all of this to useReducer
   const handleDelete = (invoiceId: string) => {
     alert(invoiceId);
   };
   const handlePay = async (invoiceId: string, amount: number) => {
-    console.log({ invoiceId, amount });
+    const newInvoices = (invoices || []).map((i) =>
+      i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
+    );
+    const options = {
+      optimisticData: newInvoices,
+      rollbackOnError: true,
+      revalidate: true,
+    };
+    const f = async (invoices?: InvoiceDto[]) => {
+      const newInvoice = await payInvoice(invoiceId, amount);
+      if (!newInvoice) {
+        console.error("Unable to pay invoice");
+        return invoices
+      }
+      return spliceInvoice(invoices || [], newInvoice);
+    };
+    mutate(f, options);
   };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {
