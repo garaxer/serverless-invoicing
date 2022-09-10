@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
-import { withPageAuthRequired, useUser } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired, useUser, getSession } from "@auth0/nextjs-auth0";
 import {
   Box,
   Button,
@@ -11,8 +11,14 @@ import {
 import useGetInvoicesNext from "api/useGetInvoicesNext";
 import InvoicesList from "@stories/invoicesList/InvoicesList";
 import { getGroupedInvoices } from "../libs/invoices";
+import { InvoiceDto, PAIDSTATUS } from "types/invoice";
+import api from "api";
+// TODO make this a viewable only list.
+type InvoiceProps = {
+  invoices?: InvoiceDto[];
+};
 
-const Invoice: NextPage = () => {
+const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
   const user = useUser();
   const {
     state: { data: invoices, error, isLoading },
@@ -25,7 +31,18 @@ const Invoice: NextPage = () => {
         You are viewing the invoices of {user.user?.email}
       </Typography>
 
-      <Box>Your UNPAID invoices (TODO via serverside props)</Box>
+      <Box>
+        Your UNPAID invoices
+        <Paper>
+          {unpaidInvoices ? (
+            <InvoicesList
+              groupedInvoices={getGroupedInvoices(unpaidInvoices)}
+            />
+          ) : (
+            <CircularProgress />
+          )}
+        </Paper>
+      </Box>
       <Box>
         <Typography sx={{ paddingBottom: 5, paddingTop: 5 }}>
           Other information
@@ -33,16 +50,16 @@ const Invoice: NextPage = () => {
         <Button onClick={() => getInvoices()}>
           Click here to view all your PAID invoices.
         </Button>
-        {error && <h1>error retrieving your invoices</h1>}
-        {invoices && (
-          <Paper>
-            {!isLoading ? (
+        <Paper sx={{ padding: 2 }}>
+          {error && <h1>error retrieving your invoices</h1>}
+          {!isLoading ? (
+            invoices && (
               <InvoicesList groupedInvoices={getGroupedInvoices(invoices)} />
-            ) : (
-              <CircularProgress />
-            )}
-          </Paper>
-        )}
+            )
+          ) : (
+            <CircularProgress />
+          )}
+        </Paper>
       </Box>
     </Layout>
   );
@@ -50,4 +67,31 @@ const Invoice: NextPage = () => {
 
 export default Invoice;
 
-export const getServerSideProps = withPageAuthRequired();
+// https://auth0.github.io/nextjs-auth0/modules/helpers_with_page_auth_required.html#withpageauthrequired
+export const getServerSideProps = withPageAuthRequired({
+  async getServerSideProps(context) {
+    const { req, res } = context;
+    const s = getSession(req, res);
+    let invoices: InvoiceDto[] = [];
+
+    if (!s?.idToken) {
+      console.error("Failed to get token");
+      return {
+        props: { invoices },
+      };
+    }
+    try {
+      invoices = await api.Invoices(s?.idToken).list(PAIDSTATUS.UNPAID);
+      console.log("success at retrieving invoices");
+      console.log("Retrieved invoices count: " + invoices.length);
+    } catch (error: any) {
+      console.error({ error });
+    }
+
+    console.log(invoices);
+
+    return {
+      props: { invoices },
+    };
+  },
+});
