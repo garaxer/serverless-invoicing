@@ -9,12 +9,24 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { InvoiceDto } from "../../types/invoice";
+import PayInvoice from "./PayInvoice";
 
 export type InvoicesListItemProps = {
   invoice: InvoiceDto;
+  onDelete?: (invoiceId: string) => void;
+  onReSend?: (invoiceId: string) => void;
+  onEdit?: (invoiceId: string) => void;
+  onPay: (invoiceId: string, amount: number) => Promise<void>;
 };
 // Good example in mui divider
-const InvoicesListItem = ({ invoice, ...props }: InvoicesListItemProps) => {
+const InvoicesListItem = ({
+  invoice,
+  onDelete,
+  onReSend,
+  onEdit,
+  onPay,
+  ...props
+}: InvoicesListItemProps) => {
   return (
     <Card sx={{ marginBottom: "1rem" }} {...props}>
       <CardContent>
@@ -24,9 +36,12 @@ const InvoicesListItem = ({ invoice, ...props }: InvoicesListItemProps) => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Due: {format(new Date(invoice.dueDate), "dd/MM/yyyy")}
         </Typography>
-        <Typography variant="h5" component="div">
-          {invoice.paidStatus}
-        </Typography>
+        <Box sx ={{display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h5" component="div">
+            {invoice.paidStatus}
+          </Typography>
+          <PayInvoice initialAmount={0} invoiceId={invoice.id} onSubmit={onPay} />
+        </Box>
         {invoice.serviceStartDate && invoice.serviceEndDate && (
           <Typography variant="body2" sx={{ mb: 0.5 }}>
             Period: {format(new Date(invoice.serviceStartDate), "dd/MM/yyyy")} -{" "}
@@ -49,9 +64,21 @@ const InvoicesListItem = ({ invoice, ...props }: InvoicesListItemProps) => {
           </Box>
 
           <Box>
-            <Button size="small">Edit</Button>
-            <Button size="small">Delete</Button>
-            <Button size="small">Resend</Button>
+            {onEdit && (
+              <Button size="small" onClick={() => onEdit(invoice.id)}>
+                Edit
+              </Button>
+            )}
+            {onDelete && (
+              <Button size="small" onClick={() => onDelete(invoice.id)}>
+                Delete
+              </Button>
+            )}
+            {onReSend && (
+              <Button size="small" onClick={() => onReSend(invoice.id)}>
+                Resend
+              </Button>
+            )}
           </Box>
         </Box>
       </CardActions>

@@ -14,7 +14,7 @@ const SpacedDivider = styled(Divider)(({}) => ({
 }));
 
 const Invoices = () => {
-  console.log('Invoicing')
+  console.log("Invoicing");
   const {
     data: invoices,
     error,
@@ -25,6 +25,10 @@ const Invoices = () => {
   if (error) {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
   }
+
+  const handleDelete = (invoiceId: string) => {
+    alert(invoiceId);
+  };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {
     const createdInvoice: InvoiceDto = {
@@ -55,7 +59,13 @@ const Invoices = () => {
       <CreateInvoice onSubmit={handleSubmitInvoice} />
       <SpacedDivider />
       {invoices ? (
-        <InvoicesList groupedInvoices={getGroupedInvoices(invoices)} />
+        <InvoicesList
+          groupedInvoices={getGroupedInvoices(invoices)}
+          onDelete={handleDelete}
+          onReSend={() => alert("not yet implemented")}
+          onEdit={() => alert("not yet implemented")}
+          onPay={() => alert("not yet implemented")}
+        />
       ) : (
         <CircularProgress />
       )}

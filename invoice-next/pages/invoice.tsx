@@ -37,6 +37,10 @@ const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
           {unpaidInvoices ? (
             <InvoicesList
               groupedInvoices={getGroupedInvoices(unpaidInvoices)}
+              onDelete={() => alert("not yet implemented")}
+              onReSend={() => alert("not yet implemented")}
+              onEdit={() => alert("not yet implemented")}
+              onPay={() => alert("not yet implemented")}
             />
           ) : (
             <CircularProgress />
@@ -54,7 +58,14 @@ const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
           {error && <h1>error retrieving your invoices</h1>}
           {!isLoading ? (
             invoices && (
-              <InvoicesList groupedInvoices={getGroupedInvoices(invoices)} />
+              <InvoicesList
+                groupedInvoices={getGroupedInvoices(invoices)}
+                onDelete={() => alert("not yet implemented")}
+                onReSend={() => alert("not yet implemented")}
+                onEdit={() => alert("not yet implemented")}
+              onPay={() => alert("not yet implemented")}
+
+              />
             )
           ) : (
             <CircularProgress />
