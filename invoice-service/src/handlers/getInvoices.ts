@@ -33,7 +33,7 @@ export const getInvoicesByFilter = async ({
         TableName: process.env.INVOICES_TABLE_NAME,
         IndexName: "statusAndDueDate",
         KeyConditionExpression: `paidStatus = :paidStatus${
-          dueAfterDate ? " AND dueAfterDate > :dueAfterDate" : ""
+          dueAfterDate ? " AND dueDate > :dueAfterDate" : ""
         }`,
         ExpressionAttributeValues: {
           ":paidStatus": paidStatus,
