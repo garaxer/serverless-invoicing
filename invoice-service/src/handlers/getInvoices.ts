@@ -4,7 +4,7 @@ import * as createHttpError from "http-errors";
 import { APIGatewayEvent, Context } from "aws-lambda";
 import validator from "@middy/validator";
 import getInvoicesSchemas from "@libs/schemas/getInvoicesSchemas";
-import { PAIDSTATUS } from "src/typings/invoice";
+import { Invoice, PAIDSTATUS } from "src/typings/invoice";
 
 const dynamodb = new DynamoDB.DocumentClient();
 
@@ -14,14 +14,15 @@ export type GetInvoicesByFilterType = {
   recipient?: string;
   dueAfterDate?: string;
   dueBeforeDate?: string;
-  limit?: string;
+  limit?: string | number;
   exclusiveStartKeyId?: string;
 };
 export const getInvoicesByFilter = async ({
   paidStatus,
   limit,
   exclusiveStartKeyId,
-}: GetInvoicesByFilterType) => {
+  dueAfterDate,
+}: GetInvoicesByFilterType): Promise<Invoice[]> => {
   let invoices: DynamoDB.DocumentClient.ItemList;
   // TODO add optional duedate before and after
 
@@ -31,9 +32,12 @@ export const getInvoicesByFilter = async ({
       .query({
         TableName: process.env.INVOICES_TABLE_NAME,
         IndexName: "statusAndDueDate",
-        KeyConditionExpression: "paidStatus = :paidStatus",
+        KeyConditionExpression: `paidStatus = :paidStatus${
+          dueAfterDate ? " AND dueAfterDate > :dueAfterDate" : ""
+        }`,
         ExpressionAttributeValues: {
           ":paidStatus": paidStatus,
+          ...(dueAfterDate && { ":dueAfterDate": dueAfterDate }),
         },
         ...(limit && { Limit: parseInt(`${limit || 20}`) }),
         ...(exclusiveStartKeyId && {
@@ -47,7 +51,7 @@ export const getInvoicesByFilter = async ({
     console.error(error);
     throw new createHttpError.InternalServerError(error);
   }
-  return invoices;
+  return invoices as Invoice[];
 };
 
 async function getInvoices(event: APIGatewayEvent, _context: Context) {

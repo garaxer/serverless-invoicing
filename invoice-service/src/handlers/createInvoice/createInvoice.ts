@@ -36,6 +36,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
   const {
     title,
     recipientEmail,
+    recipientName = undefined,
     amount = 0,
     dueDate: dueDateU = undefined,
     serviceEndDate = undefined,
@@ -51,6 +52,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
     createdAt: now.toISOString(),
     amount,
     recipientEmail,
+    recipientName,
     dueDate: dueDate.toISOString(),
     paidBy: [],
     serviceEndDate: (serviceEndDate

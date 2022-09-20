@@ -7,6 +7,7 @@ export default {
     amount: { type: 'number' },
     dueDate: { type: 'string' },
     recipientEmail: { type: 'string' },
+    recipientName: { type: 'string' },
     serviceEndDate: { type: 'string' },
     serviceStartDate: { type: 'string' },
   },

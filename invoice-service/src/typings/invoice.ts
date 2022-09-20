@@ -11,6 +11,7 @@ export type Invoice = {
   amount: number;
   dueDate: string;
   recipientEmail: string;
+  recipientName: string;
   paidBy: {
     amount: number;
     datePaid?: string;
@@ -29,6 +30,7 @@ export class InvoiceDto implements Invoice {
   createdAt: string;
   amount: number;
   dueDate: string;
+  recipientName: string;
   recipientEmail: string;
   paidBy: {
     amount: number;

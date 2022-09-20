@@ -19,7 +19,7 @@ import styled from "@emotion/styled";
 import ProtectedAuth from "./ProtectedAuth";
 import LoginAvatar from "./LoginAvatar";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Create"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const siteTitle = "Real Estate Invoicing";
 
@@ -91,6 +91,7 @@ color: ${theme.palette.text.primary}
                     letterSpacing: ".3rem",
                     color: "inherit",
                     textDecoration: "none",
+                    cursor: "pointer"
                   }}
                 >
                   {title}

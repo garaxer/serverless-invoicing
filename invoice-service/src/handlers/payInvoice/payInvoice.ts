@@ -8,6 +8,7 @@ import { receiptMailer } from "@libs/receiptMailer";
 import { PAIDSTATUS } from "src/typings/invoice";
 import validator from "@middy/validator";
 import { Authorizer } from "src/typings/authorizer";
+import { getInvoicesByFilter } from "@handlers/getInvoices";
 
 const payInvoice: ValidatedEventAPIGatewayProxyEvent<
   typeof schema,
@@ -56,18 +57,23 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 
   // Pay invoice and use the account the logged it as paid as the one who did.
   // Send an email to the recipient email.
+
   try {
-    const updatedInvoice = await payInvoiceCommand(
-      invoice,
-      amount,
-      totalPaidSoFar,
-      email
-    );
+    const [updatedInvoice, nextInvoices] = await Promise.all([
+      payInvoiceCommand(invoice, amount, totalPaidSoFar, email),
+      getInvoicesByFilter({
+        paidStatus: PAIDSTATUS.UNPAID,
+        createdBy: email,
+        limit: 1,
+        dueAfterDate: invoice?.dueDate,
+      }),
+    ]);
+
+    const nextInvoice = nextInvoices && nextInvoices.length ? nextInvoices[0] : undefined
+
     const totalPaidSoFarAfterPaying =
       updatedInvoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
-
-    //TODO Get the next invoice using the due date.
-    await receiptMailer(updatedInvoice, amount, totalPaidSoFarAfterPaying);
+    await receiptMailer(updatedInvoice, amount, totalPaidSoFarAfterPaying, nextInvoice);
 
     return {
       statusCode: 201,
