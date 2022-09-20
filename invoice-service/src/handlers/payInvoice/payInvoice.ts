@@ -68,7 +68,7 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
         dueAfterDate: invoice?.dueDate,
       }),
     ]);
-
+    // TODO Perhaps create the next invoice
     const nextInvoice = nextInvoices && nextInvoices.length ? nextInvoices[0] : undefined
 
     const totalPaidSoFarAfterPaying =

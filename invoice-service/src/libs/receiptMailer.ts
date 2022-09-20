@@ -26,7 +26,7 @@ export async function receiptMailer(
     serviceEndDate: nextServiceEndDate,
     dueDate: nextDueDate = addDays(new Date(dueDate), 7).toISOString(),
     amount: nextAmount = amount,
-  } = nextInvoice;
+  } = nextInvoice || {};
   const datePaid =
     paidBy && paidBy.length ? paidBy[paidBy.length - 1].datePaid : undefined;
 
@@ -48,9 +48,15 @@ export async function receiptMailer(
           makeDateString(serviceEndDate) || "?"
         }. I have marked the invoice as ${paidStatus}.
 \n
-        The next period "${makeDateString(nextServiceStartDate) || "?"} to ${
-          makeDateString(nextServiceEndDate) || "?"
-        }" $${nextAmount} is due before ${makeDateString(nextDueDate)}.`,
+        ${
+          nextInvoice
+            ? `The next period "${
+                makeDateString(nextServiceStartDate) || "?"
+              } to ${
+                makeDateString(nextServiceEndDate) || "?"
+              }" $${nextAmount} is due before ${makeDateString(nextDueDate)}.`
+            : ""
+        }`,
       }),
     })
     .promise();
