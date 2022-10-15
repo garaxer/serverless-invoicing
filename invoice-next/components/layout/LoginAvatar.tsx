@@ -3,11 +3,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const LoginAvatar = () => {
   // TODO figure out why loginWithRedirect is not workings
-  const { loginWithPopup } = useAuth0();
+  const { loginWithPopup, logout, isAuthenticated } = useAuth0();
 
   return (
-    <Tooltip title="Open settings">
-      <IconButton onClick={() => loginWithPopup()} sx={{ p: 0 }}>
+    <Tooltip title={isAuthenticated ? "Logout" : "Login"}>
+      <IconButton
+        onClick={() => (isAuthenticated ? logout() : loginWithPopup())}
+        sx={{ p: 0 }}
+      >
         <Avatar alt="avatar" />
       </IconButton>
     </Tooltip>

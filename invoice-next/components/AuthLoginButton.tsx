@@ -10,12 +10,20 @@ const AuthLoginButton = () => {
   if (user) {
     return (
       <div>
-        Welcome {user.name}! <Link href="/api/auth/logout">Logout</Link>
+        {/* disable @next/next/no-html-link-for-pages */}
+        Welcome {user.name}!{" "}
+        <Link href={"/api/auth/logout"}>
+          <a href="/api/auth/logout">Logout</a>
+        </Link>
       </div>
     );
   }
-
-  return <Link href="/api/auth/login">Login</Link>;
+  //disable @next/next/no-html-link-for-pages
+  return (
+    <Link href={"/api/auth/login"}>
+      <a href="/api/auth/login">Login</a>;
+    </Link>
+  );
 };
 
 export default AuthLoginButton;
