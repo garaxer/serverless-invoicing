@@ -37,6 +37,7 @@ const AuthedApp = ({ Component, pageProps }: AppProps) => {
 };
 function MyApp(props: AppProps) {
   console.log("envs: " + process.env.NEXT_PUBLIC_AUTH0_ISSUER_BASE_URL);
+  console.log("envs2: " + process.env.AUTH0_ISSUER_BASE_URL);
   return (
     <UserProvider>
       <Auth0Provider
