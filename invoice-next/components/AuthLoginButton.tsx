@@ -13,7 +13,7 @@ const AuthLoginButton = () => {
         {/* disable @next/next/no-html-link-for-pages */}
         Welcome {user.name}!{" "}
         <Link href={"/api/auth/logout"}>
-          <a href="/api/auth/logout">Logout</a>
+          <a >Logout</a>
         </Link>
       </div>
     );
@@ -21,7 +21,7 @@ const AuthLoginButton = () => {
   //disable @next/next/no-html-link-for-pages
   return (
     <Link href={"/api/auth/login"}>
-      <a href="/api/auth/login">Login</a>;
+      <a >Login</a>;
     </Link>
   );
 };
