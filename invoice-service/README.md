@@ -296,3 +296,4 @@ TODO
 17. Infinite scroll or something
 18. Fix bug that happens when you create multiple in a row fast on the FE.
 19. AWS diagrams using mermaid, SQS and SES, auth setup etc.
+20. get rid of next and serverless and use react and s3
