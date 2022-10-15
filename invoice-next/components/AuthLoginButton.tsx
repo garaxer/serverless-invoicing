@@ -1,4 +1,5 @@
 import { useUser } from "@auth0/nextjs-auth0";
+import { Button } from "@mui/material";
 import Link from "next/link";
 
 const AuthLoginButton = () => {
@@ -9,19 +10,19 @@ const AuthLoginButton = () => {
 
   if (user) {
     return (
-      <div>
-        {/* disable @next/next/no-html-link-for-pages */}
-        Welcome {user.name}!{" "}
-        <Link href={"/api/auth/logout"}>
-          <a >Logout</a>
-        </Link>
-      </div>
+      <Link href={"/api/auth/logout"}>
+        <Button variant="contained" color="secondary">
+          Welcome {user.name}! Logout
+        </Button>
+      </Link>
     );
   }
   //disable @next/next/no-html-link-for-pages
   return (
     <Link href={"/api/auth/login"}>
-      <a >Login</a>;
+      <Button variant="contained" color="secondary">
+        Login
+      </Button>
     </Link>
   );
 };

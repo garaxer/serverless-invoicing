@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
 import AuthLoginButton from "components/AuthLoginButton";
 import Link from "next/link";
-import { Box, Button, CircularProgress, styled } from "@mui/material";
+import { Box, CircularProgress, styled } from "@mui/material";
 import { useUser } from "@auth0/nextjs-auth0";
 
 const HeroContent = styled("div")(
@@ -55,9 +55,8 @@ const Hero = () => {
         ) : (
           <HeroText>
             <Box>
-              <Button variant="contained" color="secondary">
                 <AuthLoginButton />
-              </Button>
+
             </Box>
             <br />
             <Link href="/invoice">
