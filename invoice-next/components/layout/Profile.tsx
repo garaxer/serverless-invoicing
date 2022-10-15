@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import Image from "next/image";
 
 const Profile = () => {
   const { user } = useAuth0();
@@ -10,11 +11,11 @@ const Profile = () => {
     <div>
       <div className="row align-items-center profile-header">
         <div className="col-md-2 mb-3">
-          <img
+          {picture && <Image
             src={picture}
             alt="Profile"
             className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
-          />
+          />}
         </div>
         <div className="col-md text-center text-md-left">
           <h2>{name}</h2>

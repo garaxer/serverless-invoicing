@@ -40,7 +40,7 @@ const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
               onDelete={() => alert("not yet implemented")}
               onReSend={() => alert("not yet implemented")}
               onEdit={() => alert("not yet implemented")}
-              onPay={() => alert("not yet implemented")}
+              onPay={async () => alert("not yet implemented")}
             />
           ) : (
             <CircularProgress />
@@ -63,8 +63,7 @@ const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
                 onDelete={() => alert("not yet implemented")}
                 onReSend={() => alert("not yet implemented")}
                 onEdit={() => alert("not yet implemented")}
-              onPay={() => alert("not yet implemented")}
-
+                onPay={async () => alert("not yet implemented")}
               />
             )
           ) : (

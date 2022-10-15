@@ -1,4 +1,5 @@
 import { useUser } from "@auth0/nextjs-auth0";
+import Link from "next/link";
 
 const AuthLoginButton = () => {
   const { user, error, isLoading } = useUser();
@@ -9,12 +10,12 @@ const AuthLoginButton = () => {
   if (user) {
     return (
       <div>
-        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
+        Welcome {user.name}! <Link href="/api/auth/logout">Logout</Link>
       </div>
     );
   }
 
-  return <a href="/api/auth/login">Login</a>;
+  return <Link href="/api/auth/login">Login</Link>;
 };
 
 export default AuthLoginButton;

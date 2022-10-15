@@ -9,7 +9,7 @@ const Home: NextPage = () => {
 
 
   return (
-    <Layout title={"Login"}>
+    <Layout title={"Login"} useAuth={false}>
       <div>
         Nice
       </div>
