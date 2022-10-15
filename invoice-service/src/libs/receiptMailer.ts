@@ -31,6 +31,7 @@ export async function receiptMailer(
     paidBy && paidBy.length ? paidBy[paidBy.length - 1].datePaid : undefined;
 
   console.log("RECIEPT BEING EMAILED");
+  //TODO clean this mess up
   const makeDateString = (d?: string) =>
     d ? new Date(d).toLocaleDateString("en-AU") : "";
   await sqs
@@ -40,9 +41,9 @@ export async function receiptMailer(
         subject: `Payment reciept for ${title} | ${id}`,
         recipient: recipientEmail,
         body: `${recipientName ? `Hi ${recipientName}` : ""}\n
-        This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
+This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
           datePaid
-        )} which pays $${totalPaidSoFar} towards $${amount} for the period ${
+        )}. You have paid $${totalPaidSoFar} out of $${amount} for the period ${
           makeDateString(serviceStartDate) || "?"
         } to ${
           makeDateString(serviceEndDate) || "?"
@@ -50,11 +51,11 @@ export async function receiptMailer(
 \n
         ${
           nextInvoice
-            ? `The next period "${
+            ? `The next amount of $${nextAmount} for the period "${
                 makeDateString(nextServiceStartDate) || "?"
               } to ${
                 makeDateString(nextServiceEndDate) || "?"
-              }" $${nextAmount} is due before ${makeDateString(nextDueDate)}.`
+              }" is due before ${makeDateString(nextDueDate)}.`
             : ""
         }`,
       }),

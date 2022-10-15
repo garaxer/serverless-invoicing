@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { CreateInvoiceDto, InvoiceDto } from "types/invoice";
+import { InvoiceDto } from "types/invoice";
 import api from "api";
 
 const usePayInvoice = () => {
@@ -10,7 +10,7 @@ const usePayInvoice = () => {
 
   const { getIdTokenClaims } = useAuth0();
 
-  const mutate = async (invoiceId: string, amount: number) => {
+  const mutate = async (invoiceId: string, amount: number, datePaid: Date) => {
     const idToken = await getIdTokenClaims();
     if (!idToken) {
       alert("Please login");
@@ -18,7 +18,9 @@ const usePayInvoice = () => {
     }
     try {
       setIsMutating(true);
-      const response = await api.Invoices(idToken.__raw).pay(invoiceId, amount);
+      const response = await api
+        .Invoices(idToken.__raw)
+        .pay(invoiceId, amount, datePaid.toISOString());
 
       setData(response);
       setIsMutating(false);

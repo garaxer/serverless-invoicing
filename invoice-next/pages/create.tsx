@@ -34,7 +34,7 @@ const Invoices = () => {
   const handleDelete = (invoiceId: string) => {
     alert(invoiceId);
   };
-  const handlePay = async (invoiceId: string, amount: number) => {
+  const handlePay = async (invoiceId: string, amount: number, datePaid: Date) => {
     const newInvoices = (invoices || []).map((i) =>
       i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
     );
@@ -44,7 +44,7 @@ const Invoices = () => {
       revalidate: true,
     };
     const f = async (invoices?: InvoiceDto[]) => {
-      const newInvoice = await payInvoice(invoiceId, amount);
+      const newInvoice = await payInvoice(invoiceId, amount, datePaid);
       if (!newInvoice) {
         console.error("Unable to pay invoice");
         return invoices
@@ -97,7 +97,7 @@ const Invoices = () => {
   );
 };
 
-// TODO kanban style paid unpaid overdue
+// TODO kanban style paid |unpaid |overdue
 const Home: NextPage = () => {
   return (
     <Layout title={"Invoicing - create"} useAuth={true}>

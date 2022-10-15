@@ -10,6 +10,7 @@ export type CreateInvoiceDto = {
   amount: number;
   dueDate: string;
   recipientEmail: string;
+  recipientName: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
 };
@@ -22,6 +23,7 @@ export type InvoiceDto = {
   amount: number;
   dueDate: string;
   recipientEmail: string;
+  recipientName: string;
   paidBy: {
     amount: number;
     datePaid?: string;

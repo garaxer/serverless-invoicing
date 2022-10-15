@@ -16,7 +16,8 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 > = async (event, _context) => {
   const { email = "unknown@example.com" } = event.requestContext.authorizer;
   const { id } = event.pathParameters;
-  const { amount } = event.body;
+  const { amount, datePaid = new Date().toISOString() } = event.body;
+  console.log("Paying invoice with", event.body)
 
   // Validate amount
   if (amount < 0) {
@@ -60,7 +61,7 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 
   try {
     const [updatedInvoice, nextInvoices] = await Promise.all([
-      payInvoiceCommand(invoice, amount, totalPaidSoFar, email),
+      payInvoiceCommand(invoice, amount, totalPaidSoFar, email, datePaid),
       getInvoicesByFilter({
         paidStatus: PAIDSTATUS.UNPAID,
         createdBy: email,
@@ -69,11 +70,17 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
       }),
     ]);
     // TODO Perhaps create the next invoice
-    const nextInvoice = nextInvoices && nextInvoices.length ? nextInvoices[0] : undefined
+    const nextInvoice =
+      nextInvoices && nextInvoices.length ? nextInvoices[0] : undefined;
 
     const totalPaidSoFarAfterPaying =
       updatedInvoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
-    await receiptMailer(updatedInvoice, amount, totalPaidSoFarAfterPaying, nextInvoice);
+    await receiptMailer(
+      updatedInvoice,
+      amount,
+      totalPaidSoFarAfterPaying,
+      nextInvoice
+    );
 
     return {
       statusCode: 201,

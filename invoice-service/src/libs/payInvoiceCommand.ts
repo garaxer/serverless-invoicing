@@ -7,7 +7,8 @@ export async function payInvoiceCommand(
   invoice: Invoice,
   amount: number,
   totalPaidSoFar: number,
-  email = "unknown"
+  email = "unknown",
+  datePaid = new Date().toISOString()
 ) {
   const paidStatus =
     amount + totalPaidSoFar >= invoice.amount ? "PAID" : "UNPAID";
@@ -19,7 +20,7 @@ export async function payInvoiceCommand(
     ExpressionAttributeValues: {
       ":paidBy": [
         ...invoice.paidBy,
-        { datePaid: new Date().toISOString(), amount, email },
+        { datePaid, amount, email },
       ],
       ":paid": paidStatus,
     },

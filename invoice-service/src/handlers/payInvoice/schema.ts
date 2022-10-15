@@ -4,6 +4,7 @@ export default  {
   type: "object",
   properties: {
     amount: { type: "number" },
+    datePaid: { type: "string" },
   },
   required: ['amount']
 

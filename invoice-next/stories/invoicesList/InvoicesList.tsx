@@ -7,7 +7,7 @@ export type InvoicesListProps = {
   onDelete?: (invoiceId: string) => void | Promise<void>;
   onReSend?: (invoiceId: string) => void | Promise<void>;
   onEdit?: (invoiceId: string) => void | Promise<void>;
-  onPay: (invoiceId: string, amount: number) => Promise<void>;
+  onPay: (invoiceId: string, amount: number, datePaid: Date) => Promise<void>;
 };
 // Use this for the client facing list of invoices. Infinite scroll
 //The table will be used for the month to month reciepts using virtualised scrolling.

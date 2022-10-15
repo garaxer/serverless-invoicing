@@ -155,6 +155,7 @@ erDiagram
         amount number
         dueDate string
         recipientEmail string
+        recipientName string
         amountPaid number
         datePaid string
         reminderSentDate string
@@ -271,3 +272,27 @@ Which sends an email
 sls invoke -f remindInvoice -l
 to go through and check any overdue invoices (UNPAID and dueDate < now and hasn't been reminded in a week)
 List through invoices.
+
+
+
+TODO
+0. Email last sent updated when paying invoice?
+1. Get name and email working
+2. get FE hosted.
+3. Edit invoice
+4. Resend Invoice
+5. Fix reminder service
+6. Filter invoices by email.
+7. Make sure when you are logged in you only see your invoices, admin sees the invoices they created, user sees ones assigned to them.
+8. Get S3 upload working, upload pdf invoice and link to it.
+9. Better rework the login system. Profile and preferences. When to send email/default template for email you enter. Enter an email and a due date and it fills out rest based of the template.
+10. github action for sls deploy for all 3 services.
+11. Tick box to create the next invoicing on paying
+12. Serverless offline
+13. unit tests
+14. cypress
+15. Monorepo? 
+16. Context for something to show recruiters how cool I am
+17. Infinite scroll or something
+18. Fix bug that happens when you create multiple in a row fast on the FE.
+19. AWS diagrams using mermaid, SQS and SES, auth setup etc.

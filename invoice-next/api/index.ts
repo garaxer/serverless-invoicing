@@ -20,6 +20,25 @@ export const SWRFetcher =
     return await res.json();
   };
 
+const isOfTypeInvoiceDto = (obj: unknown): obj is InvoiceDto => {
+  return obj != null && typeof (obj as InvoiceDto).id === "string";
+};
+
+const responseBodyIsTyped =
+  <T>(typingFn: (obj: unknown) => obj is T) =>
+  async (response: Response) => {
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const responseTyped: unknown = await response.json();
+    if (!typingFn(responseTyped)) {
+      throw new TypeError("Type not correct in response");
+    }
+    return responseTyped;
+  };
+
 const responseBody = <T>(response: Response) => {
   console.log(response);
 
@@ -81,8 +100,11 @@ const Invoices = (token: string, baseUrl = BASE_URL) => ({
     ),
   create: (invoice: CreateInvoiceDto) =>
     requests(token, baseUrl).post<InvoiceDto>("/invoice", invoice),
-  pay: (invoiceId: string, amount: number) =>
-    requests(token, baseUrl).patch<InvoiceDto>(`/invoice/${invoiceId}/pay`, {amount}),
+  pay: (invoiceId: string, amount: number, datePaid: string) =>
+    requests(token, baseUrl).patch<InvoiceDto>(`/invoice/${invoiceId}/pay`, {
+      amount,
+      datePaid,
+    }),
 });
 
 const agent = {

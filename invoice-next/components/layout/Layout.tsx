@@ -91,7 +91,7 @@ color: ${theme.palette.text.primary}
                     letterSpacing: ".3rem",
                     color: "inherit",
                     textDecoration: "none",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   }}
                 >
                   {title}
@@ -128,9 +128,11 @@ color: ${theme.palette.text.primary}
                   }}
                 >
                   {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
+                    <Link href={page.toLowerCase()} key={page}>
+                      <MenuItem onClick={handleCloseNavMenu}>
+                        <Typography textAlign="center">{page}22</Typography>
+                      </MenuItem>
+                    </Link>
                   ))}
                 </Menu>
               </Box>
@@ -157,21 +159,19 @@ color: ${theme.palette.text.primary}
 
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
-                  <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
-                  >
-                    {page}
-                  </Button>
+                  <Link href={page.toLowerCase()} key={page}>
+                    <Button
+                      key={page}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      {page}
+                    </Button>
+                  </Link>
                 ))}
               </Box>
 
-              <Box sx={{ flexGrow: 0 }}>
-                {useAuth && (
-                  <LoginAvatar />
-                )}
-              </Box>
+              <Box sx={{ flexGrow: 0 }}>{useAuth && <LoginAvatar />}</Box>
             </Toolbar>
           </Container>
         </AppBar>

@@ -16,7 +16,7 @@ export type InvoicesListItemProps = {
   onDelete?: (invoiceId: string) => void;
   onReSend?: (invoiceId: string) => void;
   onEdit?: (invoiceId: string) => void;
-  onPay: (invoiceId: string, amount: number) => Promise<void>;
+  onPay: (invoiceId: string, amount: number, datePaid: Date) => Promise<void>;
 };
 // Good example in mui divider
 const InvoicesListItem = ({
@@ -33,14 +33,27 @@ const InvoicesListItem = ({
         <Typography variant="h5" color="text.primary">
           {invoice.title}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Due: {format(new Date(invoice.dueDate), "dd/MM/yyyy")}
+        <Typography
+          sx={{ fontSize: 16, gap: 5, display: "flex" }}
+          color="text.secondary"
+          gutterBottom
+        >
+          <span>Due: {format(new Date(invoice.dueDate), "dd/MM/yyyy")}</span>
+          <span>Recipient Email: {invoice.recipientEmail}</span>
+          <span>Name: {invoice.recipientName}</span>
         </Typography>
-        <Box sx ={{display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h5" component="div">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="h6" component="div">
             {invoice.paidStatus}
           </Typography>
-          <PayInvoice initialAmount={invoice.amount} invoiceId={invoice.id} onSubmit={onPay} />
+          <PayInvoice
+            initialAmount={invoice.amount}
+            invoiceId={invoice.id}
+            onSubmit={onPay}
+          />
+          <Typography sx={{ paddingLeft: "1rem" }}>
+            ${invoice.paidBy.reduce((a, c) => c.amount + a, 0)} paid so far.
+          </Typography>
         </Box>
         {invoice.serviceStartDate && invoice.serviceEndDate && (
           <Typography variant="body2" sx={{ mb: 0.5 }}>

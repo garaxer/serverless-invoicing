@@ -70,6 +70,7 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
           new Date(),
           1
         ).toLocaleDateString()}`,
+        recipientName: "Stewart/Patty",
         dueDate: new Date().toISOString(),
         amount: 420,
         recipientEmail: "gbagnall8@gmail.com",
@@ -127,6 +128,15 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
                 label={"Title"}
                 type={"text"}
                 fullWidth
+              />
+            </BoxFormInputWrapper>
+            <BoxFormInputWrapper flexGrow={0.5}>
+              <ArticleIcon fontSize="large" color="primary" />
+              <FormikMuiTextInput
+                name="recipientName"
+                placeholder={"Name of recipient"}
+                label={"Name"}
+                type={"text"}
               />
             </BoxFormInputWrapper>
           </BoxFormRow>
