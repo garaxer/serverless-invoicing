@@ -8,7 +8,7 @@ const LoginAvatar = () => {
   return (
     <Tooltip title={isAuthenticated ? "Logout" : "Login"}>
       <IconButton
-        onClick={() => (isAuthenticated ? logout() : loginWithPopup())}
+        onClick={() => (isAuthenticated ? logout({ returnTo: window.location.origin }) : loginWithPopup())}
         sx={{ p: 0 }}
       >
         <Avatar alt="avatar" />
