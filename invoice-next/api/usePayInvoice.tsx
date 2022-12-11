@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { InvoiceDto } from "types/invoice";
-import api from "api";
+import api, { ResponseError } from "api";
+
+export type UsePayInvoiceErrorResponse = { error: ResponseError; invoiceId: string }
+export const isOfTypeUsePayInvoiceErrorResponse = (obj: unknown): obj is UsePayInvoiceErrorResponse => {
+  return obj != null && typeof (obj as UsePayInvoiceErrorResponse)?.error?.info === "string";
+};
 
 const usePayInvoice = () => {
   const [data, setData] = useState<InvoiceDto | undefined>();
   const [isMutating, setIsMutating] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] =
+    useState<UsePayInvoiceErrorResponse | null>(null);
 
   const { getIdTokenClaims } = useAuth0();
 
@@ -26,8 +32,13 @@ const usePayInvoice = () => {
       setIsMutating(false);
       return response;
     } catch (error: any) {
-      setError(error);
+      const errorResponse = {
+        invoiceId,
+        error,
+      }
+      setError(errorResponse);
       setIsMutating(false);
+      return errorResponse;
     }
   };
   const resetData = () => setData(undefined);

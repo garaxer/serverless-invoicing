@@ -39,7 +39,7 @@ export async function receiptMailer(
       QueueUrl: process.env.MAIL_QUEUE_URL,
       MessageBody: JSON.stringify({
         subject: `Payment reciept for ${title} | ${id}`,
-        recipient: recipientEmail,
+        recipients: [recipientEmail],
         body: `${recipientName ? `Hi ${recipientName}` : ""}\n
 This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
           datePaid
@@ -66,3 +66,5 @@ This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString
 
   return;
 }
+
+

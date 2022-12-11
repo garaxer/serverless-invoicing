@@ -32,9 +32,22 @@ const handler = async (
   try {
     const result = await ses.sendEmail(params).promise();
     console.log(result);
-    return formatJSONResponse({result});
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        success: true,
+        result,
+      }),
+    };
   } catch (error) {
     console.error(error);
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        success: false,
+        error,
+      }),
+    };
   }
 };
 

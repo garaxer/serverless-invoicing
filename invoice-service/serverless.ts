@@ -11,7 +11,7 @@ import ServicesBucket from "./resources/ServicesBucket";
 import addBooking from "@functions/addBooking";
 import createService from "@functions/createService";
 import getBookings from "@functions/getBookings";
-import remindService from "@functions/remindService";
+// import remindService from "@functions/remindService";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
 import {
@@ -108,7 +108,7 @@ const serverlessConfiguration: AWS = {
     createInvoice,
     payInvoice,
     editInvoice,
-    remindService,
+    // remindService, // convert from text to email, just use the sqs code.
   },
   package: { individually: true },
   custom: {

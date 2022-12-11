@@ -2,12 +2,17 @@ import { AttachMoney } from "@mui/icons-material";
 import { Box, Button, styled } from "@mui/material";
 import FormikDateInput from "@stories/form/FormikDateInput";
 import FormikMuiTextInput from "@stories/form/FormikMuiTextInput";
+import { isOfTypeUsePayInvoiceErrorResponse, UsePayInvoiceErrorResponse } from "api/usePayInvoice";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 type PayInvoiceProps = {
   initialAmount: number;
   invoiceId: string;
-  onSubmit: (invoiceId: string, amount: number, datePaid: Date) => Promise<void>;
+  onSubmit: (
+    invoiceId: string,
+    amount: number,
+    datePaid: Date
+  ) => Promise<void | unknown | UsePayInvoiceErrorResponse>;
 };
 const PayInvoice = ({
   invoiceId,
@@ -32,9 +37,19 @@ const PayInvoice = ({
       validationSchema={Yup.object({
         amount: Yup.number().required("Required"),
       })}
-      onSubmit={async (values: { amount: number, datePaid: string }, { setSubmitting }) => {
-        console.log(values)
-        await onSubmit(invoiceId, values.amount, new Date(values.datePaid));
+      onSubmit={async (
+        values: { amount: number; datePaid: string },
+        { setSubmitting, setErrors }
+      ) => {
+        const response = await onSubmit(
+          invoiceId,
+          values.amount,
+          new Date(values.datePaid)
+        );
+        if (isOfTypeUsePayInvoiceErrorResponse(response)) {
+          // TODO add switch here for known errors. Start returning typed error codes to the front end via swagger or something
+          setErrors({ amount: response.error.info });
+        }
         setSubmitting(false);
       }}
     >

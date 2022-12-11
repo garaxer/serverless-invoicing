@@ -6,7 +6,7 @@ const BASE_URL =
 export const SWRFetcher =
   (token: string) =>
   async (resource: RequestInfo | URL, init?: RequestInit | undefined) => {
-    console.log({ token });
+    // console.log({ token });
     const res = await fetch(`${BASE_URL}${resource}`, {
       ...init,
       headers: {
@@ -15,13 +15,13 @@ export const SWRFetcher =
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Custom fetcher");
-    console.log({ res });
+    // console.log("Custom fetcher");
+    // console.log({ res });
     return await res.json();
   };
 
-const isOfTypeInvoiceDto = (obj: unknown): obj is InvoiceDto => {
-  return obj != null && typeof (obj as InvoiceDto).id === "string";
+export const isOfTypeInvoiceDto = (obj: unknown): obj is InvoiceDto => {
+  return obj != null && typeof (obj as InvoiceDto)?.id === "string";
 };
 
 const responseBodyIsTyped =
@@ -39,11 +39,20 @@ const responseBodyIsTyped =
     return responseTyped;
   };
 
-const responseBody = <T>(response: Response) => {
-  console.log(response);
+export class ResponseError extends Error {
+  info: string | undefined;
+  status: number | undefined;
+}
 
+const responseBody = async <T>(response: Response) => {
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const error = new ResponseError(
+      "An error occurred while fetching the data."
+    );
+    // Attach extra info to the error object.
+    error.info = await response.text(); // edit backend to send json?
+    error.status = response.status;
+    throw error;
   }
   return response.json() as Promise<T>;
 };

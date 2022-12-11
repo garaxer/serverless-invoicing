@@ -8,6 +8,7 @@ import { getGroupedInvoices } from "libs/invoices";
 import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
 import usePayInvoice from "api/usePayInvoice";
+import { isOfTypeInvoiceDto } from "api";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
@@ -24,7 +25,7 @@ const Invoices = () => {
     mutate,
   } = useSWR<InvoiceDto[]>("/invoices?status=UNPAID");
 
-  const { mutate: addInvoice } = useAddInvoice();
+  const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
   const { mutate: payInvoice } = usePayInvoice();
   if (error) {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
@@ -34,24 +35,35 @@ const Invoices = () => {
   const handleDelete = (invoiceId: string) => {
     alert(invoiceId);
   };
-  const handlePay = async (invoiceId: string, amount: number, datePaid: Date) => {
+  const handlePay = async (
+    invoiceId: string,
+    amount: number,
+    datePaid: Date
+  ) => {
     const newInvoices = (invoices || []).map((i) =>
       i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
     );
+    
     const options = {
       optimisticData: newInvoices,
       rollbackOnError: true,
       revalidate: true,
+      throwOnError: true,
     };
-    const f = async (invoices?: InvoiceDto[]) => {
-      const newInvoice = await payInvoice(invoiceId, amount, datePaid);
-      if (!newInvoice) {
-        console.error("Unable to pay invoice");
-        return invoices
+    const newInvoiceP = payInvoice(invoiceId, amount, datePaid);
+    
+    const callPayInvoice = async (invoices?: InvoiceDto[]) => {
+      const newInvoice = await newInvoiceP; // TODO doesn't look good to await twice
+      if (!newInvoice || !isOfTypeInvoiceDto(newInvoice)) {
+        console.info("Unable to pay invoice");
+        return invoices; // note can just throw an error here
       }
       return spliceInvoice(invoices || [], newInvoice);
     };
-    mutate(f, options);
+    mutate(callPayInvoice, options); // mutate just returns the new list, from useSWR, if it throws an error, it will throw it at the config level.
+
+    const newInvoice = await newInvoiceP;
+    return newInvoice; // Need to return back to formik
   };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {

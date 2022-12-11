@@ -16,7 +16,7 @@ export type InvoicesListItemProps = {
   onDelete?: (invoiceId: string) => void;
   onReSend?: (invoiceId: string) => void;
   onEdit?: (invoiceId: string) => void;
-  onPay: (invoiceId: string, amount: number, datePaid: Date) => Promise<void>;
+  onPay: (invoiceId: string, amount: number, datePaid: Date) => Promise<void | unknown>;
 };
 // Good example in mui divider
 const InvoicesListItem = ({
