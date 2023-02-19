@@ -31,12 +31,13 @@ export const getInvoiceById = async (id: string) => {
 
 async function getInvoice(event, context) {
   const { id } = event.pathParameters;
+  const { email = "unknown@example.com" } = event.requestContext.authorizer;
 
   const invoice = await getInvoiceById(id);
 
   return {
     statusCode: 200,
-    body: JSON.stringify(invoice),
+    body: JSON.stringify({ invoice, email }),
   };
 }
 

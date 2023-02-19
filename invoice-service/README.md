@@ -276,13 +276,13 @@ List through invoices.
 
 
 TODO
-0. Email last sent updated when paying invoice?
-1. Get name and email working
-2. get FE hosted.
+0. Email last sent updated when paying invoice? Done.
+1. Get name and email showing in front end
+2. get FE hosted. Done
 3. Edit invoice
 4. Resend Invoice
 5. Fix reminder service
-6. Filter invoices by email.
+6. Filter invoices by email. - use new index or add a filter
 7. Make sure when you are logged in you only see your invoices, admin sees the invoices they created, user sees ones assigned to them.
 8. Get S3 upload working, upload pdf invoice and link to it.
 9. Better rework the login system. Profile and preferences. When to send email/default template for email you enter. Enter an email and a due date and it fills out rest based of the template.
@@ -297,3 +297,11 @@ TODO
 18. Fix bug that happens when you create multiple in a row fast on the FE.
 19. AWS diagrams using mermaid, SQS and SES, auth setup etc.
 20. get rid of next and serverless and use react and s3
+
+11/12/22
+Bug list
+Need to display an error message when login expires.
+
+19/2/2023 new tickets
+Show who is logged in
+payment list

@@ -32,6 +32,7 @@ export default {
       AttributeDefinitions: [
         { AttributeName: "id", AttributeType: "S" },
         { AttributeName: "paidStatus", AttributeType: "S" },
+        { AttributeName: "recipientEmail", AttributeType: "S" },
         { AttributeName: "dueDate", AttributeType: "S" },
       ],
       KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
@@ -41,6 +42,13 @@ export default {
           KeySchema: [
             { AttributeName: "paidStatus", KeyType: "HASH" },
             { AttributeName: "dueDate", KeyType: "RANGE" },
+          ],
+          Projection: { ProjectionType: "ALL" },
+        },
+        {
+          IndexName: "emailIndex",
+          KeySchema: [
+            { AttributeName: "recipientEmail", KeyType: "HASH" },
           ],
           Projection: { ProjectionType: "ALL" },
         },

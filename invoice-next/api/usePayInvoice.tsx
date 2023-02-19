@@ -14,11 +14,11 @@ const usePayInvoice = () => {
   const [error, setError] =
     useState<UsePayInvoiceErrorResponse | null>(null);
 
-  const { getIdTokenClaims } = useAuth0();
+  const { getIdTokenClaims, isAuthenticated } = useAuth0();
 
   const mutate = async (invoiceId: string, amount: number, datePaid: Date) => {
     const idToken = await getIdTokenClaims();
-    if (!idToken) {
+  if (!idToken || !isAuthenticated) {
       alert("Please login");
       return;
     }

@@ -53,6 +53,7 @@ export const custom = {
 const serverlessConfiguration: AWS = {
   service: "psych-service",
   frameworkVersion: "3",
+  
   plugins: [
     "serverless-esbuild",
     "serverless-dynamodb-local",
@@ -61,6 +62,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: "aws",
     runtime: "nodejs16.x",
+    profile: 'personal',
     memorySize: 256,
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",

@@ -13,16 +13,18 @@ export async function payInvoiceCommand(
   const paidStatus =
     amount + totalPaidSoFar >= invoice.amount ? "PAID" : "UNPAID";
   // email is the email of the account the user is logged in with that has.
+  const now = new Date();
   const params = {
     TableName: process.env.INVOICES_TABLE_NAME,
     Key: { id: invoice.id },
-    UpdateExpression: "set paidBy = :paidBy, paidStatus = :paid",
+    UpdateExpression: "set paidBy = :paidBy, paidStatus = :paid, reminderSentDate  = :reminderSentDate",
     ExpressionAttributeValues: {
       ":paidBy": [
         ...invoice.paidBy,
         { datePaid, amount, email },
       ],
       ":paid": paidStatus,
+      ":reminderSentDate": now.toISOString(),
     },
     ReturnValues: "ALL_NEW",
   };
