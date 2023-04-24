@@ -61,8 +61,7 @@ const Hero = () => {
             <br />
             <Link href="/invoice">
               <UnderlineA>
-                Click here to and login with the email the invoice was sent to
-                to view the latest invoice
+                Welcome to Gary&apos;s invoicing, login to view your invoices.
               </UnderlineA>
             </Link>
           </HeroText>
