@@ -14,7 +14,7 @@
     "@middy/http-cors": "^3.1.1",
     "@middy/http-json-body-parser": "^2.5.3",
     "@middy/validator": "^3.1.0",
-    "aws-sdk": "^2.1176.0",
+    "aws-sdk": "^2.1354.0",
     "date-fns": "^2.29.1",
     "http-errors": "^2.0.0",
     "uuid": "^8.3.2"
