@@ -12,6 +12,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: "aws",
     runtime: "nodejs16.x",
+    profile: 'personal',
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",
     iamRoleStatements: [SendMailIAM, MailQueueIAM, SendTextIAM],

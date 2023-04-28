@@ -1,6 +1,6 @@
 import { Context, APIGatewayEvent } from "aws-lambda";
 import * as createHttpError from "http-errors";
-import { getCurrentBookings } from "@libs/booking/currentBookingsQuery";
+import { getCurrentBookings } from "src/db/currentBookingsQuery";
 import { serviceMailer } from "@libs/booking/serviceMailer";
 
 const remindService = async (_event: APIGatewayEvent, _context: Context) => {

@@ -12,6 +12,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: "aws",
     runtime: "nodejs16.x",
+    profile: 'personal',
     memorySize: 128,
     region: "ap-southeast-2",
     stage: "${opt:stage, 'dev'}",

@@ -1,17 +1,16 @@
 import type { AWS } from "@serverless/typescript";
 
-import BookingsTableIAM from "./iam/TableIAM";
-import MailQueueIAM from "./iam/MailQueueIAM";
-import SendTextIAM from "./iam/SendTextIAM";
-import InvoicesBucketIAM from "./iam/InvoicesBucketIAM";
-import ServicesBucketIAM from "./iam/ServicesBucketIAM";
-import DynamoTables from "./resources/DynamoTables";
-import InvoicesBucket from "./resources/InvoicesBucket";
-import ServicesBucket from "./resources/ServicesBucket";
+import BookingsTableIAM from "./sls/iam/TableIAM";
+import MailQueueIAM from "./sls/iam/MailQueueIAM";
+import SendTextIAM from "./sls/iam/SendTextIAM";
+import InvoicesBucketIAM from "./sls/iam/InvoicesBucketIAM";
+import ServicesBucketIAM from "./sls/iam/ServicesBucketIAM";
+import DynamoTables from "./sls/resources/DynamoTables";
+import InvoicesBucket from "./sls/resources/InvoicesBucket";
+import ServicesBucket from "./sls/resources/ServicesBucket";
 import addBooking from "@functions/addBooking";
 import createService from "@functions/createService";
 import getBookings from "@functions/getBookings";
-// import remindService from "@functions/remindService";
 import handlers from "@handlers/handlers";
 import deleteBooking from "@functions/deleteBooking";
 import {
@@ -41,8 +40,8 @@ export const custom = {
     arn: { "Fn::GetAtt": ["BookingsTable", "Arn"] },
   },
   InvoicesTable: {
-    name: { Ref: "InvociesTable" },
-    arn: { "Fn::GetAtt": ["InvociesTable", "Arn"] },
+    name: { Ref: "InvoicesTable" },
+    arn: { "Fn::GetAtt": ["InvoicesTable", "Arn"] },
   },
   MailQueue: {
     arn: "${cf:notification-service-${self:provider.stage}.MailQueueArn}",
@@ -53,7 +52,7 @@ export const custom = {
 const serverlessConfiguration: AWS = {
   service: "psych-service",
   frameworkVersion: "3",
-  
+
   plugins: [
     "serverless-esbuild",
     "serverless-dynamodb-local",
@@ -62,7 +61,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: "aws",
     runtime: "nodejs16.x",
-    profile: 'personal',
+    profile: "personal",
     memorySize: 256,
     stage: "${opt:stage, 'dev'}",
     region: "ap-southeast-2",
@@ -88,11 +87,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    Resources: {
-      ...DynamoTables,
-      ...InvoicesBucket,
-      ...ServicesBucket,
-    },
+    Resources: Object.assign({}, DynamoTables, InvoicesBucket, ServicesBucket),
     Conditions: {
       isDev: {
         "Fn::Equals": ["${self:provider.stage}", "dev"],
@@ -110,7 +105,6 @@ const serverlessConfiguration: AWS = {
     createInvoice,
     payInvoice,
     editInvoice,
-    // remindService, // convert from text to email, just use the sqs code.
   },
   package: { individually: true },
   custom: {
