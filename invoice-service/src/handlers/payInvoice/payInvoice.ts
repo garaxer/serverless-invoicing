@@ -3,7 +3,7 @@ import * as createHttpError from "http-errors";
 import { getInvoiceById } from "../getInvoice";
 import { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import schema, { payInvoiceSchema } from "./schema";
-import { payInvoiceCommand } from "@libs/payInvoiceCommand";
+import { payInvoiceCommand } from "src/db/payInvoiceCommand";
 import { receiptMailer } from "@libs/receiptMailer";
 import { PAIDSTATUS } from "src/typings/invoice";
 import validator from "@middy/validator";

@@ -8,11 +8,13 @@ import ServicesBucketIAM from "./sls/iam/ServicesBucketIAM";
 import DynamoTables from "./sls/resources/DynamoTables";
 import InvoicesBucket from "./sls/resources/InvoicesBucket";
 import ServicesBucket from "./sls/resources/ServicesBucket";
-import addBooking from "@functions/addBooking";
-import createService from "@functions/createService";
-import getBookings from "@functions/getBookings";
+import {
+  deleteBooking,
+  getBookings,
+  createService,
+  addBooking,
+} from "@functions/index";
 import handlers from "@handlers/handlers";
-import deleteBooking from "@functions/deleteBooking";
 import {
   createInvoice,
   payInvoice,
@@ -52,7 +54,6 @@ export const custom = {
 const serverlessConfiguration: AWS = {
   service: "psych-service",
   frameworkVersion: "3",
-
   plugins: [
     "serverless-esbuild",
     "serverless-dynamodb-local",
@@ -84,6 +85,7 @@ const serverlessConfiguration: AWS = {
       MAIL_QUEUE_URL: "${self:custom.MailQueue.url}",
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+      STAGE: "${self.provider.stage",
     },
   },
   resources: {
@@ -94,14 +96,13 @@ const serverlessConfiguration: AWS = {
       },
     },
   },
-  // import the function via paths
   functions: {
     getBookings,
     addBooking,
     createService,
     deleteBooking,
-    uploadInvoicePicture,
     ...handlers,
+    uploadInvoicePicture,
     createInvoice,
     payInvoice,
     editInvoice,

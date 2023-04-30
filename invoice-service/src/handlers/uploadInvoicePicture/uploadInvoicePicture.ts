@@ -5,7 +5,7 @@ import validator from "@middy/validator";
 import cors from '@middy/http-cors'
 import httpErrorHandler from "@middy/http-error-handler";
 import { uploadPictureToS3 } from "@libs/uploadPictureToS3";
-import { addPictureToInvoiceCommand } from "@libs/addPictureToInvoiceCommand";
+import { addPictureToInvoiceCommand } from "src/db/addPictureToInvoiceCommand";
 import { getInvoiceById } from "../getInvoice";
 import schema from "./schema";
 

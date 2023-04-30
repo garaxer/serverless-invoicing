@@ -1,5 +1,5 @@
 import { Context, APIGatewayEvent } from "aws-lambda";
-import { getOverdueInvoices } from "@libs/overdueInvoicesQuery";
+import { getOverdueInvoices } from "src/db/overdueInvoicesQuery";
 import { invoiceMailer } from "@libs/invoiceMailer";
 import * as createHttpError from "http-errors";
 
