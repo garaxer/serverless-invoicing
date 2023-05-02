@@ -7,7 +7,7 @@ export default withApiAuthRequired(async function services(req, res) {
   // If your Access Token is expired and you have a Refresh Token
   // `getAccessToken` will fetch you a new one using the `refresh_token` grant
 
-  const s = getSession(req, res);
+  const s = await getSession(req, res);
   if (!s?.idToken) {
     console.error("Failed to get token");
     return res.status(401).json({ error: "Not logged in, not token found" });

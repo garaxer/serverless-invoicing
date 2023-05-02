@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRFetcher } from "api";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { UserProvider } from "@auth0/nextjs-auth0";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const AuthedApp = ({ Component, pageProps }: AppProps) => {
   const auth = useAuth0();
