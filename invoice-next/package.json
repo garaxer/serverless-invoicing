@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.10.2",
-    "@auth0/nextjs-auth0": "^1.9.1",
+    "@auth0/nextjs-auth0": "^2.5.0",
     "@date-io/date-fns": "^2.14.0",
     "@emotion/babel-plugin": "^11.10.0",
     "@emotion/core": "^11.0.0",
