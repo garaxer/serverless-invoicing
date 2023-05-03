@@ -3,7 +3,7 @@ import Layout from "../components/layout/Layout";
 import AuthLoginButton from "components/AuthLoginButton";
 import Link from "next/link";
 import { Box, CircularProgress, styled } from "@mui/material";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const HeroContent = styled("div")(
   ({ theme }) =>
