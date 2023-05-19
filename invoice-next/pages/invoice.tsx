@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Layout from "../components/layout/Layout";
-import { withPageAuthRequired, useUser, getSession } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Box,
   Button,
@@ -81,7 +82,7 @@ export default Invoice;
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(context) {
     const { req, res } = context;
-    const s = getSession(req, res);
+    const s = await getSession(req, res);
     let invoices: InvoiceDto[] = [];
 
     if (!s?.idToken) {
