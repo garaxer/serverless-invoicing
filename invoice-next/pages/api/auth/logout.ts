@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const logoutHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await handleLogout(req, res);
-  } catch (error) {
+  } catch (error: any) {
     res.status(error.status || 400).end(error.message);
   }
 };
