@@ -9,6 +9,11 @@ import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
 import usePayInvoice from "api/usePayInvoice";
 import { isOfTypeInvoiceDto } from "api";
+import useSearchInvoicesForm, {
+  PAID_STATUS,
+  SearchInvoicesAction,
+} from "hooks/useSearchInvoicesForm";
+import { useState } from "react";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
@@ -19,11 +24,19 @@ const spliceInvoice = (invoices: InvoiceDto[], invoice: InvoiceDto) =>
 
 const Invoices = () => {
   console.log("Invoicing");
-  const {
-    data: invoices,
-    error,
-    mutate,
-  } = useSWR<InvoiceDto[]>("/invoices?status=UNPAID");
+  const [invoiceUrl, setInvoiceUrl] = useState("/invoices?status=UNPAID");
+  const { state, onActionHandler } = useSearchInvoicesForm(
+    {
+      paidStatus: PAID_STATUS.UNPAID,
+    },
+    ({ type, data }) => {
+      console.log(type)
+      if (type === SearchInvoicesAction.SEARCH_SUBMIT) {
+        data && setInvoiceUrl(`/invoices?status=${data?.paidStatus}`);
+      }
+    }
+  );
+  const { data: invoices, error, mutate } = useSWR<InvoiceDto[]>(invoiceUrl);
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
   const { mutate: payInvoice } = usePayInvoice();
@@ -43,7 +56,7 @@ const Invoices = () => {
     const newInvoices = (invoices || []).map((i) =>
       i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
     );
-    
+
     const options = {
       optimisticData: newInvoices,
       rollbackOnError: true,
@@ -51,7 +64,7 @@ const Invoices = () => {
       throwOnError: true,
     };
     const newInvoiceP = payInvoice(invoiceId, amount, datePaid);
-    
+
     const callPayInvoice = async (invoices?: InvoiceDto[]) => {
       const newInvoice = await newInvoiceP; // TODO doesn't look good to await twice
       if (!newInvoice || !isOfTypeInvoiceDto(newInvoice)) {
@@ -101,6 +114,8 @@ const Invoices = () => {
           onReSend={() => alert("not yet implemented")}
           onEdit={() => alert("not yet implemented")}
           onPay={handlePay}
+          invoiceListState={state}
+          onActionHandler={onActionHandler}
         />
       ) : (
         <CircularProgress />

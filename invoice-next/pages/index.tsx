@@ -56,13 +56,13 @@ const Hero = () => {
           <HeroText>
             <Box>
                 <AuthLoginButton />
-
             </Box>
             <br />
-            <Link href="/invoice">
               <UnderlineA>
                 Welcome to Gary&apos;s invoicing, login to view your invoices.
               </UnderlineA>
+            <Link href="/invoice">
+              Coming soon - ability to view your invoices. Try creating one instead.
             </Link>
           </HeroText>
         )}
