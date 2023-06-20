@@ -63,7 +63,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
       ? new Date(serviceStartDate)
       : subDays(dueDate, 7)
     ).toISOString(),
-    ...(email && { createdBy: email }),
+    createdBy: email,
   });
 
   try {

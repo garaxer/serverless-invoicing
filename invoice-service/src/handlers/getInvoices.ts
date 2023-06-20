@@ -10,7 +10,7 @@ const dynamodb = new DynamoDB.DocumentClient();
 
 export type GetInvoicesByFilterType = {
   paidStatus: PAIDSTATUS;
-  createdBy?: string;
+  createdBy: string;
   recipient?: string;
   dueAfterDate?: string;
   dueBeforeDate?: string;
@@ -21,12 +21,12 @@ export const getInvoicesByFilter = async ({
   paidStatus,
   limit,
   exclusiveStartKeyId,
+  createdBy,
   dueAfterDate,
 }: GetInvoicesByFilterType): Promise<Invoice[]> => {
   let invoices: DynamoDB.DocumentClient.ItemList;
   // TODO add optional duedate before and after
 
-  // TODO Only get invoices created by you.
   try {
     const result = await dynamodb
       .query({
@@ -35,8 +35,10 @@ export const getInvoicesByFilter = async ({
         KeyConditionExpression: `paidStatus = :paidStatus${
           dueAfterDate ? " AND dueDate > :dueAfterDate" : ""
         }`,
+        FilterExpression: "createdBy = :createdBy",
         ExpressionAttributeValues: {
           ":paidStatus": paidStatus,
+          ":createdBy": createdBy,
           ...(dueAfterDate && { ":dueAfterDate": dueAfterDate }),
         },
         ...(limit && { Limit: parseInt(`${limit || 20}`) }),
@@ -60,11 +62,14 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
     limit = undefined,
     exclusiveStartKeyId = undefined,
   } = event?.queryStringParameters || {};
+  const { email = "unknownCreate@example.com" } =
+    event.requestContext.authorizer;
 
   const invoices = await getInvoicesByFilter({
     paidStatus: status as PAIDSTATUS,
     limit,
     exclusiveStartKeyId,
+    createdBy: email,
   });
 
   return {
