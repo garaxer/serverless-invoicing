@@ -12,6 +12,8 @@ import { isOfTypeInvoiceDto } from "api";
 import useSearchInvoicesForm, {
   PAID_STATUS,
   SearchInvoicesAction,
+  SearchInvoicesFormProvider,
+  useSearchInvoicesFormContext,
 } from "hooks/useSearchInvoicesForm";
 import { useState } from "react";
 const SpacedDivider = styled(Divider)(({}) => ({
@@ -30,7 +32,7 @@ const Invoices = () => {
       paidStatus: PAID_STATUS.UNPAID,
     },
     ({ type, data }) => {
-      console.log(type)
+      console.log(type);
       if (type === SearchInvoicesAction.SEARCH_SUBMIT) {
         data && setInvoiceUrl(`/invoices?status=${data?.paidStatus}`);
       }
@@ -108,15 +110,16 @@ const Invoices = () => {
       <CreateInvoice onSubmit={handleSubmitInvoice} />
       <SpacedDivider />
       {invoices ? (
-        <InvoicesList
-          groupedInvoices={getGroupedInvoices(invoices)}
-          onDelete={handleDelete}
-          onReSend={() => alert("not yet implemented")}
-          onEdit={() => alert("not yet implemented")}
-          onPay={handlePay}
-          invoiceListState={state}
-          onActionHandler={onActionHandler}
-        />
+        <SearchInvoicesFormProvider {...state} onAction={onActionHandler}>
+          <InvoicesList
+            groupedInvoices={getGroupedInvoices(invoices)}
+            onDelete={handleDelete}
+            onReSend={() => alert("not yet implemented")}
+            onEdit={() => alert("not yet implemented")}
+            onPay={handlePay}
+            invoiceListState={state}
+          />
+        </SearchInvoicesFormProvider>
       ) : (
         <CircularProgress />
       )}

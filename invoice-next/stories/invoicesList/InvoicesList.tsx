@@ -14,6 +14,7 @@ import {
   InvoiceListState,
   PAID_STATUS,
   SearchInvoicesAction,
+  useSearchInvoicesFormContext,
 } from "hooks/useSearchInvoicesForm";
 
 export type InvoicesListProps = {
@@ -26,8 +27,6 @@ export type InvoicesListProps = {
     amount: number,
     datePaid: Date
   ) => Promise<void | unknown>;
-  onActionHandler?: ActionHandler;
-  invoiceListState?: InvoiceListState;
 };
 // Use this for the client facing list of invoices. Infinite scroll
 //The table will be used for the month to month reciepts using virtualised scrolling.
@@ -38,10 +37,10 @@ const InvoicesList = ({
   onReSend,
   onEdit,
   onPay,
-  onActionHandler,
-  invoiceListState,
 }: InvoicesListProps) => {
   console.log("Using invoices list");
+  const { onAction: onActionHandler, paidStatus } =
+    useSearchInvoicesFormContext();
   const theme = useTheme();
   return (
     <>
@@ -49,13 +48,13 @@ const InvoicesList = ({
         <FormControlLabel
           control={
             <Switch
-              checked={invoiceListState?.paidStatus === PAID_STATUS.PAID}
+              checked={paidStatus === PAID_STATUS.PAID}
               onClick={() =>
                 onActionHandler &&
                 onActionHandler({
                   type: SearchInvoicesAction.SET_PAID_STATUS_FILTER,
                   data:
-                    invoiceListState?.paidStatus === PAID_STATUS.PAID
+                    paidStatus === PAID_STATUS.PAID
                       ? PAID_STATUS.UNPAID
                       : PAID_STATUS.PAID,
                 })
