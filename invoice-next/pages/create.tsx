@@ -117,7 +117,6 @@ const Invoices = () => {
             onReSend={() => alert("not yet implemented")}
             onEdit={() => alert("not yet implemented")}
             onPay={handlePay}
-            invoiceListState={state}
           />
         </SearchInvoicesFormProvider>
       ) : (
