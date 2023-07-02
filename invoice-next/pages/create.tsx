@@ -13,9 +13,9 @@ import useSearchInvoicesForm, {
   PAID_STATUS,
   SearchInvoicesAction,
   SearchInvoicesFormProvider,
-  useSearchInvoicesFormContext,
 } from "hooks/useSearchInvoicesForm";
 import { useState } from "react";
+import { InvoiceControlProvider } from "hooks/useInvoiceControl";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
@@ -111,13 +111,15 @@ const Invoices = () => {
       <SpacedDivider />
       {invoices ? (
         <SearchInvoicesFormProvider {...state} onAction={onActionHandler}>
-          <InvoicesList
-            groupedInvoices={getGroupedInvoices(invoices)}
-            onDelete={handleDelete}
-            onReSend={() => alert("not yet implemented")}
-            onEdit={() => alert("not yet implemented")}
-            onPay={handlePay}
-          />
+          <InvoiceControlProvider handleDelete={handleDelete}>
+            <InvoicesList
+              groupedInvoices={getGroupedInvoices(invoices)}
+              onDelete={handleDelete}
+              onReSend={() => alert("not yet implemented")}
+              onEdit={() => alert("not yet implemented")}
+              onPay={handlePay}
+            />
+          </InvoiceControlProvider>
         </SearchInvoicesFormProvider>
       ) : (
         <CircularProgress />
