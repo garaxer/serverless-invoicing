@@ -1,6 +1,4 @@
-import  {
-  useState,
-} from "react";
+import { useState } from "react";
 
 export enum PAID_STATUS {
   PAID = "PAID",
@@ -13,14 +11,17 @@ export interface InvoiceListState {
 
 export const initialSearchInvoiceState: InvoiceListState = {
   paidStatus: PAID_STATUS.UNPAID,
-  dueAfterDate: new Date(Date.now() - 365*24*60*60*1000).toISOString(),
+  dueAfterDate: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(),
 };
 
 const useSearchInvoicesForm = () => {
   const [invoiceUrl, setInvoiceUrl] = useState("/invoices?status=UNPAID");
   const onActionHandler = (data: InvoiceListState) => {
-    console.log(data)
-    setInvoiceUrl(`/invoices?status=${data?.paidStatus}`);
+    console.log(data);
+    const dueAfterDate = data?.dueAfterDate
+      ? `&dueAfterDate=${data.dueAfterDate}`
+      : "";
+    setInvoiceUrl(`/invoices?status=${data?.paidStatus}${dueAfterDate}`);
   };
 
   return { invoiceUrl, onActionHandler };
