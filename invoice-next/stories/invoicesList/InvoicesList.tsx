@@ -71,7 +71,7 @@ const InvoicesList = ({
             <Box>
               <CalendarMonth fontSize="large" color="primary" />
               <FormikDateInput
-                name={"dateFilter"}
+                name={"dueAfterDate"}
                 label="Invoice dates after"
                 sx={{ marginRight: "1rem" }}
               />
