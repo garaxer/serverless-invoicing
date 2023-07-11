@@ -59,6 +59,7 @@ export const getInvoicesByFilter = async ({
 async function getInvoices(event: APIGatewayEvent, _context: Context) {
   const {
     status = PAIDSTATUS.UNPAID,
+    dueAfterDate = undefined,
     limit = undefined,
     exclusiveStartKeyId = undefined,
   } = event?.queryStringParameters || {};
@@ -70,6 +71,7 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
     limit,
     exclusiveStartKeyId,
     createdBy: email,
+    dueAfterDate
   });
 
   return {

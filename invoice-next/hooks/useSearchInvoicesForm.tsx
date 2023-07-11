@@ -8,12 +8,12 @@ export enum PAID_STATUS {
 }
 export interface InvoiceListState {
   paidStatus?: PAID_STATUS;
-  afterDate?: string;
+  dueAfterDate?: string;
 }
 
 export const initialSearchInvoiceState: InvoiceListState = {
   paidStatus: PAID_STATUS.UNPAID,
-  afterDate: new Date(Date.now() - 365*24*60*60*1000).toISOString(),
+  dueAfterDate: new Date(Date.now() - 365*24*60*60*1000).toISOString(),
 };
 
 const useSearchInvoicesForm = () => {
