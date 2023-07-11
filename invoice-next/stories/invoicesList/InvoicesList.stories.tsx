@@ -4,10 +4,6 @@ import InvoicesList from "./InvoicesList";
 import { v4 as uuid } from "uuid";
 import { Box } from "@mui/material";
 import { getGroupedInvoices } from "../../libs/invoices";
-import {
-  PAID_STATUS,
-  SearchInvoicesFormProvider,
-} from "hooks/useSearchInvoicesForm";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
 
 const invoices: InvoiceDto[] = [
@@ -100,15 +96,12 @@ const InvoicesListTemplate: ComponentStory<typeof InvoicesList> = ({
   ...args
 }) => (
   <Box flexDirection="column" bgcolor="#eaeaea" padding={2} color="black">
-    <SearchInvoicesFormProvider
-      paidStatus={PAID_STATUS.PAID}
-      onAction={(action) => console.log(action)}
+    <InvoiceControlProvider
+      handleDelete={() => console.log("deleted")}
+      handleSubmit={(action) => console.log(action)}
     >
-          <InvoiceControlProvider handleDelete={() => console.log('deleted')}>
-
       <InvoicesList {...args} />{" "}
-      </ InvoiceControlProvider>
-    </SearchInvoicesFormProvider>
+    </InvoiceControlProvider>
   </Box>
 );
 

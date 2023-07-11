@@ -276,6 +276,8 @@ List through invoices.
 
 
 TODO
+1. filter by date
+
 0. Email last sent updated when paying invoice? Done.
 1. Get name and email showing in front end
 2. get FE hosted. Done
@@ -305,3 +307,12 @@ Need to display an error message when login expires.
 19/2/2023 new tickets
 Show who is logged in
 payment list
+
+
+
+
+
+## Serverless offline
+`npm i -g dynamodb-admin`
+
+`DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin`

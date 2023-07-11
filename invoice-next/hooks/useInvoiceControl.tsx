@@ -1,7 +1,9 @@
-import { PropsWithChildren, createContext, useContext } from "react";
+import { PropsWithChildren, createContext, useContext, useMemo, useState } from "react";
+import { InvoiceListState } from "./useSearchInvoicesForm";
 
 export type InvoiceActions = {
   handleDelete: (invoiceId: string) => void;
+  handleSubmit: (data: InvoiceListState) => void;
 };
 
 const InvoiceControlContext =
@@ -11,10 +13,19 @@ export type InvoiceControlProviderProps = PropsWithChildren<InvoiceActions>;
 
 export const InvoiceControlProvider = ({
   handleDelete,
+  handleSubmit,
   children,
 }: InvoiceControlProviderProps) => {
+  const value = useMemo(
+    () => ({
+      handleDelete,
+      handleSubmit
+    }),
+    [handleDelete, handleSubmit]
+  );
+  
   return (
-    <InvoiceControlContext.Provider value={{ handleDelete }}>
+    <InvoiceControlContext.Provider value={value}>
       {children}
     </InvoiceControlContext.Provider>
   );

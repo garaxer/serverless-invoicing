@@ -9,12 +9,7 @@ import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
 import usePayInvoice from "api/usePayInvoice";
 import { isOfTypeInvoiceDto } from "api";
-import useSearchInvoicesForm, {
-  PAID_STATUS,
-  SearchInvoicesAction,
-  SearchInvoicesFormProvider,
-} from "hooks/useSearchInvoicesForm";
-import { useState } from "react";
+import useSearchInvoicesForm from "hooks/useSearchInvoicesForm";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
@@ -26,18 +21,7 @@ const spliceInvoice = (invoices: InvoiceDto[], invoice: InvoiceDto) =>
 
 const Invoices = () => {
   console.log("Invoicing");
-  const [invoiceUrl, setInvoiceUrl] = useState("/invoices?status=UNPAID");
-  const { state, onActionHandler } = useSearchInvoicesForm(
-    {
-      paidStatus: PAID_STATUS.UNPAID,
-    },
-    ({ type, data }) => {
-      console.log(type);
-      if (type === SearchInvoicesAction.SEARCH_SUBMIT) {
-        data && setInvoiceUrl(`/invoices?status=${data?.paidStatus}`);
-      }
-    }
-  );
+  const { invoiceUrl, onActionHandler } = useSearchInvoicesForm();
   const { data: invoices, error, mutate } = useSWR<InvoiceDto[]>(invoiceUrl);
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
@@ -46,7 +30,6 @@ const Invoices = () => {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
   }
 
-  // TODO move all of this to useReducer
   const handleDelete = (invoiceId: string) => {
     alert(invoiceId);
   };
@@ -71,14 +54,14 @@ const Invoices = () => {
       const newInvoice = await newInvoiceP; // TODO doesn't look good to await twice
       if (!newInvoice || !isOfTypeInvoiceDto(newInvoice)) {
         console.info("Unable to pay invoice");
-        return invoices; // note can just throw an error here
+        return invoices; // TODO can just throw an error here
       }
       return spliceInvoice(invoices || [], newInvoice);
     };
     mutate(callPayInvoice, options); // mutate just returns the new list, from useSWR, if it throws an error, it will throw it at the config level.
 
     const newInvoice = await newInvoiceP;
-    return newInvoice; // Need to return back to formik
+    return newInvoice; // TODO to return back to formik
   };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {
@@ -110,17 +93,18 @@ const Invoices = () => {
       <CreateInvoice onSubmit={handleSubmitInvoice} />
       <SpacedDivider />
       {invoices ? (
-        <SearchInvoicesFormProvider {...state} onAction={onActionHandler}>
-          <InvoiceControlProvider handleDelete={handleDelete}>
-            <InvoicesList
-              groupedInvoices={getGroupedInvoices(invoices)}
-              onDelete={handleDelete}
-              onReSend={() => alert("not yet implemented")}
-              onEdit={() => alert("not yet implemented")}
-              onPay={handlePay}
-            />
-          </InvoiceControlProvider>
-        </SearchInvoicesFormProvider>
+        <InvoiceControlProvider
+          handleDelete={handleDelete}
+          handleSubmit={onActionHandler}
+        >
+          <InvoicesList
+            groupedInvoices={getGroupedInvoices(invoices)}
+            onDelete={handleDelete}
+            onReSend={() => alert("not yet implemented")}
+            onEdit={() => alert("not yet implemented")}
+            onPay={handlePay}
+          />
+        </InvoiceControlProvider>
       ) : (
         <CircularProgress />
       )}
@@ -128,7 +112,7 @@ const Invoices = () => {
   );
 };
 
-// TODO kanban style paid |unpaid |overdue
+// TODO kanban style paid | unpaid | overdue or use tabs
 const Home: NextPage = () => {
   return (
     <Layout title={"Invoicing - create"} useAuth={true}>

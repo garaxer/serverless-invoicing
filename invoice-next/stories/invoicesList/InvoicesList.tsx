@@ -10,12 +10,13 @@ import {
 import { InvoiceDto } from "../../types/invoice";
 import InvoicesListItem from "./InvoicesListItem";
 import {
-  ActionHandler,
-  InvoiceListState,
   PAID_STATUS,
-  SearchInvoicesAction,
-  useSearchInvoicesFormContext,
+  initialSearchInvoiceState,
 } from "hooks/useSearchInvoicesForm";
+import { CalendarMonth } from "@mui/icons-material";
+import FormikDateInput from "@stories/form/FormikDateInput";
+import { useInvoiceControl } from "hooks/useInvoiceControl";
+import { Formik } from "formik";
 
 export type InvoicesListProps = {
   groupedInvoices: [string, InvoiceDto[]][];
@@ -28,8 +29,8 @@ export type InvoicesListProps = {
     datePaid: Date
   ) => Promise<void | unknown>;
 };
-// Use this for the client facing list of invoices. Infinite scroll
-//The table will be used for the month to month reciepts using virtualised scrolling.
+// Use this for the client facing list of invoices. TODO Infinite scroll
+// The table will be used for the month to month reciepts using virtualised scrolling.
 // TODO wrap the CRUD and pay functions within context
 const InvoicesList = ({
   groupedInvoices,
@@ -38,46 +39,55 @@ const InvoicesList = ({
   onEdit,
   onPay,
 }: InvoicesListProps) => {
-  console.log("Using invoices list");
-  const { onAction: onActionHandler, paidStatus } =
-    useSearchInvoicesFormContext();
+  const { handleSubmit } = useInvoiceControl();
   const theme = useTheme();
   return (
     <>
-      <FormGroup sx={{ flexDirection: "row" }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={paidStatus === PAID_STATUS.PAID}
-              onClick={() =>
-                onActionHandler &&
-                onActionHandler({
-                  type: SearchInvoicesAction.SET_PAID_STATUS_FILTER,
-                  data:
-                    paidStatus === PAID_STATUS.PAID
-                      ? PAID_STATUS.UNPAID
-                      : PAID_STATUS.PAID,
-                })
+      <Formik
+        initialValues={initialSearchInvoiceState}
+        onSubmit={(values, _formikHelpers) => {
+          handleSubmit(values);
+        }}
+      >
+        {(formik) => (
+          <FormGroup sx={{ flexDirection: "row" }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.paidStatus === PAID_STATUS.PAID}
+                  onClick={() =>
+                    formik.setFieldValue(
+                      "paidStatus",
+                      formik.values.paidStatus === PAID_STATUS.PAID
+                        ? PAID_STATUS.UNPAID
+                        : PAID_STATUS.PAID
+                    )
+                  }
+                />
               }
+              label="Show paid?"
             />
-          }
-          label="Show paid?"
-        />
-        <Button
-          type="submit"
-          size="small"
-          onClick={() =>
-            onActionHandler &&
-            onActionHandler({
-              type: SearchInvoicesAction.SEARCH_SUBMIT,
-            })
-          }
-        >
-          Search again
-        </Button>
-      </FormGroup>
 
-      <Box>TODO date filter?</Box>
+            <Box>
+              <CalendarMonth fontSize="large" color="primary" />
+              <FormikDateInput
+                name={"dateFilter"}
+                label="Invoice dates after"
+                sx={{ marginRight: "1rem" }}
+              />
+            </Box>
+
+            <Button
+              type="submit"
+              size="small"
+              onClick={() => formik.submitForm()}
+            >
+              Search again
+            </Button>
+          </FormGroup>
+        )}
+      </Formik>
+
       {groupedInvoices.map(([group, invoices]) => (
         <div key={group}>
           <Typography marginTop={"2rem"} color={theme.palette.secondary.main}>
