@@ -54,16 +54,15 @@ const Hero = () => {
           <CircularProgress />
         ) : (
           <HeroText>
-            <Box>
-                <AuthLoginButton />
-            </Box>
+            Welcome to Gary&apos;s invoicing. 
+            <UnderlineA>
+              <Link href="/create">View and create an invoice</Link>
+            </UnderlineA>
             <br />
-              <UnderlineA>
-                Welcome to Gary&apos;s invoicing, login to view your invoices.
-              </UnderlineA>
-            <Link href="/invoice">
-              Coming soon - ability to view your invoices. Try creating one instead.
-            </Link>
+            {user.user && <Link href="/invoice">View your invoices</Link>}
+            <Box>
+              <AuthLoginButton />
+            </Box>
           </HeroText>
         )}
       </HeroContent>
@@ -72,7 +71,7 @@ const Hero = () => {
 };
 const Home: NextPage = () => {
   return (
-    <Layout title={"Login"} useAuth={false}>
+    <Layout title={"Login"} useAuth={true}>
       <Hero />
     </Layout>
   );
