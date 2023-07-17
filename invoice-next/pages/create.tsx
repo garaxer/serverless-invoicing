@@ -11,6 +11,7 @@ import usePayInvoice from "api/usePayInvoice";
 import { isOfTypeInvoiceDto } from "api";
 import useSearchInvoicesForm from "hooks/useSearchInvoicesForm";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
+import useDeleteInvoice from "api/useDeleteInvoice";
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
@@ -26,12 +27,14 @@ const Invoices = () => {
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
   const { mutate: payInvoice } = usePayInvoice();
+  const { mutate: deleteInvoice } = useDeleteInvoice();
   if (error) {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
   }
 
   const handleDelete = (invoiceId: string) => {
-    alert(invoiceId);
+    deleteInvoice(invoiceId);
+    mutate(invoices?.filter(i => i.id !== invoiceId));
   };
   const handlePay = async (
     invoiceId: string,

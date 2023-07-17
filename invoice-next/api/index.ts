@@ -87,6 +87,17 @@ const requests = (token: string, baseUrl = BASE_URL) => {
       })
         .then((r) => responseBody<T>(r))
         .catch(responseError),
+    delete: <T>(url: string) =>
+      fetch(`${baseUrl}${url}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((r) => responseBody<T>(r))
+        .catch(responseError),
     patch: <T>(url: string, body: {}) =>
       fetch(`${baseUrl}${url}`, {
         method: "PATCH",
@@ -109,6 +120,8 @@ const Invoices = (token: string, baseUrl = BASE_URL) => ({
     ),
   create: (invoice: CreateInvoiceDto) =>
     requests(token, baseUrl).post<InvoiceDto>("/invoice", invoice),
+  delete: (invoiceId: string) =>
+    requests(token, baseUrl).delete<{id: string, invoice: InvoiceDto}>(`/invoice/${invoiceId}`),
   pay: (invoiceId: string, amount: number, datePaid: string) =>
     requests(token, baseUrl).patch<InvoiceDto>(`/invoice/${invoiceId}/pay`, {
       amount,
