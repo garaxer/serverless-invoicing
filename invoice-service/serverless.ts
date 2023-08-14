@@ -14,7 +14,7 @@ import {
   createService,
   addBooking,
 } from "@functions/index";
-import handlers from "@handlers/handlers";
+import handlers from "./sls/handlers";
 import {
   createInvoice,
   payInvoice,
