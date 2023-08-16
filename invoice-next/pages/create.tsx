@@ -8,7 +8,6 @@ import { getGroupedInvoices } from "libs/invoices";
 import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
 import usePayInvoice from "api/usePayInvoice";
-import { isOfTypeInvoiceDto } from "api";
 import useSearchInvoicesForm from "hooks/useSearchInvoicesForm";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
 import useDeleteInvoice from "api/useDeleteInvoice";
@@ -17,8 +16,6 @@ const SpacedDivider = styled(Divider)(({}) => ({
   marginBottom: "1rem",
 }));
 
-const spliceInvoice = (invoices: InvoiceDto[], invoice: InvoiceDto) =>
-  invoices.map((i) => (i.id.includes(invoice.id) ? invoice : i));
 
 const Invoices = () => {
   console.log("Invoicing");
@@ -32,9 +29,9 @@ const Invoices = () => {
     return <h1>An error has occured fetching the data {error.toString()}</h1>;
   }
 
-  const handleDelete = (invoiceId: string) => {
-    deleteInvoice(invoiceId);
-    mutate(invoices?.filter(i => i.id !== invoiceId));
+  const handleDelete = async (invoiceId: string) => {
+    await deleteInvoice(invoiceId);
+    mutate(invoices?.filter((i) => i.id !== invoiceId));
   };
   const handlePay = async (
     invoiceId: string,
@@ -44,27 +41,17 @@ const Invoices = () => {
     const newInvoices = (invoices || []).map((i) =>
       i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
     );
-
     const options = {
       optimisticData: newInvoices,
       rollbackOnError: true,
       revalidate: true,
       throwOnError: true,
     };
-    const newInvoiceP = payInvoice(invoiceId, amount, datePaid);
+    const response = await payInvoice(invoiceId, amount, datePaid);
 
-    const callPayInvoice = async (invoices?: InvoiceDto[]) => {
-      const newInvoice = await newInvoiceP; // TODO doesn't look good to await twice
-      if (!newInvoice || !isOfTypeInvoiceDto(newInvoice)) {
-        console.info("Unable to pay invoice");
-        return invoices; // TODO can just throw an error here
-      }
-      return spliceInvoice(invoices || [], newInvoice);
-    };
-    mutate(callPayInvoice, options); // mutate just returns the new list, from useSWR, if it throws an error, it will throw it at the config level.
+    mutate(newInvoices, options);
 
-    const newInvoice = await newInvoiceP;
-    return newInvoice; // TODO to return back to formik
+    return response;
   };
 
   const handleSubmitInvoice = async (invoice: CreateInvoiceDto) => {
@@ -76,20 +63,12 @@ const Invoices = () => {
       createdAt: new Date().toLocaleDateString(),
       paidBy: [],
     };
-    const newInvoices = [...(invoices || []), createdInvoice];
-    const options = {
-      optimisticData: newInvoices,
-      rollbackOnError: true,
-      revalidate: true,
-    };
-    const f = async (invoices?: InvoiceDto[]) => {
-      const newInvoice = await addInvoice(invoice);
-      return [
-        ...(invoices?.filter((i) => !i.id.includes("pending")) || []),
-        ...(newInvoice ? [newInvoice] : []),
-      ];
-    };
-    mutate(f, options);
+    const optimisticNewInvoices = [...(invoices || []), createdInvoice];
+
+    const newInvoice = await addInvoice(invoice);
+
+    mutate(optimisticNewInvoices);
+    return newInvoice;
   };
   return (
     <>

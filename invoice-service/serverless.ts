@@ -89,7 +89,12 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    Resources: Object.assign({}, DynamoTables, InvoicesBucket, ServicesBucket),
+    Resources: Object.assign(
+      {},
+      DynamoTables,
+      InvoicesBucket,
+      ServicesBucket
+    ),
     Conditions: {
       isDev: {
         "Fn::Equals": ["${self:provider.stage}", "dev"],

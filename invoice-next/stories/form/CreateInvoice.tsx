@@ -4,15 +4,16 @@ import * as Yup from "yup";
 import { createTheme } from "@mui/material/styles";
 import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { CreateInvoiceDto } from "../../types/invoice";
+import { CreateInvoiceDto, InvoiceDto } from "../../types/invoice";
 import ArticleIcon from "@mui/icons-material/Article";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import AttachMoney from "@mui/icons-material/AttachMoney";
 import FormikDateInput from "./FormikDateInput";
 import { subDays } from "date-fns";
+import FormikMuiCheckBox from "./FormikMuiCheckBox";
 
 type CreateInvoiceProps = {
-  onSubmit: (invoice: CreateInvoiceDto) => Promise<void>;
+  onSubmit: (invoice: CreateInvoiceDto) => Promise<InvoiceDto | undefined>;
 };
 const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
   const theme = createTheme({
@@ -50,7 +51,7 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
       "title",
       `Unit 12/130 Jutland st. Invoice for ${subDays(
         dueDate,
-        1
+        8
       ).toLocaleDateString()} - ${subDays(dueDate, 1).toLocaleDateString()}`
     );
     formik.setFieldValue("serviceEndDate", subDays(dueDate, 1).toISOString());
@@ -72,10 +73,11 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
         ).toLocaleDateString()}`,
         recipientName: "Stewart/Patty",
         dueDate: new Date().toISOString(),
-        amount: 420,
+        amount: 480,
         recipientEmail: "gbagnall8@gmail.com",
         serviceEndDate: subDays(new Date(), 1).toISOString(),
         serviceStartDate: subDays(new Date(), 7).toISOString(),
+        sendEmail: false,
       }}
       validationSchema={Yup.object({
         title: Yup.string()
@@ -158,6 +160,9 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
                 type="number"
                 fullWidth
               />
+            </BoxFormInputWrapper>
+            <BoxFormInputWrapper>
+              <FormikMuiCheckBox name="sendEmail" />
             </BoxFormInputWrapper>
           </BoxFormRow>
           <BoxFormRow>

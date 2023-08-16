@@ -47,12 +47,10 @@ export default {
         },
         {
           IndexName: "emailIndex",
-          KeySchema: [
-            { AttributeName: "recipientEmail", KeyType: "HASH" },
-          ],
+          KeySchema: [{ AttributeName: "recipientEmail", KeyType: "HASH" }],
           Projection: { ProjectionType: "ALL" },
         },
       ],
     },
-  },
+  }
 };

@@ -2,7 +2,7 @@ import { PropsWithChildren, createContext, useContext, useMemo, useState } from 
 import { InvoiceListState } from "./useSearchInvoicesForm";
 
 export type InvoiceActions = {
-  handleDelete: (invoiceId: string) => void;
+  handleDelete: (invoiceId: string) => Promise<void>;
   handleSubmit: (data: InvoiceListState) => void;
 };
 
