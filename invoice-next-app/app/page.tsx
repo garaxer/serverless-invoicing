@@ -8,9 +8,8 @@ const Hero = () => {
 export default function Home() {
   return (
     <Layout>
-      <Header>
-        <Hero />
-      </Header>
+      <Header>Hello</Header>
+      <Hero />
     </Layout>
   );
 }

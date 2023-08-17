@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { InvoiceDto, PAIDSTATUS } from "../../types/invoice";
 import InvoicesList from "./InvoicesList";
 import { v4 as uuid } from "uuid";
@@ -90,14 +90,14 @@ const invoices: InvoiceDto[] = [
 export default {
   component: InvoicesList,
   title: "InvoiceList",
-} as ComponentMeta<typeof InvoicesList>;
+} as Meta<typeof InvoicesList>;
 
-const InvoicesListTemplate: ComponentStory<typeof InvoicesList> = ({
+const InvoicesListTemplate: StoryFn<typeof InvoicesList> = ({
   ...args
 }) => (
   <Box flexDirection="column" bgcolor="#eaeaea" padding={2} color="black">
     <InvoiceControlProvider
-      handleDelete={() => console.log("deleted")}
+      handleDelete={() => Promise.resolve(console.log("deleted"))}
       handleSubmit={(action) => console.log(action)}
     >
       <InvoicesList {...args} />{" "}
