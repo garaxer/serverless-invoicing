@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+// import { UserProvider } from "@auth0/nextjs-auth0/client";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,9 +18,9 @@ export default function RootLayout({
   //https://github.com/auth0/nextjs-auth0/blob/main/EXAMPLES.md#protecting-a-server-side-rendered-ssr-page
   return (
     <html lang="en">
-      <UserProvider>
+      {/* <UserProvider> */}
         <body className={inter.className}>{children}</body>
-      </UserProvider>
+      {/* </UserProvider> */}
     </html>
   );
 }

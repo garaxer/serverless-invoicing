@@ -1,5 +1,5 @@
-import Header from "./components/header/Header";
-import Layout from "./components/layout/Layout";
+import Header from "./_components/header/Header";
+import Layout from "./_components/layout/Layout";
 
 const Hero = () => {
   return <div>Hello</div>;
