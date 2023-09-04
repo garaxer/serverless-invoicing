@@ -53,7 +53,7 @@ This is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
           datePaid
         )} which pays the period ${makeDateString(
           serviceStartDate
-        )}-${makeDateString(serviceEndDate)}.\n
+        )}-${makeDateString(serviceEndDate)}.
 The next period  ${makeDateString(nextServiceStartDate)}-${makeDateString(
           nextServiceEndDate
         )}  $${nextAmount} is due before ${makeDateString(nextDueDate)}.
