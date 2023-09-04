@@ -309,6 +309,8 @@ Show who is logged in
 payment list
 
 
+5/9/23
+only show and allow paying of invoices by createdBy.
 
 
 
