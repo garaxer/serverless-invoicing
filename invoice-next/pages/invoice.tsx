@@ -60,7 +60,6 @@ const Invoice: NextPage = ({ invoices: unpaidInvoices }: InvoiceProps) => {
             invoices && (
               <InvoicesList
                 groupedInvoices={getGroupedInvoices(invoices)}
-                onDelete={() => alert("not yet implemented")}
                 onReSend={() => alert("not yet implemented")}
                 onEdit={() => alert("not yet implemented")}
                 onPay={async () => alert("not yet implemented")}
