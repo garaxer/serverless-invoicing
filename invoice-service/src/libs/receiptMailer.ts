@@ -59,24 +59,24 @@ The next period  ${makeDateString(nextServiceStartDate)}-${makeDateString(
         )}  $${nextAmount} is due before ${makeDateString(nextDueDate)}.
         `,
 
-        bodyOld: `${recipientName ? `Hi ${recipientName}` : ""}\n
-This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
-          datePaid
-        )}. You have paid $${totalPaidSoFar} out of $${amount} for the period ${
-          makeDateString(serviceStartDate) || "?"
-        } to ${
-          makeDateString(serviceEndDate) || "?"
-        }. I have marked the invoice as ${paidStatus}.
-\n
-        ${
-          nextInvoice
-            ? `The next amount of $${nextAmount} for the period "${
-                makeDateString(nextServiceStartDate) || "?"
-              } to ${
-                makeDateString(nextServiceEndDate) || "?"
-              }" is due before ${makeDateString(nextDueDate)}.`
-            : ""
-        }`,
+//         bodyOld: `${recipientName ? `Hi ${recipientName}` : ""}\n
+// This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
+//           datePaid
+//         )}. You have paid $${totalPaidSoFar} out of $${amount} for the period ${
+//           makeDateString(serviceStartDate) || "?"
+//         } to ${
+//           makeDateString(serviceEndDate) || "?"
+//         }. I have marked the invoice as ${paidStatus}.
+// \n
+//         ${
+//           nextInvoice
+//             ? `The next amount of $${nextAmount} for the period "${
+//                 makeDateString(nextServiceStartDate) || "?"
+//               } to ${
+//                 makeDateString(nextServiceEndDate) || "?"
+//               }" is due before ${makeDateString(nextDueDate)}.`
+//             : ""
+//         }`,
       }),
     })
     .promise();

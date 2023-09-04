@@ -5,6 +5,7 @@ import FormikMuiCheckBox from "@stories/form/FormikMuiCheckBox";
 import FormikMuiTextInput from "@stories/form/FormikMuiTextInput";
 import {
   isOfTypeUsePayInvoiceErrorResponse,
+  OnPayProps,
   UsePayInvoiceErrorResponse,
 } from "api/usePayInvoice";
 import { Form, Formik } from "formik";
@@ -13,9 +14,7 @@ type PayInvoiceProps = {
   initialAmount: number;
   invoiceId: string;
   onSubmit: (
-    invoiceId: string,
-    amount: number,
-    datePaid: Date
+    props: OnPayProps
   ) => Promise<void | unknown | UsePayInvoiceErrorResponse>;
 };
 const PayInvoice = ({
@@ -43,14 +42,15 @@ const PayInvoice = ({
         amount: Yup.number().required("Required"),
       })}
       onSubmit={async (
-        values: { amount: number; datePaid: string },
+        values: { amount: number; datePaid: string; sendEmail: boolean },
         { setSubmitting, setErrors }
       ) => {
-        const response = await onSubmit(
+        const response = await onSubmit({
           invoiceId,
-          values.amount,
-          new Date(values.datePaid)
-        );
+          sendEmail: values.sendEmail,
+          amount: values.amount,
+          datePaid: new Date(values.datePaid),
+        });
         if (isOfTypeUsePayInvoiceErrorResponse(response)) {
           // TODO add switch here for known errors. Start returning typed error codes to the front end via swagger or something
           setErrors({ amount: response.error.info });

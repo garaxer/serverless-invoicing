@@ -8,6 +8,13 @@ export const isOfTypeUsePayInvoiceErrorResponse = (obj: unknown): obj is UsePayI
   return obj != null && typeof (obj as UsePayInvoiceErrorResponse)?.error?.info === "string";
 };
 
+export type OnPayProps = {
+  invoiceId: string;
+  amount: number;
+  datePaid: Date;
+  sendEmail: boolean;
+};
+
 const usePayInvoice = () => {
   const [data, setData] = useState<InvoiceDto | undefined>();
   const [isMutating, setIsMutating] = useState(false);
@@ -16,7 +23,12 @@ const usePayInvoice = () => {
 
   const { getIdTokenClaims, isAuthenticated } = useAuth0();
 
-  const mutate = async (invoiceId: string, amount: number, datePaid: Date) => {
+  const mutate = async ({
+    invoiceId,
+    amount,
+    datePaid,
+    sendEmail,
+  }: OnPayProps) => {
     const idToken = await getIdTokenClaims();
   if (!idToken || !isAuthenticated) {
       alert("Please login");
@@ -26,7 +38,7 @@ const usePayInvoice = () => {
       setIsMutating(true);
       const response = await api
         .Invoices(idToken.__raw)
-        .pay(invoiceId, amount, datePaid.toISOString());
+        .pay(invoiceId, amount, datePaid.toISOString(), sendEmail);
 
       setData(response);
       setIsMutating(false);

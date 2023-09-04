@@ -12,7 +12,7 @@ export type CreateInvoiceDto = {
   recipientName: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
-  sendEmail?: string;
+  sendEmail?: boolean;
 };
 
 export type InvoiceDto = {

@@ -17,16 +17,13 @@ import { CalendarMonth } from "@mui/icons-material";
 import FormikDateInput from "@stories/form/FormikDateInput";
 import { useInvoiceControl } from "hooks/useInvoiceControl";
 import { Formik } from "formik";
+import { OnPayProps } from "api/usePayInvoice";
 
 export type InvoicesListProps = {
   groupedInvoices: [string, InvoiceDto[]][];
   onReSend?: (invoiceId: string) => void | Promise<void>;
   onEdit?: (invoiceId: string) => void | Promise<void>;
-  onPay: (
-    invoiceId: string,
-    amount: number,
-    datePaid: Date
-  ) => Promise<void | unknown>;
+  onPay: (props: OnPayProps) => Promise<void | unknown>;
 };
 // Use this for the client facing list of invoices. TODO Infinite scroll
 // The table will be used for the month to month reciepts using virtualised scrolling.

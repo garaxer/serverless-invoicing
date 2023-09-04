@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { Box } from "@mui/material";
 import { getGroupedInvoices } from "../../libs/invoices";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
+import { initialSearchInvoiceState } from "hooks/useSearchInvoicesForm";
 
 const invoices: InvoiceDto[] = [
   {
@@ -92,13 +93,12 @@ export default {
   title: "InvoiceList",
 } as Meta<typeof InvoicesList>;
 
-const InvoicesListTemplate: StoryFn<typeof InvoicesList> = ({
-  ...args
-}) => (
+const InvoicesListTemplate: StoryFn<typeof InvoicesList> = ({ ...args }) => (
   <Box flexDirection="column" bgcolor="#eaeaea" padding={2} color="black">
     <InvoiceControlProvider
       handleDelete={() => Promise.resolve(console.log("deleted"))}
       handleSubmit={(action) => console.log(action)}
+      searchFormState={initialSearchInvoiceState}
     >
       <InvoicesList {...args} />{" "}
     </InvoiceControlProvider>

@@ -16,7 +16,7 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 > = async (event, _context) => {
   const { email = "unknown@example.com" } = event.requestContext.authorizer;
   const { id } = event.pathParameters;
-  const { amount, datePaid = new Date().toISOString(), sendEmail } = event.body;
+  const { amount, datePaid = new Date().toISOString(), sendEmail = true } = event.body;
   console.log("Paying invoice with", event.body);
 
   // Validate amount

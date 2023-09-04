@@ -10,13 +10,14 @@ import {
 import { format } from "date-fns";
 import { InvoiceDto } from "../../types/invoice";
 import PayInvoice from "./PayInvoice";
+import { OnPayProps } from "api/usePayInvoice";
 
 export type InvoicesListItemProps = {
   invoice: InvoiceDto;
   onDelete?: (invoiceId: string) => void;
   onReSend?: (invoiceId: string) => void;
   onEdit?: (invoiceId: string) => void;
-  onPay: (invoiceId: string, amount: number, datePaid: Date) => Promise<void | unknown>;
+  onPay: (props: OnPayProps) => Promise<void | unknown>;
 };
 // Good example in mui divider
 const InvoicesListItem = ({
@@ -54,7 +55,6 @@ const InvoicesListItem = ({
           <Typography sx={{ paddingLeft: "1rem" }}>
             ${invoice.paidBy.reduce((a, c) => c.amount + a, 0)} paid so far.
           </Typography>
-          
         </Box>
         {invoice.serviceStartDate && invoice.serviceEndDate && (
           <Typography variant="body2" sx={{ mb: 0.5 }}>

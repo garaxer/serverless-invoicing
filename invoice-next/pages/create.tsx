@@ -7,20 +7,27 @@ import { CreateInvoiceDto, InvoiceDto, PAIDSTATUS } from "../types/invoice";
 import { getGroupedInvoices } from "libs/invoices";
 import useSWR from "swr";
 import useAddInvoice from "api/useAddInvoice";
-import usePayInvoice from "api/usePayInvoice";
+import usePayInvoice, { OnPayProps } from "api/usePayInvoice";
 import useSearchInvoicesForm from "hooks/useSearchInvoicesForm";
 import { InvoiceControlProvider } from "hooks/useInvoiceControl";
 import useDeleteInvoice from "api/useDeleteInvoice";
+
 const SpacedDivider = styled(Divider)(({}) => ({
   marginTop: "1rem",
   marginBottom: "1rem",
 }));
 
-
 const Invoices = () => {
   console.log("Invoicing");
-  const { invoiceUrl, onActionHandler, searchFormState } = useSearchInvoicesForm();
-  const { data: invoices, error, mutate, isLoading, isValidating } = useSWR<InvoiceDto[]>(invoiceUrl);
+  const { invoiceUrl, onActionHandler, searchFormState } =
+    useSearchInvoicesForm();
+  const {
+    data: invoices,
+    error,
+    mutate,
+    isLoading,
+    isValidating,
+  } = useSWR<InvoiceDto[]>(invoiceUrl);
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
   const { mutate: payInvoice } = usePayInvoice();
@@ -38,11 +45,13 @@ const Invoices = () => {
     };
     mutate(deleteInvoice(invoiceId), options);
   };
-  const handlePay = async (
-    invoiceId: string,
-    amount: number,
-    datePaid: Date
-  ) => {
+
+  const handlePay = async ({
+    invoiceId,
+    amount,
+    datePaid,
+    sendEmail,
+  }: OnPayProps) => {
     const newInvoices = (invoices || []).map((i) =>
       i.id.includes(invoiceId) ? { ...i, paidStatus: PAIDSTATUS.LOADING } : i
     );
@@ -52,7 +61,12 @@ const Invoices = () => {
       revalidate: true,
       throwOnError: true,
     };
-    const response = await payInvoice(invoiceId, amount, datePaid);
+    const response = await payInvoice({
+      invoiceId,
+      amount,
+      datePaid,
+      sendEmail,
+    });
 
     mutate(newInvoices, options);
 
