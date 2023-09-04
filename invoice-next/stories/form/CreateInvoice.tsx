@@ -2,7 +2,7 @@ import { Form, Formik, FormikProps } from "formik";
 import FormikMuiTextInput from "./FormikMuiTextInput";
 import * as Yup from "yup";
 import { createTheme } from "@mui/material/styles";
-import { Button, Box } from "@mui/material";
+import { Button, Box, FormControlLabel } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CreateInvoiceDto, InvoiceDto } from "../../types/invoice";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -162,7 +162,7 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
               />
             </BoxFormInputWrapper>
             <BoxFormInputWrapper>
-              <FormikMuiCheckBox name="sendEmail" />
+            <FormControlLabel control={<FormikMuiCheckBox name="sendEmail" />} label="Send Email?" />
             </BoxFormInputWrapper>
           </BoxFormRow>
           <BoxFormRow>

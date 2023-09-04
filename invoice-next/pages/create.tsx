@@ -19,7 +19,7 @@ const SpacedDivider = styled(Divider)(({}) => ({
 
 const Invoices = () => {
   console.log("Invoicing");
-  const { invoiceUrl, onActionHandler } = useSearchInvoicesForm();
+  const { invoiceUrl, onActionHandler, searchFormState } = useSearchInvoicesForm();
   const { data: invoices, error, mutate } = useSWR<InvoiceDto[]>(invoiceUrl);
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
@@ -78,10 +78,10 @@ const Invoices = () => {
         <InvoiceControlProvider
           handleDelete={handleDelete}
           handleSubmit={onActionHandler}
+          searchFormState={searchFormState}
         >
           <InvoicesList
             groupedInvoices={getGroupedInvoices(invoices)}
-            onDelete={handleDelete}
             onReSend={() => alert("not yet implemented")}
             onEdit={() => alert("not yet implemented")}
             onPay={handlePay}

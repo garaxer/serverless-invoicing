@@ -7,7 +7,6 @@ export type FormikMuiCheckBoxProps = CheckboxProps & {
 
 export default function FormikMuiCheckBox(props: FormikMuiCheckBoxProps) {
   const [field, meta] = useField(props.name);
-  console.log({ field });
   return (
     <>
       <Checkbox

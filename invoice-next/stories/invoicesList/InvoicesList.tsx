@@ -20,7 +20,6 @@ import { Formik } from "formik";
 
 export type InvoicesListProps = {
   groupedInvoices: [string, InvoiceDto[]][];
-  onDelete?: (invoiceId: string) => void | Promise<void>;
   onReSend?: (invoiceId: string) => void | Promise<void>;
   onEdit?: (invoiceId: string) => void | Promise<void>;
   onPay: (
@@ -34,17 +33,16 @@ export type InvoicesListProps = {
 // TODO wrap the CRUD and pay functions within context
 const InvoicesList = ({
   groupedInvoices,
-  onDelete,
   onReSend,
   onEdit,
   onPay,
 }: InvoicesListProps) => {
-  const { handleSubmit } = useInvoiceControl();
+  const { handleSubmit, handleDelete, searchFormState } = useInvoiceControl();
   const theme = useTheme();
   return (
     <>
       <Formik
-        initialValues={initialSearchInvoiceState}
+        initialValues={{ ...initialSearchInvoiceState, ...searchFormState }}
         onSubmit={(values, _formikHelpers) => {
           handleSubmit(values);
         }}
@@ -97,7 +95,7 @@ const InvoicesList = ({
             <div key={invoice.id}>
               <InvoicesListItem
                 invoice={invoice}
-                onDelete={onDelete}
+                onDelete={handleDelete}
                 onReSend={onReSend}
                 onEdit={onEdit}
                 onPay={onPay}
