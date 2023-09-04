@@ -1,4 +1,3 @@
-
 export enum PAIDSTATUS {
   PAID = "PAID",
   UNPAID = "UNPAID",
@@ -13,6 +12,7 @@ export type CreateInvoiceDto = {
   recipientName: string;
   serviceEndDate?: string;
   serviceStartDate?: string;
+  sendEmail?: string;
 };
 
 export type InvoiceDto = {

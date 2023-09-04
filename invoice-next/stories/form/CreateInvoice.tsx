@@ -162,7 +162,10 @@ const CreateInvoice = ({ onSubmit }: CreateInvoiceProps) => {
               />
             </BoxFormInputWrapper>
             <BoxFormInputWrapper>
-            <FormControlLabel control={<FormikMuiCheckBox name="sendEmail" />} label="Send Email?" />
+              <FormControlLabel
+                control={<FormikMuiCheckBox name="sendEmail" />}
+                label="Send Email?"
+              />
             </BoxFormInputWrapper>
           </BoxFormRow>
           <BoxFormRow>

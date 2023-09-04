@@ -20,7 +20,7 @@ const SpacedDivider = styled(Divider)(({}) => ({
 const Invoices = () => {
   console.log("Invoicing");
   const { invoiceUrl, onActionHandler, searchFormState } = useSearchInvoicesForm();
-  const { data: invoices, error, mutate } = useSWR<InvoiceDto[]>(invoiceUrl);
+  const { data: invoices, error, mutate, isLoading, isValidating } = useSWR<InvoiceDto[]>(invoiceUrl);
 
   const { mutate: addInvoice } = useAddInvoice(); // If I want something to happen when there is an error I need to add a callback event
   const { mutate: payInvoice } = usePayInvoice();
@@ -30,8 +30,13 @@ const Invoices = () => {
   }
 
   const handleDelete = async (invoiceId: string) => {
-    await deleteInvoice(invoiceId);
-    mutate(invoices?.filter((i) => i.id !== invoiceId));
+    const options = {
+      optimisticData: invoices?.filter((i) => i.id !== invoiceId),
+      rollbackOnError: true,
+      revalidate: true,
+      throwOnError: true,
+    };
+    mutate(deleteInvoice(invoiceId), options);
   };
   const handlePay = async (
     invoiceId: string,
@@ -74,7 +79,7 @@ const Invoices = () => {
     <>
       <CreateInvoice onSubmit={handleSubmitInvoice} />
       <SpacedDivider />
-      {invoices ? (
+      {invoices && !isLoading && !isValidating ? (
         <InvoiceControlProvider
           handleDelete={handleDelete}
           handleSubmit={onActionHandler}
