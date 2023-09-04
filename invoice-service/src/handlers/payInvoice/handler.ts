@@ -16,8 +16,8 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 > = async (event, _context) => {
   const { email = "unknown@example.com" } = event.requestContext.authorizer;
   const { id } = event.pathParameters;
-  const { amount, datePaid = new Date().toISOString() } = event.body;
-  console.log("Paying invoice with", event.body)
+  const { amount, datePaid = new Date().toISOString(), sendEmail } = event.body;
+  console.log("Paying invoice with", event.body);
 
   // Validate amount
   if (amount < 0) {
@@ -75,12 +75,15 @@ const payInvoice: ValidatedEventAPIGatewayProxyEvent<
 
     const totalPaidSoFarAfterPaying =
       updatedInvoice?.paidBy?.reduce((a, c) => c.amount + a, 0) || 0;
-    await receiptMailer(
-      updatedInvoice,
-      amount,
-      totalPaidSoFarAfterPaying,
-      nextInvoice
-    );
+
+    if (sendEmail) {
+      await receiptMailer(
+        updatedInvoice,
+        amount,
+        totalPaidSoFarAfterPaying,
+        nextInvoice
+      );
+    }
 
     return {
       statusCode: 201,

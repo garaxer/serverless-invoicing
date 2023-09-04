@@ -41,6 +41,7 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
     dueDate: dueDateU = undefined,
     serviceEndDate = undefined,
     serviceStartDate = undefined,
+    sendEmail = true,
   } = event.body;
   const now = new Date();
   const dueDate = dueDateU ? new Date(dueDateU) : addDays(now, 14);
@@ -78,7 +79,9 @@ const createInvoice: ValidatedEventAPIGatewayProxyEvent<
     throw new createHttpError.InternalServerError(error);
   }
 
-  await invoiceMailer(invoice, true);
+  if (sendEmail) {
+    await invoiceMailer(invoice, true);
+  }
 
   return formatJSONResponse({ ...invoice }, 201);
 };

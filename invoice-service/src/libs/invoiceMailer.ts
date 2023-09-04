@@ -16,6 +16,7 @@ export async function invoiceMailer(invoice: Invoice, sendOverride = false) {
     paidStatus,
     reminderSentDate,
     dueDate,
+    createdBy,
   } = invoice;
   const amountPaid = paidBy.reduce((a, c) => c.amount + a, 0);
 
@@ -53,10 +54,18 @@ export async function invoiceMailer(invoice: Invoice, sendOverride = false) {
       QueueUrl: process.env.MAIL_QUEUE_URL,
       MessageBody: JSON.stringify({
         subject: `Invoice - ${title}${isOverdue ? " OVERDUE" : ""}| ${id}`,
-        recipients: [recipientEmail],
+        recipients: [
+          ...recipientEmail
+            .split(";")
+            .map((x) => x.split(","))
+            .flat(),
+          createdBy,
+        ],
         body: `Your payment $${amount} is due on the ${new Date(
           dueDate
-        ).toLocaleDateString('en-AU')}.\nYou have paid $${amountPaid} so far, the invoice status is ${paidStatus}.`,
+        ).toLocaleDateString(
+          "en-AU"
+        )}.\nYou have paid $${amountPaid} so far, the invoice status is ${paidStatus}.`,
       }),
     })
     .promise();

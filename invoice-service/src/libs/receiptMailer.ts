@@ -20,6 +20,7 @@ export async function receiptMailer(
     serviceEndDate,
     paidBy,
     dueDate,
+    createdBy,
   } = invoice;
   const {
     serviceStartDate: nextServiceStartDate,
@@ -39,8 +40,26 @@ export async function receiptMailer(
       QueueUrl: process.env.MAIL_QUEUE_URL,
       MessageBody: JSON.stringify({
         subject: `Payment reciept for ${title} | ${id}`,
-        recipients: [recipientEmail],
-        body: `${recipientName ? `Hi ${recipientName}` : ""}\n
+        recipients: [
+          ...recipientEmail
+            .split(";")
+            .map((x) => x.split(","))
+            .flat(),
+          createdBy,
+        ],
+        body: `
+Hi ${recipientName},\n
+This is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
+          datePaid
+        )} which pays the period ${makeDateString(
+          serviceStartDate
+        )}-${makeDateString(serviceEndDate)}.\n
+The next period  ${makeDateString(nextServiceStartDate)}-${makeDateString(
+          nextServiceEndDate
+        )}  $${nextAmount} is due before ${makeDateString(nextDueDate)}.
+        `,
+
+        bodyOld: `${recipientName ? `Hi ${recipientName}` : ""}\n
 This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString(
           datePaid
         )}. You have paid $${totalPaidSoFar} out of $${amount} for the period ${
@@ -66,5 +85,3 @@ This email is a receipt to confirm payment of $${amountPaid} on ${makeDateString
 
   return;
 }
-
-

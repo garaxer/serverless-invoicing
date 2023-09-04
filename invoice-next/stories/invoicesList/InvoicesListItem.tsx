@@ -54,6 +54,7 @@ const InvoicesListItem = ({
           <Typography sx={{ paddingLeft: "1rem" }}>
             ${invoice.paidBy.reduce((a, c) => c.amount + a, 0)} paid so far.
           </Typography>
+          
         </Box>
         {invoice.serviceStartDate && invoice.serviceEndDate && (
           <Typography variant="body2" sx={{ mb: 0.5 }}>

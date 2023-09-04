@@ -1,8 +1,12 @@
 import { AttachMoney } from "@mui/icons-material";
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button, FormControlLabel, styled } from "@mui/material";
 import FormikDateInput from "@stories/form/FormikDateInput";
+import FormikMuiCheckBox from "@stories/form/FormikMuiCheckBox";
 import FormikMuiTextInput from "@stories/form/FormikMuiTextInput";
-import { isOfTypeUsePayInvoiceErrorResponse, UsePayInvoiceErrorResponse } from "api/usePayInvoice";
+import {
+  isOfTypeUsePayInvoiceErrorResponse,
+  UsePayInvoiceErrorResponse,
+} from "api/usePayInvoice";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 type PayInvoiceProps = {
@@ -33,6 +37,7 @@ const PayInvoice = ({
       initialValues={{
         amount: initialAmount,
         datePaid: new Date().toISOString(),
+        sendEmail: true,
       }}
       validationSchema={Yup.object({
         amount: Yup.number().required("Required"),
@@ -70,6 +75,11 @@ const PayInvoice = ({
             >
               Pay
             </Button>
+            <FormControlLabel
+              sx={{ marginLeft: "1rem" }}
+              control={<FormikMuiCheckBox name="sendEmail" />}
+              label=" Send Email?"
+            />
           </BoxFormInputWrapper>
         </Form>
       )}
