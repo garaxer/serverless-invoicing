@@ -1,19 +1,16 @@
-"use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { InvoiceDto } from "../_types/invoice";
+import { Invoices } from "./invoices";
 
-export default function Index() {
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-
-  if (user) {
-    return (
-      <div>
-        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-      </div>
-    );
+export default async function Index() {
+  const invoicesData = await fetch("  http://localhost:3000/api/invoices");
+  const invoices: InvoiceDto[] & { error: any } = await invoicesData.json();
+  console.log(invoices);
+  if (!invoices || invoices?.error) {
+    return <>Error fetching invoices</>;
   }
-
-  return <a href="/api/auth/login">Login</a>;
+  return (
+    <div>
+      <Invoices invoices={invoices} />
+    </div>
+  );
 }

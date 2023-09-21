@@ -1,10 +1,6 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 // import Auth0Provider from "./_context/auth0";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
-
-const inter = Inter({ subsets: ["latin"] });
+import Header from "./_components/Header";
 
 export const metadata: Metadata = {
   title: "Invoicing app",
@@ -19,10 +15,10 @@ export default function RootLayout({
   //https://auth0.com/blog/auth0-stable-support-for-nextjs-app-router/
   //https://github.com/auth0/nextjs-auth0/blob/main/EXAMPLES.md#protecting-a-server-side-rendered-ssr-page
   return (
-    <html lang="en" data-theme="winter">
-      <UserProvider>
-        <body className={inter.className}>{children}</body>
-      </UserProvider>
-    </html>
+    <div>
+      <Header></Header>
+
+      {children}
+    </div>
   );
 }

@@ -1,15 +1,18 @@
 // pages/api/services.js
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { InvoiceDto, PAIDSTATUS } from "types/invoice";
+import { InvoiceDto, PAIDSTATUS } from "../../_types/invoice";
 import { NextResponse } from "next/server";
 import { NextApiRequest } from "next";
-import api from "@/api";
+import api from "@/app/api/invoices";
 
-export default withApiAuthRequired(async function handler(req: NextApiRequest) {
+const handler = withApiAuthRequired(async function handler(
+  req: NextApiRequest
+) {
   // If your Access Token is expired and you have a Refresh Token
   // `getAccessToken` will fetch you a new one using the `refresh_token` grant
 
   const s = await getSession();
+
   if (!s?.idToken) {
     console.error("Failed to get token");
     return NextResponse.json(
@@ -18,7 +21,6 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest) {
     );
   }
   console.log("Got token");
-  console.log({ req });
   const query = req.query;
   const status = query?.status;
   let invoices: InvoiceDto[];
@@ -35,5 +37,7 @@ export default withApiAuthRequired(async function handler(req: NextApiRequest) {
 
   console.log(invoices);
 
-  NextResponse.json(invoices);
+  return NextResponse.json(invoices );
 });
+
+export { handler as GET };

@@ -1,4 +1,4 @@
-import { InvoiceDto, PAIDSTATUS, CreateInvoiceDto } from "../types/invoice";
+import { InvoiceDto, PAIDSTATUS, CreateInvoiceDto } from "../../_types/invoice";
 
 const BASE_URL =
   "https://bpqc2pxzub.execute-api.ap-southeast-2.amazonaws.com/dev";
@@ -122,10 +122,11 @@ const Invoices = (token: string, baseUrl = BASE_URL) => ({
     requests(token, baseUrl).post<InvoiceDto>("/invoice", invoice),
   delete: (invoiceId: string) =>
     requests(token, baseUrl).delete<{id: string, invoice: InvoiceDto}>(`/invoice/${invoiceId}`),
-  pay: (invoiceId: string, amount: number, datePaid: string) =>
+  pay: (invoiceId: string, amount: number, datePaid: string, sendEmail = true) =>
     requests(token, baseUrl).patch<InvoiceDto>(`/invoice/${invoiceId}/pay`, {
       amount,
       datePaid,
+      sendEmail,
     }),
 });
 
