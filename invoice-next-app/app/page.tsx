@@ -1,18 +1,17 @@
-import TodoList from "./_components/TodoList";
-import Layout from "./_components/layout/Layout";
-import { serverClient } from "./_trpc/serverClient";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
-const Hero = () => {
-  return <div>Hello</div>;
-};
-
-export default async function Home() {
-  const todos = await serverClient.getTodos();
+export default async function ProtectedRoute() {
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect("/api/auth/signin");
+  }
 
   return (
-    <Layout>
-      <Hero />
-      <TodoList initialTodos={todos} />
-    </Layout>
+    <div>
+      This is a protected route.
+      <br />
+      You will only see this if you are authenticated.
+    </div>
   );
 }
