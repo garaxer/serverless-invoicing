@@ -1,24 +1,24 @@
-import { publicProcedure, router } from "./trpc";
+import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import Database from "better-sqlite3";
 import { z } from "zod";
 
-const todos = [{ id: 1, done: 1, content: "2" }];
-export type Todos = {
-  id: number;
-  done: number | null;
-  content: string | null;
-}[];
+import { publicProcedure, router } from "./trpc";
+
+import { todos } from "@/db/schema";
+
+const sqlite = new Database("sqlite.db");
+const db = drizzle(sqlite);
+
+migrate(db, { migrationsFolder: "drizzle" });
+
 export const appRouter = router({
   getTodos: publicProcedure.query(async () => {
-    console.log(todos);
-    return todos;
+    return await db.select().from(todos).all();
   }),
   addTodo: publicProcedure.input(z.string()).mutation(async (opts) => {
-    todos.push({
-      id: todos.reduce((a, c) => (a > c.id ? a : c.id), 1) + 1,
-      done: 0,
-      content: opts.input,
-    });
-    console.log(todos);
+    await db.insert(todos).values({ content: opts.input, done: 0 }).run();
     return true;
   }),
   setDone: publicProcedure
@@ -29,6 +29,11 @@ export const appRouter = router({
       })
     )
     .mutation(async (opts) => {
+      await db
+        .update(todos)
+        .set({ done: opts.input.done })
+        .where(eq(todos.id, opts.input.id))
+        .run();
       return true;
     }),
 });

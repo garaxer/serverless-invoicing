@@ -14,7 +14,7 @@ function AuthButton() {
     return (
       <>
         {session?.user?.name} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <button onClick={() => signOut({callbackUrl: '/foo'})}>Sign out</button>
       </>
     );
   }

@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 
 import SessionProvider from "./_components/SessionProvider";
 import NavMenu from "./_components/NavMenu";
+import Provider from "./_trpc/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,12 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <main className="mx-auto max-w-5xl text-2xl flex gap-2 text-white">
-            <NavMenu />
-            {children}
-          </main>
+          <Provider>
+            <main className="mx-auto max-w-5xl text-2xl flex gap-2 text-white">
+              <NavMenu />
+              {children}
+            </main>
+          </Provider>
         </SessionProvider>
       </body>
     </html>
