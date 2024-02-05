@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import Auth0Provider from "next-auth/providers/auth0";
 
+//https://stackoverflow.com/questions/75155213/i-want-to-send-jwt-token-to-my-backend-in-next-auth
 export const authOptions = {
   
   providers: [

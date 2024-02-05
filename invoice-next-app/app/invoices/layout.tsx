@@ -16,10 +16,10 @@ export default function RootLayout({
   //https://github.com/auth0/nextjs-auth0/blob/main/EXAMPLES.md#protecting-a-server-side-rendered-ssr-page
   // can't change the callback from api/auth/callback to */auth0/*. Sticking with next auth for now. can switch back if needed
   return (
-    <UserProvider profileUrl="/api/auth0/me" loginUrl="/api/auth0/login">
+    <UserProvider>
       <div>
         <Header></Header>
-
+hey
         {children}
       </div>
     </UserProvider>

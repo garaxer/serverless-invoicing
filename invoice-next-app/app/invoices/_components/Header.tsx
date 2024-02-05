@@ -10,12 +10,12 @@ export default function Header({ children }: { children?: React.ReactNode }) {
   if (user) {
     return (
       <div>
-        Welcome {user.name}! <a href="/api/auth0/logout">Logout</a>
+        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
         <br />
         {children}
       </div>
     );
   }
 
-  return <a href="/api/auth0/login?returnTo=/api/auth0/callback">Login</a>;
+  return <a href="/api/auth/login">Login</a>;
 }
