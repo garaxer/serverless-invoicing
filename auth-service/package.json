@@ -14,7 +14,7 @@
   "dependencies": {
     "@middy/core": "^2.5.3",
     "@middy/http-json-body-parser": "^2.5.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "serverless-bundle": "^5.4.0"
   },
   "devDependencies": {
