@@ -19,7 +19,6 @@ export default function RootLayout({
     <UserProvider>
       <div>
         <Header></Header>
-hey
         {children}
       </div>
     </UserProvider>

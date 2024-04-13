@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Provider from "./_trpc/Provider";
+// import Provider from "./_trpc/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +18,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider>
-          <main className="mx-auto max-w-5xl text-2xl flex gap-2 text-white">
-            {children}
-          </main>
-        </Provider>
+        {/* <Provider> */}
+        <main className="mx-auto max-w-5xl text-2xl flex gap-2 ">
+          {children}
+        </main>
+        {/* </Provider> */}
       </body>
     </html>
   );
