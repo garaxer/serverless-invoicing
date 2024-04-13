@@ -5,8 +5,10 @@ import { APIGatewayEvent, Context } from "aws-lambda";
 import validator from "@middy/validator";
 import getInvoicesSchemas from "@libs/schemas/getInvoicesSchemas";
 import { Invoice, PAIDSTATUS } from "src/typings/invoice";
+import getDynamoDbClient from "src/db/getDynamoDbClient";
+import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 
-const dynamodb = new DynamoDB.DocumentClient();
+const dynamodb = getDynamoDbClient();
 
 export type GetInvoicesByFilterType = {
   paidStatus: PAIDSTATUS;
@@ -28,25 +30,24 @@ export const getInvoicesByFilter = async ({
   // TODO add optional duedate before and after
 
   try {
-    const result = await dynamodb
-      .query({
-        TableName: process.env.INVOICES_TABLE_NAME,
-        IndexName: "statusAndDueDate",
-        KeyConditionExpression: `paidStatus = :paidStatus${
-          dueAfterDate ? " AND dueDate > :dueAfterDate" : ""
-        }`,
-        FilterExpression: "createdBy = :createdBy",
-        ExpressionAttributeValues: {
-          ":paidStatus": paidStatus,
-          ":createdBy": createdBy,
-          ...(dueAfterDate && { ":dueAfterDate": dueAfterDate }),
-        },
-        ...(limit && { Limit: parseInt(`${limit || 20}`) }),
-        ...(exclusiveStartKeyId && {
-          ExclusiveStartKey: { id: exclusiveStartKeyId },
-        }), // LastEvaluatedKey
-      })
-      .promise();
+    const queryCommand = new QueryCommand({
+      TableName: process.env.INVOICES_TABLE_NAME,
+      IndexName: "statusAndDueDate",
+      KeyConditionExpression: `paidStatus = :paidStatus${
+        dueAfterDate ? " AND dueDate > :dueAfterDate" : ""
+      }`,
+      FilterExpression: "createdBy = :createdBy",
+      ExpressionAttributeValues: {
+        ":paidStatus": paidStatus,
+        ":createdBy": createdBy,
+        ...(dueAfterDate && { ":dueAfterDate": dueAfterDate }),
+      },
+      ...(limit && { Limit: parseInt(`${limit || 20}`) }),
+      ...(exclusiveStartKeyId && {
+        ExclusiveStartKey: { id: exclusiveStartKeyId },
+      }), // LastEvaluatedKey
+    });
+    const result = await dynamodb.send(queryCommand);
 
     invoices = result.Items;
   } catch (error) {
@@ -71,7 +72,7 @@ async function getInvoices(event: APIGatewayEvent, _context: Context) {
     limit,
     exclusiveStartKeyId,
     createdBy: email,
-    dueAfterDate
+    dueAfterDate,
   });
 
   return {
