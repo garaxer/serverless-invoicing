@@ -1,20 +1,11 @@
-import { createEmailClient } from "../_libs/email";
-import config from "../config";
-
-const Emailer = () => {
-  const handleClick = async () => {
-    const emailer =  createEmailClient();
-    emailer.send({
-        to: [config.emailTo],
-        from: { name: "Gary", email: config.emailFrom },
-        subject: 'Invoice for rent',
-        html: '<p>Test</p>'
-      })
-  };
+"use client";
+const Emailer = ({ sendEmail }: { sendEmail: () => Promise<boolean> }) => {
   return (
-    <button onClick={handleClick} className="btn">
-      Send Email
-    </button>
+    <form action={sendEmail}>
+      <button type="submit" className="btn">
+        Send Email
+      </button>
+    </form>
   );
 };
 
