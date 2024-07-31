@@ -12,7 +12,7 @@
     "node": ">=16.15.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.554.0",
+    "@aws-sdk/client-dynamodb": "^3.621.0",
     "@aws-sdk/lib-dynamodb": "^3.554.0",
     "@middy/core": "^2.5.3",
     "@middy/http-cors": "^3.1.1",
